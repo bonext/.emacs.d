@@ -4,6 +4,10 @@
 ;; beep -> visual bell
 (setq ring-bell-function 'ignore)
 (setq visible-bell t)
+;; startup to scratch
+(setq inhibit-startup-screen t)
+;; add russian as C-\ bind
+(setq current-input-method "russian-computer")
 
 
 ; packages
