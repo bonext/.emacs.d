@@ -1,5 +1,10 @@
-; colors
+; misc
+;; colorscheme
 (load-theme 'tango-dark)
+;; beep -> visual bell
+(setq ring-bell-function 'ignore)
+(setq visible-bell t)
+
 
 ; packages
 (require 'package)
@@ -12,6 +17,8 @@
 (package-initialize)
 
 ;; evil
+;;; evil setup goes here
+;;; (setq ...)
 (require 'evil)
 (evil-mode 1)
 
