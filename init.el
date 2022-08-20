@@ -4,17 +4,23 @@
 (setq visible-bell t)
 
 ;; startup to scratch
-(setq inhibit-startup-screen t)
+;; (setq inhibit-startup-screen t)
 
 ;; add russian as C-\ bind
 ;;; TODO: move to C-^ (as in vim) instead
 ;;;       - that's impossible because it clashes
 ;;;         with some emacs defaults
-(setq current-input-method "russian-computer")
+(setq default-input-method "russian-computer")
+
+;; org-mode
+;;; suggested shortcut keys 
+(global-set-key (kbd "C-c l") 'org-store-link)
+(global-set-key (kbd "C-c a") 'org-agenda)
+(global-set-key (kbd "C-c c") 'org-capture)
 
 ; colors
 ;; solarized-dark
-;;; TODO: pull solarized to ~/.emacs.d as subtree and load from there
+;; TODO: pull solarized to ~/.emacs.d as subtree and load from there
 (add-to-list 'custom-theme-load-path "~/src/3rdparty/emacs-color-theme-solarized")
 (load-theme 'solarized t)
 
@@ -35,11 +41,11 @@
 ;; evil
 ;;; evil setup goes here
 ;;; (setq ...)
-(require 'evil)
+;; (require 'evil)
 ;;; disable evil-mode in some buffers (by their name, cf. C-xC-b)
-(add-to-list 'evil-buffer-regexps '("^\\*info\\*$"))
-(add-to-list 'evil-buffer-regexps '("^\\*Geiser.*REPL\\*$"))
-(evil-mode 1)
+;; (add-to-list 'evil-buffer-regexps '("^\\*info\\*$"))
+;; (add-to-list 'evil-buffer-regexps '("^\\*Geiser.*REPL\\*$"))
+;; (evil-mode 1)
 
 ;; slime
 (setq inferior-lisp-program "/usr/local/bin/sbcl")
@@ -74,9 +80,9 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages '(paredit geiser-guile company slime evil)))
-(custom-set-faces
+(custom-set-faces)
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+
