@@ -19,9 +19,13 @@
 (global-set-key (kbd "C-c c") 'org-capture)
 
 ; colors
+;; via https://www.emacswiki.org/emacs/CustomThemes#h5o-3
+(let ((basedir "~/.emacs.d/themes/"))
+  (dolist (f (directory-files basedir))
+    (if (and (not (or (equal f ".") (equal f "..")))
+             (file-directory-p (concat basedir f)))
+        (add-to-list 'custom-theme-load-path (concat basedir f)))))
 ;; solarized-dark
-;; TODO: pull solarized to ~/.emacs.d as subtree and load from there
-(add-to-list 'custom-theme-load-path "~/src/3rdparty/emacs-color-theme-solarized")
 (load-theme 'solarized t)
 
 ; packages
