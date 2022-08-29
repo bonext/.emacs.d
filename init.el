@@ -13,7 +13,7 @@
 (setq default-input-method "russian-computer")
 
 ;; org-mode
-;;; suggested shortcut keys 
+;;; suggested shortcut keys
 (global-set-key (kbd "C-c l") 'org-store-link)
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
@@ -36,6 +36,7 @@
 (package-initialize)
 
 ;; company
+(setq company-minimum-prefix-length 5)
 (add-hook 'after-init-hook 'global-company-mode)
 
 ;; evil

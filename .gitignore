@@ -1,6 +1,6 @@
 *~
+*.elc
 places
 auto-save-list/
-elpa/
 transient/
 bookmarks
