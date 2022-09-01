@@ -46,11 +46,13 @@
 ;; evil
 ;;; evil setup goes here
 ;;; (setq ...)
-;; (require 'evil)
+;; go evil on demand
+(setq evil-default-state 'emacs)
+(require 'evil)
 ;;; disable evil-mode in some buffers (by their name, cf. C-xC-b)
 ;; (add-to-list 'evil-buffer-regexps '("^\\*info\\*$"))
 ;; (add-to-list 'evil-buffer-regexps '("^\\*Geiser.*REPL\\*$"))
-;; (evil-mode 1)
+(evil-mode 1)
 
 ;; slime
 (setq inferior-lisp-program "/usr/local/bin/sbcl")
