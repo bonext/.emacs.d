@@ -39,6 +39,11 @@
  t)
 (package-initialize)
 
+;; org-journal
+(require 'org-journal)
+(setq org-journal-file-type 'daily)
+(setq org-journal-dir "~/Documents/journal")
+
 ;; company
 (setq company-minimum-prefix-length 5)
 (add-hook 'after-init-hook 'global-company-mode)
@@ -86,7 +91,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages '(lua-mode paredit geiser-guile company slime evil)))
+ '(package-selected-packages
+   '(org-journal lua-mode paredit geiser-guile company slime evil)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
