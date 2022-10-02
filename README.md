@@ -1,11 +1,10 @@
 # .emacs.d
 
-## Solarized Theme
+## Color Themes
 
-Added as a [git subtree](https://gist.github.com/SKempin/b7857a6ff6bddb05717cc17a44091202)
-from [sellout/emacs-color-theme-solarized](https://github.com/sellout/emacs-color-theme-solarized)
+Added as a `solarized-theme` package.
 
-Other standalone themes can be added in the same fashion under `themes/` and will be autoloaded. See `init.el` for related snippet.
+There's also a way to add standalone themes: any theme put under `themes/` and will be autoloaded. See `init.el` for related snippet.
 
 ## Package Management
 
