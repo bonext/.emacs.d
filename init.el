@@ -20,13 +20,11 @@
 
 ; colors
 ;; via https://www.emacswiki.org/emacs/CustomThemes#h5o-3
-(let ((basedir "~/.emacs.d/themes/"))
-  (dolist (f (directory-files basedir))
-    (if (and (not (or (equal f ".") (equal f "..")))
-             (file-directory-p (concat basedir f)))
-        (add-to-list 'custom-theme-load-path (concat basedir f)))))
-;; solarized-dark
-(load-theme 'solarized t)
+;; (let ((basedir "~/.emacs.d/themes/"))
+;;   (dolist (f (directory-files basedir))
+;;     (if (and (not (or (equal f ".") (equal f "..")))
+;;              (file-directory-p (concat basedir f)))
+;;         (add-to-list 'custom-theme-load-path (concat basedir f)))))
 
 ; packages
 (require 'package)
@@ -38,6 +36,9 @@
  '("melpa" . "http://melpa.org/packages/")
  t)
 (package-initialize)
+
+;; solarized-dark
+(load-theme 'solarized-dark t)
 
 ;; org-journal
 (require 'org-journal)
@@ -92,7 +93,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(org-journal lua-mode paredit geiser-guile company slime evil)))
+   '(solarized-theme org-journal lua-mode paredit geiser-guile company slime evil)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
