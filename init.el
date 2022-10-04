@@ -26,7 +26,12 @@
 ;;              (file-directory-p (concat basedir f)))
 ;;         (add-to-list 'custom-theme-load-path (concat basedir f)))))
 
-; packages
+					; packages
+;; manual "packages"
+(let ((default-directory "~/.emacs.d/manual-packages/"))
+  (normal-top-level-add-subdirs-to-load-path))
+
+;; actual packages
 (require 'package)
 
 ;; MELPA
