@@ -3,6 +3,9 @@
 (setq ring-bell-function 'ignore)
 (setq visible-bell t)
 
+;; disable menu bar (it causes glitches on wayland)
+(tool-bar-mode -1)
+
 ;; startup to scratch
 ;; (setq inhibit-startup-screen t)
 
@@ -30,6 +33,10 @@
 ;; manual "packages"
 (let ((default-directory "~/.emacs.d/manual-packages/"))
   (normal-top-level-add-subdirs-to-load-path))
+
+;;; yuck-mode
+;;; via https://github.com/bonext/.emacs.d/tree/master/manual-packages/yuck-mode#how-do-i-install-it
+(autoload 'yuck-mode "yuck-mode" nil t)
 
 ;; actual packages
 (require 'package)
