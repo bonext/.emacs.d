@@ -1,4 +1,8 @@
 ; built-ins
+
+;; only spaces
+(setq-default indent-tabs-mode nil)
+
 ;; beep -> visual bell
 (setq ring-bell-function 'ignore)
 (setq visible-bell t)
@@ -29,14 +33,24 @@
 ;;              (file-directory-p (concat basedir f)))
 ;;         (add-to-list 'custom-theme-load-path (concat basedir f)))))
 
-					; packages
-;; manual "packages"
-(let ((default-directory "~/.emacs.d/manual-packages/"))
-  (normal-top-level-add-subdirs-to-load-path))
+; packages
 
 ;;; yuck-mode
 ;;; via https://github.com/bonext/.emacs.d/tree/master/manual-packages/yuck-mode#how-do-i-install-it
+(add-to-list 'load-path "~/.emacs.d/manual-packages/yuck-mode")
 (autoload 'yuck-mode "yuck-mode" nil t)
+
+;; parinfer-rust-mode
+(add-to-list 'load-path "~/.emacs.d/manual-packages/parinfer-rust-mode")
+(autoload 'parinfer-rust-mode "parinfer-rust-mode" nil t)
+(add-hook 'emacs-lisp-mode 'parinfer-rust-mode)
+
+;; TODO: add these as parinfer hooks instead?
+;; (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
+;; (add-hook 'ielm-mode-hook             #'enable-paredit-mode)
+;; (add-hook 'lisp-mode-hook             #'enable-paredit-mode)
+;; (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
+;; (add-hook 'scheme-mode-hook           #'enable-paredit-mode)
 
 ;; actual packages
 (require 'package)
@@ -79,19 +93,8 @@
 ;;; guile2
 (setq geiser-guile-binary "/usr/local/bin/guile2.2")
 
-;; paredit
-(autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
-(add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
-(add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
-(add-hook 'ielm-mode-hook             #'enable-paredit-mode)
-(add-hook 'lisp-mode-hook             #'enable-paredit-mode)
-(add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
-(add-hook 'scheme-mode-hook           #'enable-paredit-mode)
-;;; ElDoc support
+;; ElDoc support
 (require 'eldoc)
-(eldoc-add-command
- 'paredit-backward-delete
- 'paredit-close-round)
 
 ; save position
 (if (version< emacs-version "25.0")
@@ -106,12 +109,12 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    '(solarized-theme org-journal lua-mode paredit geiser-guile company slime evil)))
-(custom-set-faces
+(custom-set-faces)
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ 
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
