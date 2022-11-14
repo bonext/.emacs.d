@@ -24,6 +24,8 @@
 (global-set-key (kbd "C-c l") 'org-store-link)
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
+;;; enable scaling of inline images with attr_org width
+(setq org-image-actual-width nil)
 
 ; colors
 ;; via https://www.emacswiki.org/emacs/CustomThemes#h5o-3
@@ -67,9 +69,11 @@
 (load-theme 'solarized-dark t)
 
 ;; org-journal
-(require 'org-journal)
 (setq org-journal-file-type 'daily)
 (setq org-journal-dir "~/Documents/journal")
+(setq org-journal-date-format "%Y-%m-%d, %A")
+(setq org-journal-file-format "%F.org") ; yyyy-mm-dd.org
+(require 'org-journal)
 
 ;; company
 (setq company-minimum-prefix-length 5)
