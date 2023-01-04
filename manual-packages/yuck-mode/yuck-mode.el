@@ -10,10 +10,8 @@
 ;; Keywords: languages yuck eww widgets
 ;; Homepage: https://github.com/mmcjimsey26/yuck-mode
 ;; Package-Requires: ((emacs "25.1"))
-;;
-;; This file is not part of GNU Emacs.
 
-;;; Commentary:
+;; This file is not part of GNU Emacs.
 
 ;; Permission is hereby granted, free of charge, to any person obtaining a copy
 ;; of this software and associated documentation files (the "Software"), to deal
@@ -33,11 +31,15 @@
 ;; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ;; SOFTWARE.
 
+;;; Commentary:
+
 ;; A simple major mode for editing files in the yuck configuration language, used for
 ;; configuring ElKowar's Wacky Widgets (eww), usually ending in `.yuck'.
 
 ;; This package provides the following features:
 ;;      * Syntax hilighting
+;;      * Indentation
+;;      * Commenting
 
 ;;; Installation:
 
@@ -51,10 +53,7 @@
   "Yuck Configuration Major Mode."
   :group 'languages)
 
-(defvar yuck-mode-hook nil "Yuck mode hook.")
-
 ;; Keywords and widget types for `yuck-mode'.
-;; Byte-compile the code for optimized regexps
 (eval-and-compile
   (defvar yuck-keywords-list
      '("defvar" "defpoll" "deflisten" "defwindow" "defwidget" "for" "include"))
@@ -69,29 +68,44 @@
   (defun yuck-ppre (re)
     (format "\\_<\\(%s\\)\\>" (regexp-opt re))))
 
+;; Font-lock keywords
+;; The use of `eval-when-compile' here is to reduce calculation of the
+;; regular expressions at time of evaluation, therefore calculating them
+;; at compile time.
 (defvar yuck-font-lock-keywords
   (list
-   (cons (eval-when-compile
-           (format "\:[a-z\-]*"))
+   ;; keys - e.g :path, :class, etc.
+   (cons ":[a-z-]*"
          font-lock-builtin-face)
+   ;; keywords
    (cons (eval-when-compile
            (yuck-ppre yuck-keywords-list))
          font-lock-keyword-face)
+   ;; types
    (cons (eval-when-compile
            (yuck-ppre yuck-widgets-list))
          font-lock-type-face)))
 
 (defconst yuck-mode-syntax-table
   (let ((table (make-syntax-table)))
-    ;; "" : string delimiter
+
+    ;; "" - string delimiter
     (modify-syntax-entry ?\" "\"" table)
     (modify-syntax-entry ?\` "\"" table)
+
+    ;; ";" - comment start
     (modify-syntax-entry ?\; "<" table)
     (modify-syntax-entry ?\n ">" table)
+    
+    ;; open and closing parens
     (modify-syntax-entry ?\( "()" table)
     (modify-syntax-entry ?\) ")(" table)
+    
+    ;; open and closing braces
     (modify-syntax-entry ?\[ "(]" table)
     (modify-syntax-entry ?\] ")[" table)
+
+    ;; open and closing curly braces
     (modify-syntax-entry ?\{ "(}" table)
     (modify-syntax-entry ?\} "){" table)
     table))
@@ -101,6 +115,7 @@
   "Major mode for editing yuck config files."
   :syntax-table yuck-mode-syntax-table
   (setq-local font-lock-defaults '(yuck-font-lock-keywords))
+  (setq-local indent-line-function #'lisp-indent-line)
   (setq-local comment-start ";; ")
   (setq-local comment-end "")
   (setq-local comment-padding "")
