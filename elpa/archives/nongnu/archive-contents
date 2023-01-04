@@ -149,7 +149,7 @@
 	      ("Dave Pearson" . "davep@davep.org"))
 	     (:commit . "fe676396fa7e4372e01bf2c3d9a62e8d53615d46"))])
  (buttercup .
-	    [(1 28)
+	    [(1 29)
 	     ((emacs
 	       (24 3)))
 	     "Behavior-Driven Emacs Lisp Testing" tar
@@ -157,7 +157,7 @@
 	      (:maintainer "Ola Nilsson" . "ola.nilsson@gmail.com")
 	      (:authors
 	       ("Jorgen Schaefer" . "contact@jorgenschaefer.de"))
-	      (:commit . "eaa4b3ccd115a2bb25be98dc637950645d3adbae"))])
+	      (:commit . "b3ea11826e2ca5d648d677c4ae27974ce8e7c7e3"))])
  (camera .
 	 [(0 2)
 	  ((emacs
@@ -511,16 +511,16 @@
 		  ("Chen Bin" . "chenbin.sh@gmail.com"))
 		 (:commit . "7a2a7384b6e752a805d6fbb78cf9425e54c2b18b"))])
  (evil-nerd-commenter .
-		      [(3 5 8)
+		      [(3 6 0)
 		       ((emacs
-			 (25 1)))
+			 (26 1)))
 		       "Comment/uncomment lines efficiently. Like Nerd Commenter in Vim" tar
 		       ((:url . "http://github.com/redguardtoo/evil-nerd-commenter")
 			(:keywords "convenience" "evil")
 			(:maintainer "Chen Bin" . "chenbin.sh@gmail.com")
 			(:authors
 			 ("Chen Bin" . "chenbin.sh@gmail.com"))
-			(:commit . "9609fb170da00aeca1716b022d93e1cb68464a34"))])
+			(:commit . "8c0f23d46a3927b9f83c1c2c4590be53d0b740db"))])
  (evil-numbers .
 	       [(0 7)
 		((emacs
@@ -1554,14 +1554,14 @@
 	       ("David Christiansen" . "david@davidchristiansen.dk"))
 	      (:keywords "convenience"))])
  (racket-mode .
-	      [(1 0 20221201 102945)
+	      [(1 0 20221205 101826)
 	       ((emacs
 		 (25 1)))
 	       "Racket editing, REPL, and more" tar
 	       ((:url . "https://www.racket-mode.com/")
 		(:maintainer "Greg Hendershott")
 		(:authors
-		 ("Greg Hendershott"))
+		 ("Greg Hendershott" . "racket-mode-author@greghendershott.com"))
 		(:commit . "HEAD"))])
  (rainbow-delimiters .
 		     [(2 1 5)
@@ -1789,7 +1789,7 @@
 	   ("Random User"))
 	  (:commit . "7563c61b7e152e0c7e06387edf98809c08cb134f"))])
  (sweeprolog .
-	     [(0 9 3)
+	     [(0 9 4)
 	      ((emacs
 		(28 1)))
 	      "Embedded SWI-Prolog" tar
@@ -1798,7 +1798,7 @@
 	       (:maintainer "Eshel Yaron" . "~eshel/dev@lists.sr.ht")
 	       (:authors
 		("Eshel Yaron" . "me@eshelyaron.com"))
-	       (:commit . "f4e9d872c81bab6772025f2a481adbc25338f37f"))])
+	       (:commit . "0e324b3216ff031104fefbdb23e081d88ed1e7f6"))])
  (swift-mode .
 	     [(8 6 0)
 	      ((emacs
@@ -2095,7 +2095,7 @@
 	      (:authors
 	       ("Le Wang")))])
  (xah-fly-keys .
-	       [(22 2 20221121172301)
+	       [(22 3 20221208105541)
 		((emacs
 		  (24 1)))
 		"ergonomic modal keybinding minor mode." tar
@@ -2104,7 +2104,7 @@
 		 (:maintainer "Xah Lee" . "xah@xahlee.org")
 		 (:authors
 		  ("Xah Lee ( http://xahlee.info/ )"))
-		 (:commit . "094095d6084d6a640c33dd1f503e00b81da481ab"))])
+		 (:commit . "c00742c6c86fbd44e28cb008339c6307aff4f16e"))])
  (xml-rpc .
 	  [(1 6 16)
 	   nil "An elisp implementation of clientside XML-RPC" tar
