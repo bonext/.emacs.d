@@ -26,6 +26,8 @@
 (global-set-key (kbd "C-c c") 'org-capture)
 ;;; enable scaling of inline images with attr_org width
 (setq org-image-actual-width nil)
+;;; show inline images by default
+(setq org-startup-with-inline-images t)
 
 ; colors
 ;; via https://www.emacswiki.org/emacs/CustomThemes#h5o-3
@@ -112,8 +114,13 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(solarized-theme org-journal lua-mode paredit geiser-guile company slime evil)))
-(custom-set-faces)
+   '(geiser geiser-racket racket-mode solarized-theme org-journal lua-mode paredit geiser-guile company slime evil)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
