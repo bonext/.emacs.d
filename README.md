@@ -19,3 +19,7 @@ Currently defaults to emacs mode in all buffers, use `C-z` to actually go evil.
 ## [yuck-mode](https://github.com/mmcjimsey26/yuck-mode)
 
 Installed as [git subtree](https://gist.github.com/SKempin/b7857a6ff6bddb05717cc17a44091202)
+
+## [parinfer-rust-mode](https://github.com/justinbarclay/parinfer-rust-mode)
+
+Installed as git subtree.
