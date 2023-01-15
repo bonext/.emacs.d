@@ -48,6 +48,7 @@
 (add-to-list 'load-path "~/.emacs.d/manual-packages/parinfer-rust-mode")
 (autoload 'parinfer-rust-mode "parinfer-rust-mode" nil t)
 (add-hook 'emacs-lisp-mode 'parinfer-rust-mode)
+(setq parinfer-rust-auto-download t)
 
 ;; TODO: add these as parinfer hooks instead?
 ;; (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
@@ -113,6 +114,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(browse-url-browser-function 'browse-url-firefox)
  '(package-selected-packages
    '(geiser geiser-racket racket-mode solarized-theme org-journal lua-mode paredit geiser-guile company slime evil)))
 (custom-set-faces
