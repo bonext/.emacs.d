@@ -10,6 +10,9 @@
 ;; disable menu bar (it causes glitches on wayland)
 (tool-bar-mode -1)
 
+;; show lines in programming modes
+(add-hook 'prog-mode-hook 'display-line-numbers-mode)
+
 ;; startup to scratch
 ;; (setq inhibit-startup-screen t)
 
@@ -93,6 +96,13 @@
 ;; (add-to-list 'evil-buffer-regexps '("^\\*Geiser.*REPL\\*$"))
 (evil-mode 1)
 
+;; evil-org
+(require 'evil-org)
+(add-hook 'org-mode-hook 'evil-org-mode)
+(evil-org-set-key-theme '(navigation insert textobjects additional calendar))
+(require 'evil-org-agenda)
+(evil-org-agenda-set-keys)
+
 ;; slime
 (setq inferior-lisp-program "/usr/local/bin/sbcl")
 
@@ -116,7 +126,7 @@
  ;; If there is more than one, they won't work right.
  '(browse-url-browser-function 'browse-url-firefox)
  '(package-selected-packages
-   '(geiser geiser-racket racket-mode solarized-theme org-journal lua-mode paredit geiser-guile company slime evil))
+   '(evil-org org geiser geiser-racket racket-mode solarized-theme org-journal lua-mode paredit geiser-guile company slime evil))
  '(warning-suppress-types '((comp))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
