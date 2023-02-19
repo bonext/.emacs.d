@@ -88,8 +88,8 @@
 ;; evil
 ;;; evil setup goes here
 ;;; (setq ...)
-;; go evil on demand
-(setq evil-default-state 'emacs)
+;; uncomment to go evil on demand
+;; (setq evil-default-state 'emacs)
 (require 'evil)
 ;;; disable evil-mode in some buffers (by their name, cf. C-xC-b)
 ;; (add-to-list 'evil-buffer-regexps '("^\\*info\\*$"))
