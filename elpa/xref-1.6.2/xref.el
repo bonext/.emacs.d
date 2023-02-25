@@ -1,7 +1,7 @@
 ;;; xref.el --- Cross-referencing commands              -*-lexical-binding:t-*-
 
 ;; Copyright (C) 2014-2023 Free Software Foundation, Inc.
-;; Version: 1.6.1
+;; Version: 1.6.2
 ;; Package-Requires: ((emacs "26.1"))
 
 ;; This is a GNU ELPA :core package.  Avoid functionality that is not
@@ -568,7 +568,8 @@ This can be used from `xref-after-jump-hook', for instance.")
     (dolist (l (list (car history) (cdr history)))
       (dolist (m l)
         (set-marker m nil nil)))
-    (setq history (cons nil nil)))
+    (setcar history nil)
+    (setcdr history nil))
   nil)
 
 ;;;###autoload
@@ -1125,7 +1126,9 @@ GROUP is a string for decoration purposes and XREF is an
                                    maximize (xref-location-line
                                              (xref-item-location xref)))
            for line-format = (and max-line
-                                  (format "%%%dd: " (1+ (floor (log max-line 10)))))
+                                  (format
+                                   #("%%%dd:" 0 4 (face xref-line-number) 5 6 (face shadow))
+                                   (1+ (floor (log max-line 10)))))
            with item-text-props = (list 'mouse-face 'highlight
                                         'keymap xref--button-map
                                         'help-echo
@@ -1145,8 +1148,7 @@ GROUP is a string for decoration purposes and XREF is an
                         ((and (equal line prev-line)
                               (equal prev-group group))
                          "")
-                        (t (propertize (format line-format line)
-                                       'face 'xref-line-number)))))
+                        (t (format line-format line)))))
                  ;; Render multiple matches on the same line, together.
                  (when (and (equal prev-group group)
                             (or (null line)
