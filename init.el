@@ -126,7 +126,7 @@
  ;; If there is more than one, they won't work right.
  '(browse-url-browser-function 'browse-url-firefox)
  '(package-selected-packages
-   '(evil-org org geiser geiser-racket racket-mode solarized-theme org-journal lua-mode paredit geiser-guile company slime evil))
+   '(slime evil-org org geiser geiser-racket racket-mode solarized-theme org-journal lua-mode paredit geiser-guile company evil))
  '(warning-suppress-types '((comp))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
