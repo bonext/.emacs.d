@@ -93,7 +93,8 @@
 (require 'evil)
 ;;; disable evil-mode in some buffers (by their name, cf. C-xC-b)
 ;; (add-to-list 'evil-buffer-regexps '("^\\*info\\*$"))
-;; (add-to-list 'evil-buffer-regexps '("^\\*Geiser.*REPL\\*$"))
+(add-to-list 'evil-buffer-regexps '("^\\*Geiser.*REPL\\*$"))
+(add-to-list 'evil-buffer-regexps '("^\\*slime-repl.*\\*$"))
 (evil-mode 1)
 
 ;; evil-org
