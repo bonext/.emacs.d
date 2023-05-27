@@ -25,12 +25,14 @@
 ;; org-mode
 ;;; suggested shortcut keys
 (global-set-key (kbd "C-c l") 'org-store-link)
-(global-set-key (kbd "C-c a") 'org-agenda)
-(global-set-key (kbd "C-c c") 'org-capture)
 ;;; enable scaling of inline images with attr_org width
 (setq org-image-actual-width nil)
 ;;; show inline images by default
 (setq org-startup-with-inline-images t)
+;;; capture setup
+(setq org-directory "~/Documents/Notes")
+(setq org-default-notes-file (concat org-directory "/captured.org"))
+(global-set-key (kbd "C-c c") 'org-capture)
 
 ; colors
 ;; via https://www.emacswiki.org/emacs/CustomThemes#h5o-3
@@ -100,6 +102,7 @@
 ;; evil-org
 (require 'evil-org)
 (add-hook 'org-mode-hook 'evil-org-mode)
+(add-hook 'org-mode-hook 'visual-line-mode)
 (evil-org-set-key-theme '(navigation insert textobjects additional calendar))
 (require 'evil-org-agenda)
 (evil-org-agenda-set-keys)
