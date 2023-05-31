@@ -2972,7 +2972,8 @@ linewise, otherwise it is character wise."
   (let* ((count (or count 1))
          (bnd (or (let ((b (bounds-of-thing-at-point thing)))
                     (and b (< (point) (cdr b)) b))
-                  (evil-bounds-of-not-thing-at-point thing))))
+                  (evil-bounds-of-not-thing-at-point thing)
+                  (cons (point-min) (point-max)))))
     ;; check if current object is selected
     (when (or (not beg) (not end)
               (> beg (car bnd))
@@ -3019,7 +3020,9 @@ linewise, otherwise it is character wise."
          (count (abs (or count 1)))
          (objbnd (let ((b (bounds-of-thing-at-point thing)))
                    (and b (< (point) (cdr b)) b)))
-         (bnd (or objbnd (evil-bounds-of-not-thing-at-point thing)))
+         (bnd (or objbnd
+                  (evil-bounds-of-not-thing-at-point thing)
+                  (cons (point-min) (point-max))))
          addcurrent other)
     ;; check if current object is not selected
     (when (or (not beg) (not end)

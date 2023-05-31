@@ -2273,45 +2273,45 @@ leave the cursor just after the new text."
          (yank-handler (car-safe (get-text-property
                                   0 'yank-handler text)))
          (dir (evil-visual-direction))
-         beg end paste-eob)
+         beg end type)
     (evil-with-undo
       (let ((kill-ring-yank-pointer (when kill-ring (list (current-kill 0)))))
         (when (evil-visual-state-p)
           (setq beg evil-visual-beginning
-                end evil-visual-end)
+                end evil-visual-end
+                type (evil-visual-type))
           (evil-visual-rotate 'upper-left)
-          ;; if we replace the last buffer line that does not end in a
-          ;; newline, we use `evil-paste-after' because `evil-delete'
-          ;; will move point to the line above
-          (when (and (= evil-visual-end (point-max))
-                     (/= (char-before (point-max)) ?\n))
-            (setq paste-eob t))
-          (evil-delete beg end (evil-visual-type) (unless evil-kill-on-visual-paste ?_))
+          (evil-delete beg end type (unless evil-kill-on-visual-paste ?_))
           (when (and (eq yank-handler #'evil-yank-line-handler)
-                     (not (memq (evil-visual-type) '(line block)))
-                     (not (= evil-visual-end (point-max))))
+                     (not (memq type '(line block)))
+                     (/= end (point-max)))
             (insert "\n"))
           (evil-normal-state)
           (when kill-ring (current-kill 1)))
         ;; Effectively memoize `evil-get-register' because it can be
         ;; side-effecting (e.g. for the `=' register)...
-        (cl-letf (((symbol-function 'evil-get-register)
+        (cl-letf (((symbol-function #'evil-get-register)
                    (lambda (&rest _) text)))
           (cond
-           ((eq 'block (evil-visual-type))
-            (when (eq yank-handler #'evil-yank-line-handler)
-              (setq text (concat "\n" text)))
-            (evil-set-marker ?\[ beg)
+           ;; When replacing the last buffer line and it does not end
+           ;; in a newline, use `evil-paste-after' because
+           ;; `evil-delete' will have moved point to the line above.
+           ((cond ((eq type 'line) (= end (point-max)))
+                  ((eq type 'block) (eq yank-handler #'evil-yank-line-handler)))
+            (goto-char end)
+            (evil-paste-after count register))
+           ((and (eq type 'block)
+                 (not (eq yank-handler #'evil-yank-block-handler))
+                 (not (string-match-p "\n" text)))
             (evil-apply-on-block #'evil-insert-for-yank-at-col beg end t text count))
-           (paste-eob (evil-paste-after count register))
            (t (evil-paste-before count register)))))
       (when evil-kill-on-visual-paste
         (current-kill -1))
       ;; Ensure that gv can restore visually pasted area...
       (setq evil-visual-previous-mark evil-visual-mark
-            evil-visual-mark (evil-get-marker (if (<= 0 dir) ?\[ ?\]) t)
+            evil-visual-mark (evil-get-marker (if (< 0 dir) ?\[ ?\]) t)
             evil-visual-previous-point evil-visual-point
-            evil-visual-point (evil-get-marker (if (<= 0 dir) ?\] ?\[) t))
+            evil-visual-point (evil-get-marker (if (< 0 dir) ?\] ?\[) t))
       ;; mark the last paste as visual-paste
       (setq evil-last-paste
             (list (nth 0 evil-last-paste)
@@ -3854,6 +3854,25 @@ reveal.el. OPEN-SPOTS is a local version of `reveal-open-spots'."
         ;; Remove the overlay from the list of open spots.
         (overlay-put ol 'reveal-invisible nil)))))
 
+(defun evil--ex-substitute-final-message (nreplaced flags)
+  "Display message according to replacements and flags.
+If FLAGS contains `p' or `#' and NREPLACED is more than 0, print the last line
+to the echo area.  Otherwise, print the number of replacements made or found."
+  (let ((replaced-any (< 0 nreplaced)))
+    (cond
+     ((and replaced-any (memq ?p flags))
+      (message "%s" (buffer-substring (line-beginning-position)
+                                      (line-end-position))))
+     ((and replaced-any (memq ?# flags))
+      (message "%s %s" (propertize (number-to-string (line-number-at-pos))
+                                   'face 'line-number-current-line)
+                       (buffer-substring (line-beginning-position)
+                                         (line-end-position))))
+     (t (message "%s %d occurrence%s"
+                 (if (memq ?n flags) "Found" "Replaced")
+                 nreplaced
+                 (if (/= nreplaced 1) "s" ""))))))
+
 (evil-define-operator evil-ex-substitute
   (beg end pattern replacement flags)
   "The Ex substitute command.
@@ -3989,10 +4008,8 @@ reveal.el. OPEN-SPOTS is a local version of `reveal-open-spots'."
       (when use-reveal
         (evil-revert-reveal reveal-open-spots)))
 
-    (message "%s %d occurrence%s"
-             (if count-only "Found" "Replaced")
-             nreplaced
-             (if (/= nreplaced 1) "s" ""))
+    (evil--ex-substitute-final-message nreplaced flags)
+
     (if (and (= 0 nreplaced) evil-ex-point)
         (goto-char evil-ex-point)
       (evil-first-non-blank))))
@@ -4672,7 +4689,7 @@ If ARG is empty, maximize the current window height."
         (window-state-put (car slist) (car wlist))
         (setq wlist (cdr wlist)
               slist (cdr slist)))
-      (select-window (cadr (last (window-list)))))))
+      (select-window (car (window-list))))))
 
 (evil-define-command evil-window-rotate-downwards ()
   "Rotate the windows according to the current cyclic ordering."
