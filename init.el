@@ -102,7 +102,6 @@
 ;; evil-org
 (require 'evil-org)
 (add-hook 'org-mode-hook 'evil-org-mode)
-(add-hook 'org-mode-hook 'visual-line-mode)
 (evil-org-set-key-theme '(navigation insert textobjects additional calendar))
 (require 'evil-org-agenda)
 (evil-org-agenda-set-keys)
