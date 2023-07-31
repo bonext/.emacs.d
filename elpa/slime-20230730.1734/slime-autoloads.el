@@ -49,21 +49,13 @@
 (provide 'slime-autoloads)
 
 ;;; slime-autoloads.el ends here
-
-;;;### (autoloads nil "slime" "slime.el" (0 0 0 0))
-;;; Generated autoloads from slime.el
 
-(register-definition-prefixes "slime" '("??" "?c" "?d" "?e" "?i" "?l" "?n" "?p" "?q" "?t" "?v" "def-slime-selector-method" "define-sl" "defslimefun" "inferior-lisp-program" "make-slime-" "sldb-" "slime"))
 
-;;;***
 
-;;;### (autoloads nil nil ("slime-pkg.el") (0 0 0 0))
-
-;;;***
-
-;;;### (autoloads nil "slime-tests" "slime-tests.el" (0 0 0 0))
 ;;; Generated autoloads from slime-tests.el
 
 (register-definition-prefixes "slime-tests" '("arglist" "async-eval-debugging" "break" "comp" "def-slime-test" "dis" "end-of-file" "find-definition" "flow-control" "indentation" "inspector" "inter" "locally-bound-debugger-hook" "loop-interrupt-" "macroexpand" "narrowing" "read" "report-condition-with-circular-list" "sbcl-world-lock" "sexp-at-point.1" "symbol-at-point." "traditional-recipe" "unwind-to-previous-sldb-level" "utf-8-source"))
+
+;;; Generated autoloads from slime.el
 
-;;;***
+(register-definition-prefixes "slime" '("??" "?c" "?d" "?e" "?i" "?l" "?n" "?p" "?q" "?t" "?v" "def-slime-selector-method" "define-sl" "defslimefun" "inferior-lisp-program" "make-slime-" "sldb-" "slime" "topline"))

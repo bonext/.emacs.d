@@ -337,7 +337,7 @@
 	     ("Akib Azmain Turja" . "akib@disroot.org"))
 	    (:commit . "bebdb6a165bdc3bb6b357706d0ce58f57271d137"))])
  (devil .
-	[(0 5 0)
+	[(0 6 0)
 	 ((emacs
 	   (24 4)))
 	 "Minor mode for translating key sequences" tar
@@ -346,7 +346,7 @@
 	  (:maintainer "Susam Pal" . "susam@susam.net")
 	  (:authors
 	   ("Susam Pal" . "susam@susam.net"))
-	  (:commit . "20b44174c3c0f5c46ea15b463dc67c14e6f57681"))])
+	  (:commit . "1985300ce84abd712be93b271b27c3bdb164231d"))])
  (diff-ansi .
 	    [(0 2)
 	     ((emacs
@@ -690,7 +690,7 @@
 		("Akib Azmain Turja" . "akib@disroot.org"))
 	       (:commit . "ce2ea016a67b200862788e81f0ff1f8f7e4e0454"))])
  (geiser .
-	 [(0 28 2)
+	 [(0 29)
 	  ((emacs
 	    (25 1))
 	   (project
@@ -701,7 +701,7 @@
 	   (:maintainer "Jose Antonio Ortega Ruiz" . "jao@gnu.org")
 	   (:authors
 	    ("Jose Antonio Ortega Ruiz" . "jao@gnu.org"))
-	   (:commit . "bfc9cce54b7ac1cb036911965198b5cbe2f43f4c"))])
+	   (:commit . "761c65be5763a0cac161f2d9ea9dec510f58b83d"))])
  (geiser-chez .
 	      [(0 18)
 	       ((emacs
@@ -1411,13 +1411,13 @@
 		    ("Campbell Barton" . "ideasman42@gmail.com"))
 		   (:commit . "3a1d67637ea4a6099a62de45842b8c5e4440ede4"))])
  (opam-switch-mode .
-		   [(1 6)
+		   [(1 7)
 		    ((emacs
 		      (25 1)))
 		    "Select OCaml opam switches via a menu" tar
 		    ((:url . "https://github.com/ProofGeneral/opam-switch-mode")
 		     (:maintainer nil . "proof-general-maintainers@groupes.renater.fr")
-		     (:commit . "1dd11f0028b09c2ff09d87b8a3fc8af948d360b5"))])
+		     (:commit . "71612b9a307c640d2fa662b266787647a3a5075a"))])
  (org-auto-tangle .
 		  [(0 6 0)
 		   ((emacs
@@ -1618,16 +1618,16 @@
 	       ("Andreas Politz" . "mail@andreas-politz.de"))
 	      (:commit . "a9c9a12c3ecf2005fa641059368ac8284f507620"))])
  (php-mode .
-	   [(1 24 3)
+	   [(1 25 0)
 	    ((emacs
-	      (25 2)))
+	      (26 1)))
 	    "Major mode for editing PHP code" tar
 	    ((:url . "https://github.com/emacs-php/php-mode")
 	     (:keywords "languages" "php")
 	     (:maintainer "USAMI Kenta" . "tadsan@zonu.me")
 	     (:authors
 	      ("Eric James Michael Ritz"))
-	     (:commit . "bed4d8ced39ecbfd6ac4961d88cb1ba9ddbaa939"))])
+	     (:commit . "28d0a0bc81a8481fd75e5a6477dda394fe04fef3"))])
  (popon .
 	[(0 13)
 	 ((emacs
@@ -1927,7 +1927,7 @@
 	   ("Random User"))
 	  (:commit . "6ce7de37f21e123467ef1191db7a37cd99881c00"))])
  (sweeprolog .
-	     [(0 21 0)
+	     [(0 22 0)
 	      ((emacs
 		(28 1)))
 	      "Embedded SWI-Prolog" tar
@@ -1936,7 +1936,7 @@
 	       (:maintainer "Eshel Yaron" . "~eshel/dev@lists.sr.ht")
 	       (:authors
 		("Eshel Yaron" . "me@eshelyaron.com"))
-	       (:commit . "0e05fa9545c43b377fbfc38b9611e10018a65812"))])
+	       (:commit . "1553d9392686b6827ffcc6c870635a19a2818863"))])
  (swift-mode .
 	     [(9 0 0)
 	      ((emacs
@@ -2237,7 +2237,7 @@
 	      (:authors
 	       ("Le Wang")))])
  (xah-fly-keys .
-	       [(23 15 20230716225202)
+	       [(24 4 20230729142604)
 		((emacs
 		  (24 1)))
 		"ergonomic modal keybinding minor mode." tar
@@ -2246,7 +2246,7 @@
 		 (:maintainer "Xah Lee" . "xah@xahlee.org")
 		 (:authors
 		  ("Xah Lee ( http://xahlee.info/ )"))
-		 (:commit . "33bd3f7f06f9e7d17709e2b0b95c2076845d682d"))])
+		 (:commit . "d0df56a6052aa6457650c5b18f3418de843b8f97"))])
  (xkcd .
        [(1 1)
 	((json

@@ -732,7 +732,7 @@ Group 2 matches only the label, without the surrounding markup.
 Group 3 matches the closing square bracket.")
 
 (defconst markdown-regex-header
-  "^\\(?:\\(?1:[^\r\n\t -].*\\)\n\\(?:\\(?2:=+\\)\\|\\(?3:-+\\)\\)\\|\\(?4:#+[ \t]+\\)\\(?5:.*?\\)\\(?6:[ \t]*#*\\)\\)$"
+  "^\\(?:\\(?1:[^\r\n\t -].*\\)\n\\(?:\\(?2:=+\\)\\|\\(?3:-+\\)\\)\\|\\(?4:#+[ \t]+\\)\\(?5:.*?\\)\\(?6:[ \t]+#+\\)?\\)$"
   "Regexp identifying Markdown headings.
 Group 1 matches the text of a setext heading.
 Group 2 matches the underline of a level-1 setext heading.
@@ -3483,17 +3483,30 @@ SEQ may be an atom or a sequence."
                    (add-text-properties
                     (match-beginning 3) (match-end 3) rule-props)))
         ;; atx heading
-        (if markdown-fontify-whole-heading-line
-            (let ((header-end (min (point-max) (1+ (match-end 0)))))
-              (add-text-properties
-               (match-beginning 0) header-end heading-props))
+        (let ((header-end
+               (if markdown-fontify-whole-heading-line
+                   (min (point-max) (1+ (match-end 0)))
+                 (match-end 0))))
           (add-text-properties
            (match-beginning 4) (match-end 4) left-markup-props)
-          (add-text-properties
-           (match-beginning 5) (match-end 5) heading-props)
-          (when (match-end 6)
+
+          ;; If closing tag is present
+          (if (match-end 6)
+              (progn
+                (if markdown-hide-markup
+                    (progn
+                      (add-text-properties
+                       (match-beginning 5) header-end heading-props)
+                      (add-text-properties
+                       (match-beginning 6) (match-end 6) right-markup-props))
+                  (add-text-properties
+                   (match-beginning 5) (match-end 5) heading-props)
+                  (add-text-properties
+                   (match-beginning 6) header-end right-markup-props)))
+            ;; If closing tag is not present
             (add-text-properties
-             (match-beginning 6) (match-end 6) right-markup-props)))))
+             (match-beginning 5) header-end heading-props))
+          )))
     t))
 
 (defun markdown-fontify-tables (last)
