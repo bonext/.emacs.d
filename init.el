@@ -19,9 +19,8 @@
 ;; add russian as C-\ bind
 (setq default-input-method "russian-computer")
 
-;; org-mode
-;;; suggested shortcut keys
-(global-set-key (kbd "C-c l") 'org-store-link)
+                                        ; ORG-MODE
+
 ;;; enable scaling of inline images with attr_org width
 (setq org-image-actual-width nil)
 ;;; show inline images by default
@@ -29,7 +28,9 @@
 ;;; capture setup
 (setq org-directory "~/Documents/Notes")
 (setq org-default-notes-file (concat org-directory "/captured.org"))
+;;; suggested shortcut keys
 (global-set-key (kbd "C-c c") 'org-capture)
+(global-set-key (kbd "C-c l") 'org-store-link)
 
 ; colors
 ;; via https://www.emacswiki.org/emacs/CustomThemes#h5o-3
@@ -39,12 +40,7 @@
 ;;              (file-directory-p (concat basedir f)))
 ;;         (add-to-list 'custom-theme-load-path (concat basedir f)))))
 
-; packages
-
-;;; yuck-mode
-;;; via https://github.com/bonext/.emacs.d/tree/master/manual-packages/yuck-mode#how-do-i-install-it
-(add-to-list 'load-path "~/.emacs.d/manual-packages/yuck-mode")
-(autoload 'yuck-mode "yuck-mode" nil t)
+                                        ; PACKAGES
 
 ;; parinfer-rust-mode
 (add-to-list 'load-path "~/.emacs.d/manual-packages/parinfer-rust-mode")
