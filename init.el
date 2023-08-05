@@ -103,8 +103,10 @@
 (setq inferior-lisp-program "/usr/bin/sbcl")
 
 ;; geiser
-;;; guile2
-(setq geiser-guile-binary "/usr/local/bin/guile2.2")
+;;; racket
+(setq geiser-racket-binary "/usr/bin/racket")
+;;; guile
+(setq geiser-guile-binary "/usr/bin/guile")
 
 ;; ElDoc support
 (require 'eldoc)
@@ -130,13 +132,3 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
-
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
-
