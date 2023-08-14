@@ -1,6 +1,6 @@
-(define-package "markdown-mode" "20230804.305" "Major mode for Markdown-formatted text"
+(define-package "markdown-mode" "20230807.2338" "Major mode for Markdown-formatted text"
   '((emacs "27.1"))
-  :commit "50ac14ffe4e23224c74adf2b90a4833ccb62a416" :authors
+  :commit "b403120e60702c9dcc6c702a309533d4d92da150" :authors
   '(("Jason R. Blevins" . "jblevins@xbeta.org"))
   :maintainers
   '(("Jason R. Blevins" . "jblevins@xbeta.org"))

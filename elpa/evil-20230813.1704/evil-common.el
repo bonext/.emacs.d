@@ -96,7 +96,7 @@ otherwise prepend it to the list.
   "Delete by side-effect all items satisfying PREDICATE in LIST.
 Stop when reaching POINTER.  If the first item satisfies PREDICATE,
 there is no way to remove it by side-effect; therefore, write
-\(setq foo (evil-filter-list 'predicate foo)) to be sure of
+\(setq foo (evil-filter-list #\\='predicate foo)) to be sure of
 changing the value of `foo'."
   (let ((tail list) elt head)
     (while (and tail (not (eq tail pointer)))
@@ -207,6 +207,7 @@ ALIST is an association list with entries of the form
 If PROP is nil, return all properties for KEY.
 If KEY is t, return an association list of keys
 and their PROP values."
+  (declare (obsolete nil "1.15.0"))
   (cond
    ((null prop)
     (cdr (assq key alist)))
@@ -225,6 +226,7 @@ and their PROP values."
   "Set PROP to VAL for KEY in ALIST-VAR.
 ALIST-VAR points to an association list with entries of the form
 \(KEY . PLIST), where PLIST is a property list storing PROP and VAL."
+  (declare (obsolete nil "1.15.0"))
   (set alist-var
        (let* ((alist (symbol-value alist-var))
               (plist (cdr (assq key alist))))
@@ -318,11 +320,11 @@ last, sorting in between."
        ,(when (and command doc-form)
           `(put ',command 'function-documentation ,doc-form))
        ;; set command properties for symbol or lambda function
-       (let ((func ',(if (and (null command) body)
-                         `(lambda ,args
-                            ,interactive
-                            ,@body)
-                       command)))
+       (let ((func ,(if (and (null command) body)
+                        `(lambda ,args
+                           ,interactive
+                           ,@body)
+                      `#',command)))
          (apply #'evil-set-command-properties func ',keys)
          func))))
 
@@ -646,10 +648,10 @@ key-sequence. PREFIX and REST may be nil if they do not exist.
 If a command is bound to some keyboard macro, it is expanded
 recursively."
   (catch 'done
-    (let* ((len (length keys))
-           (beg 0)
-           (end 1)
-           (found-prefix nil))
+    (let ((len (length keys))
+          (beg 0)
+          (end 1)
+          found-prefix)
       (while (<= end len)
         (let* ((seq (substring keys beg end))
                (cmd (key-binding seq)))
@@ -1060,9 +1062,9 @@ immediately quits.
 
 (defun evil-signal-at-bob-or-eob (&optional count)
   "Signal error if `point' is at boundaries.
-If `point' is at bob and COUNT is negative this function signal
-`beginning-of-buffer'. If `point' is at eob and COUNT is positive
-this function singal `end-of-buffer'. This function should be used
+If `point' is at bob and COUNT is negative this function signals
+`beginning-of-buffer'.  If `point' is at eob and COUNT is positive
+this function signals `end-of-buffer'.  This function should be used
 in motions. COUNT defaults to 1."
   (setq count (or count 1))
   (cond
@@ -1363,13 +1365,11 @@ last successful match (that caused COUNT to reach zero)."
 
 (defun evil-up-xml-tag (&optional count)
   "Move point to the end or beginning of balanced xml tags.
-OPEN and CLOSE should be characters identifying the opening and
-closing parenthesis, respectively. If COUNT is greater than zero
-point is moved forward otherwise it is moved backwards. Whenever
-an opening delimiter is found the COUNT is increased by one, if a
-closing delimiter is found the COUNT is decreased by one. The
-motion stops when COUNT reaches zero. The match-data reflects the
-last successful match (that caused COUNT to reach zero)."
+If COUNT is greater than zero point is moved forward otherwise it is moved
+backwards.  Whenever an opening delimiter is found the COUNT is increased by
+one, if a closing delimiter is found the COUNT is decreased by one.  The motion
+stops when COUNT reaches zero.  The match data reflects the last successful
+match (that caused COUNT to reach zero)."
   (let* ((dir (if (> (or count 1) 0) +1 -1))
          (count (abs (or count 1)))
          (op (if (> dir 0) 1 2))
@@ -1392,7 +1392,7 @@ last successful match (that caused COUNT to reach zero)."
                         (string= (car tags) (match-string cl)))
                    ;; in backward direction we only accept matching
                    ;; tags. If the current tag is a free opener
-                   ;; without matching closing tag, the subsequents
+                   ;; without matching closing tag, the subsequent
                    ;; test will make us ignore this tag
                    (pop tags))
                   ((and (> dir 0))
@@ -1936,103 +1936,104 @@ The following special registers are supported.
   -  the last small (less than a line) delete
   _  the black hole register
   =  the expression register (read only)"
+  (unless (characterp register) (error "Invalid register `%S'" register))
   (condition-case err
-      (when (characterp register)
-        (or (cond
-             ((eq register ?\")
-              (current-kill 0))
-             ((<= ?1 register ?9)
-              (let ((reg (- register ?1)))
-                (and (< reg (length kill-ring))
-                     (current-kill reg t))))
-             ((memq register '(?* ?+))
-              (let ((what (if (eq register ?*) 'PRIMARY 'CLIPBOARD)))
-                (if (eval-when-compile (>= emacs-major-version 29))
-                    (gui--selection-value-internal what)
-                  ;; The following code is based on `x-selection-value-internal'
-                  ;; (now `gui--selection-value-internal') circa Emacs 24. We're
-                  ;; unsure why exactly it's duplicated here, and it's possible
-                  ;; it needn't be for newer versions of Emacs.
-                  (let ((request-type (or (bound-and-true-p x-select-request-type)
-                                          '(UTF8_STRING COMPOUND_TEXT STRING)))
-                        text)
-                    (unless (consp request-type)
-                      (setq request-type (list request-type)))
-                    (while (and request-type (not text))
-                      (setq text (ignore-errors
-                                   (evil-get-selection what (pop request-type)))))
-                    (when text
-                      (remove-text-properties 0 (length text) '(foreign-selection nil) text))
-                    text))))
-             ((eq register ?\C-W)
-              (unless (evil-ex-p)
-                (user-error "Register <C-w> only available in ex state"))
-              (with-current-buffer evil-ex-current-buffer
-                (thing-at-point 'evil-word)))
-             ((eq register ?\C-A)
-              (unless (evil-ex-p)
-                (user-error "Register <C-a> only available in ex state"))
-              (with-current-buffer evil-ex-current-buffer
-                (thing-at-point 'evil-WORD)))
-             ((eq register ?\C-O)
-              (unless (evil-ex-p)
-                (user-error "Register <C-o> only available in ex state"))
-              (with-current-buffer evil-ex-current-buffer
-                (thing-at-point 'evil-symbol)))
-             ((eq register ?\C-F)
-              (unless (evil-ex-p)
-                (user-error "Register <C-f> only available in ex state"))
-              (with-current-buffer evil-ex-current-buffer
-                (thing-at-point 'filename)))
-             ((eq register ?\C-L)
-              (unless (evil-ex-p)
-                (user-error "Register <C-l> only available in ex state"))
-              (with-current-buffer evil-ex-current-buffer
-                (replace-regexp-in-string "\n\\'" "" (thing-at-point 'line))))
-             ((eq register ?%)
-              (or (buffer-file-name (and (evil-ex-p)
-                                         (minibufferp)
-                                         evil-ex-current-buffer))
-                  (user-error "No file name")))
-             ((= register ?#)
-              (or (with-current-buffer (other-buffer) (buffer-file-name))
-                  (user-error "No file name")))
-             ((eq register ?/)
-              (defvar evil-search-module)
-              (or (car (cond
-                        ((eq evil-search-module 'evil-search) evil-ex-search-history)
-                        (isearch-regexp regexp-search-ring)
-                        (t search-ring)))
-                  (user-error "No previous regular expression")))
-             ((eq register ?:)
-              (or (car evil-ex-history) (user-error "No previous command line")))
-             ((eq register ?.)
-              evil-last-insertion)
-             ((eq register ?-)
-              evil-last-small-deletion)
-             ((eq register ?=)
-              (let ((enable-recursive-minibuffers t))
-                (setq evil-last-=-register-input
-                      (minibuffer-with-setup-hook
-                          (lambda ()
-                            (when evil-last-=-register-input
-                              (add-hook 'pre-command-hook #'evil-ex-remove-default nil t)))
-                        (read-from-minibuffer
-                         "="
-                         (and evil-last-=-register-input
-                              (propertize evil-last-=-register-input 'face 'shadow))
-                         evil-eval-map
-                         nil
-                         'evil-eval-history
-                         evil-last-=-register-input
-                         t)))
-                (evil--eval-expr evil-last-=-register-input)))
-             ((eq register ?_) ; the black hole register
-              "")
-             (t
-              (setq register (downcase register))
+      (or (cond
+           ((eq register ?\")
+            (current-kill 0))
+           ((<= ?1 register ?9)
+            (let ((reg (- register ?1)))
+              (and (< reg (length kill-ring))
+                   (current-kill reg t))))
+           ((memq register '(?* ?+))
+            (let ((what (if (eq register ?*) 'PRIMARY 'CLIPBOARD)))
+              (if (eval-when-compile (>= emacs-major-version 29))
+                  (gui--selection-value-internal what)
+                ;; The following code is based on `x-selection-value-internal'
+                ;; (now `gui--selection-value-internal') circa Emacs 24. We're
+                ;; unsure why exactly it's duplicated here, and it's possible
+                ;; it needn't be for newer versions of Emacs.
+                (let ((request-type (or (bound-and-true-p x-select-request-type)
+                                        '(UTF8_STRING COMPOUND_TEXT STRING)))
+                      text)
+                  (unless (consp request-type)
+                    (setq request-type (list request-type)))
+                  (while (and request-type (not text))
+                    (setq text (ignore-errors
+                                 (evil-get-selection what (pop request-type)))))
+                  (when text
+                    (remove-text-properties 0 (length text) '(foreign-selection nil) text))
+                  text))))
+           ((eq register ?\C-W)
+            (with-current-buffer
+                (or evil-ex-original-buffer
+                    (let ((w (minibuffer-selected-window))) (and w (window-buffer w)))
+                    (user-error "Register <C-w> is only available in Ex state"))
+              (thing-at-point 'evil-word)))
+           ((eq register ?\C-A)
+            (with-current-buffer
+                (or evil-ex-original-buffer
+                    (let ((w (minibuffer-selected-window))) (and w (window-buffer w)))
+                    (user-error "Register <C-a> is only available in Ex state"))
+              (thing-at-point 'evil-WORD)))
+           ((eq register ?\C-O)
+            (with-current-buffer
+                (or evil-ex-original-buffer
+                    (let ((w (minibuffer-selected-window))) (and w (window-buffer w)))
+                    (user-error "Register <C-o> is only available in Ex state"))
+              (thing-at-point 'evil-symbol)))
+           ((eq register ?\C-F)
+            (with-current-buffer
+                (or evil-ex-original-buffer
+                    (let ((w (minibuffer-selected-window))) (and w (window-buffer w)))
+                    (user-error "Register <C-f> is only available in Ex state"))
+              (thing-at-point 'filename)))
+           ((eq register ?\C-L)
+            (with-current-buffer
+                (or evil-ex-original-buffer
+                    (let ((w (minibuffer-selected-window))) (and w (window-buffer w)))
+                    (user-error "Register <C-l> is only available in Ex state"))
+              (replace-regexp-in-string "\n\\'" "" (thing-at-point 'line))))
+           ((eq register ?%)
+            (or (buffer-file-name
+                 (or evil-ex-original-buffer
+                     (let ((w (minibuffer-selected-window))) (and w (window-buffer w)))))
+                (user-error "No file name")))
+           ((= register ?#)
+            (or (with-current-buffer (other-buffer) (buffer-file-name))
+                (user-error "No file name")))
+           ((eq register ?/)
+            (defvar evil-search-module)
+            (or (car (cond
+                      ((eq evil-search-module 'evil-search) evil-ex-search-history)
+                      (isearch-regexp regexp-search-ring)
+                      (t search-ring)))
+                (user-error "No previous regular expression")))
+           ((eq register ?:)
+            (or (car evil-ex-history) (user-error "No previous command line")))
+           ((eq register ?.) evil-last-insertion)
+           ((eq register ?-) evil-last-small-deletion)
+           ((eq register ?=)
+            (let ((enable-recursive-minibuffers t))
+              (setq evil-last-=-register-input
+                    (minibuffer-with-setup-hook
+                        (lambda ()
+                          (when evil-last-=-register-input
+                            (add-hook 'pre-command-hook #'evil-ex-remove-default nil t)))
+                      (read-from-minibuffer
+                       "="
+                       (and evil-last-=-register-input
+                            (propertize evil-last-=-register-input 'face 'shadow))
+                       evil-eval-map
+                       nil
+                       'evil-eval-history
+                       evil-last-=-register-input
+                       t)))
+              (evil--eval-expr evil-last-=-register-input)))
+           ((eq register ?_) "") ; the black hole register
+           (t (setq register (downcase register))
               (get-register register)))
-            (user-error "Register `%c' is empty" register)))
+          (user-error "Register `%c' is empty" register))
     (error (unless noerror (signal (car err) (cdr err))))))
 
 (defun evil-append-register (register text)
@@ -2565,16 +2566,14 @@ is negative this is a more recent kill."
 (defun evil-match-interactive-code (interactive &optional pos)
   "Match an interactive code at position POS in string INTERACTIVE.
 Return the first matching entry in `evil-interactive-alist', or nil."
-  (let ((length (length interactive))
-        (pos (or pos 0)))
-    (catch 'done
-      (dolist (entry evil-interactive-alist)
-        (let* ((string (car entry))
-               (end (+ (length string) pos)))
-          (when (and (<= end length)
-                     (string= string
-                              (substring interactive pos end)))
-            (throw 'done entry)))))))
+  (unless pos (setq pos 0))
+  (cl-loop
+   with len = (length interactive) for entry in evil-interactive-alist thereis
+   (let* ((string (car entry))
+          (end (+ pos (length string))))
+     (and (<= end len)
+          (eq (compare-strings string nil nil interactive pos end) t)
+          entry))))
 
 (defun evil-concatenate-interactive-forms (&rest forms)
   "Concatenate interactive list expressions FORMS.
@@ -2591,17 +2590,14 @@ are joined, if possible."
           (setq forms (cons (append (car forms)
                                     (cdr (cadr forms)))
                             (cdr (cdr forms)))))
-         (t
-          (push (pop forms) result))))
+         (t (push (pop forms) result))))
       (when (car forms)
         (push (pop forms) result))
       (setq result (nreverse result))
       (cond
        ((null result))
-       ((null (cdr result))
-        (car result))
-       (t
-        `(append ,@result))))))
+       ((null (cdr result)) (car result))
+       (t `(append ,@result))))))
 
 (defun evil-interactive-string (string)
   "Evaluate the interactive string STRING.
@@ -2610,27 +2606,23 @@ The return value is a cons cell (FORM . PROPERTIES),
 where FORM is a single list-expression to be passed to
 a standard `interactive' statement, and PROPERTIES is a
 list of command properties as passed to `evil-define-command'."
-  (let ((length (length string))
+  (let ((len (length string))
         (pos 0)
-        code expr forms match plist prompt properties)
-    (while (< pos length)
+        forms properties)
+    (while (< pos len)
       (if (eq (aref string pos) ?\n)
           (setq pos (1+ pos))
-        (setq match (evil-match-interactive-code string pos))
-        (if (null match)
-            (user-error "Unknown interactive code: `%s'"
-                        (substring string pos))
-          (setq code (car match)
-                expr (car (cdr match))
-                plist (cdr (cdr match))
-                pos (+ pos (length code)))
+        (cl-destructuring-bind (code expr . plist)
+            (or (evil-match-interactive-code string pos)
+                (user-error "Unknown interactive code: `%s'"
+                            (substring string pos)))
+          (setq pos (+ pos (length code)))
           (when (functionp expr)
-            (setq prompt
-                  (substring string pos
-                             (or (string-match "\n" string pos)
-                                 length))
-                  pos (+ pos (length prompt))
-                  expr `(funcall ,expr ,prompt)))
+            (let ((prompt (substring
+                           string pos
+                           (or (string-match-p "\n" string pos) len))))
+              (setq pos (+ pos (length prompt))
+                    expr `(funcall ,expr ,prompt))))
           (setq forms (append forms (list expr))
                 properties (append properties plist)))))
     (cons `(append ,@forms) properties)))
@@ -2672,7 +2664,7 @@ list of command properties as passed to `evil-define-command'."
 
 (defun evil-set-type (object type)
   "Set the type of OBJECT to TYPE.
-For example, (evil-set-type 'next-line 'line)
+For example, (evil-set-type \\='next-line \\='line)
 will make `line' the type of the `next-line' command."
   (cond
    ((overlayp object)
@@ -3009,10 +3001,10 @@ linewise, otherwise it is character wise."
 OP and CL are pairs of buffer positions for the opening and
 closing delimiter of a range. SELECTION-TYPE is the desired type
 of selection.  It is a symbol that determines which parts of the
-block are selected.  If it is 'inclusive or t the returned range
-is \(cons (car OP) (cdr CL)). If it is 'exclusive or nil the
+block are selected.  If it is `inclusive' or t the returned range
+is \(cons (car OP) (cdr CL)). If it is `exclusive' or nil the
 returned range is (cons (cdr OP) (car CL)).  If it is
-'exclusive-line the returned range will skip whitespace at the
+`exclusive-line' the returned range will skip whitespace at the
 end of the line of OP and at the beginning of the line of CL."
   (cond
    ((memq selection-type '(inclusive t)) (cons (car op) (cdr cl)))
@@ -3045,9 +3037,9 @@ delimited object must be given by THING-up function (see
 `evil-up-block').
 
 SELECTION-TYPE is symbol that determines which parts of the block
-are selected.  If it is 'inclusive or t OPEN and CLOSE are
-included in the range. If it is 'exclusive or nil the delimiters
-are not contained. If it is 'exclusive-line the delimiters are
+are selected.  If it is `inclusive' or t OPEN and CLOSE are
+included in the range. If it is `exclusive' or nil the delimiters
+are not contained. If it is `exclusive-line' the delimiters are
 not included as well as adjacent whitespace until the beginning
 of the next line or the end of the previous line. If the
 resulting selection consists of complete lines only and visual
@@ -3226,7 +3218,7 @@ is ignored."
 
 (defun evil-select-quote-thing (thing beg end _type count &optional inclusive)
   "Selection THING as if it described a quoted object.
-THING is typically either 'evil-quote or 'evil-chars. This
+THING is typically either `evil-quote' or `evil-chars'. This
 function is called from `evil-select-quote'."
   (save-excursion
     (let* ((count (or count 1))
@@ -3345,8 +3337,7 @@ from the range."
    ((and (not inclusive) (= (abs (or count 1)) 1))
     (let ((rng (evil-select-block #'evil-up-xml-tag beg end type count nil t)))
       (if (or (and beg (= beg (evil-range-beginning rng))
-                   end (= end (evil-range-end rng)))
-              (= (evil-range-beginning rng) (evil-range-end rng)))
+                   end (= end (evil-range-end rng))))
           (evil-select-block #'evil-up-xml-tag beg end type count t)
         rng)))
    (t
@@ -3661,10 +3652,10 @@ codes \\y and \\Y can be used instead of the Emacs code \\s and
   "Return a regexp matching the magic characters according to MAGIC.
 Depending on the value of MAGIC the following characters are
 considered magic.
-  t             [][{}*+?.&~$^
-  nil           [][{}*+?$^
-  'very-magic   not 0-9A-Za-z_
-  'very-nomagic empty."
+  t              [][{}*+?.&~$^
+  nil            [][{}*+?$^
+  `very-magic'   not 0-9A-Za-z_
+  `very-nomagic' empty."
   (cond
    ((eq magic t) "[][}{*+?.&~$^]")
    ((eq magic 'very-magic) "[^0-9A-Za-z_]")
@@ -3770,7 +3761,7 @@ replacement text first."
 (defun evil-justify-lines (beg end justify position)
   "Justify all lines in a range.
 BEG and END specify the range of those lines to be
-justified. JUSTIFY is either 'left, 'right or 'center according
+justified. JUSTIFY is either `left', `right' or `center' according
 to the justification type. POSITION is the maximal text width for
 right and center justification or the column at which the lines
 should be left-aligned for left justification."

@@ -942,28 +942,36 @@ corresponding local environments are collected for these.
 Forms and environments are extracted from FORM by instrumenting
 Emacs's builtin `macroexpand' function and calling
 `macroexpand-all'."
-  (let ((real-macroexpand (indirect-function #'macroexpand))
-        (macro-form-alist '())
-        (compiler-macro-forms '()))
-    (cl-letf
-        (((symbol-function #'macroexpand)
-          (lambda (form environment &rest args)
-            (let ((expansion
-                   (apply real-macroexpand form environment args)))
-              (cond ((not (eq expansion form))
-                     (setq macro-form-alist
-                           (cons (cons form environment)
-                                 macro-form-alist)))
-                    ((and (consp form)
-                          (symbolp (car form))
-                          macrostep-expand-compiler-macros
-                          (not (eq form
-                                   (cl-compiler-macroexpand form))))
-                     (setq compiler-macro-forms
-                           (cons form compiler-macro-forms))))
-              expansion))))
-      (ignore-errors
-        (macroexpand-all form environment)))
+  (let* ((macro-form-alist '())
+         (compiler-macro-forms '())
+         (override (lambda (real-macroexpand form environment &rest args)
+                     (let ((expansion
+                            (apply real-macroexpand form environment args)))
+                       (cond ((not (eq expansion form))
+                              (setq macro-form-alist
+                                    (cons (cons form environment)
+                                          macro-form-alist)))
+                             ((and (consp form)
+                                   (symbolp (car form))
+                                   macrostep-expand-compiler-macros
+                                   (not (eq form
+                                            (cl-compiler-macroexpand form))))
+                              (setq compiler-macro-forms
+                                    (cons form compiler-macro-forms))))
+                       expansion))))
+    (cl-macrolet ((with-override (fn &rest body)
+                    `(cl-letf (((symbol-function ,fn)
+                                (apply-partially override (indirect-function ,fn))))
+                       ,@body))
+                  (with-macroexpand-1 (&rest body)
+                    (if (< emacs-major-version 30)
+                        `(progn ,@body) `(with-override #'macroexpand-1 ,@body)))
+                  (with-macroexpand (&rest body)
+                    `(with-override #'macroexpand ,@body)))
+      (with-macroexpand-1
+       (with-macroexpand
+        (ignore-errors
+          (macroexpand-all form environment)))))
     (list macro-form-alist compiler-macro-forms)))
 
 (defvar macrostep-collected-macro-form-alist nil

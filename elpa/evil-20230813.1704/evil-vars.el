@@ -70,8 +70,8 @@ the :initialize property of `defcustom'.")
 See `evil-pending-custom-initialize'."
   (dolist (init evil-pending-custom-initialize)
     (apply (car init) (cdr init)))
-  (remove-hook 'evil-after-load-hook 'evil-run-pending-custom-initialize))
-(add-hook 'evil-after-load-hook 'evil-run-pending-custom-initialize)
+  (remove-hook 'evil-after-load-hook #'evil-run-pending-custom-initialize))
+(add-hook 'evil-after-load-hook #'evil-run-pending-custom-initialize)
 
 ;;; Setters
 
@@ -407,14 +407,14 @@ also be inhibited by setting `evil-inhibit-esc'."
 Used by `evil-esc-mode'.")
 
 (defvar evil-inhibit-esc nil
-  "If non-nil, the \\e event will never be translated to 'escape.")
+  "If non-nil, the \"\\e\" event will never be translated to `escape'.")
 
 (defcustom evil-intercept-esc 'always
   "Whether Evil should intercept the escape key.
 In the terminal, escape and a meta key sequence both generate the
 same event.  In order to distingush these, Evil uses
 `input-decode-map'.  It is not necessary to do this in a graphical
-Emacs session.  However, if you prefer to use `C-[' as escape (which
+Emacs session.  However, if you prefer to use \"C-[\" as escape (which
 is identical to the terminal escape key code), this interception must
 also happen in graphical Emacs sessions.  Set this variable to
 `always', t (only in the terminal) or nil (never intercept)."
@@ -471,7 +471,8 @@ Otherwise, `C-i' inserts a tab character."
                (define-key evil-motion-state-map (kbd "C-i") nil))
               ((and value
                     (not (lookup-key evil-motion-state-map (kbd "C-i"))))
-               (define-key evil-motion-state-map (kbd "C-i") 'evil-jump-forward))))))
+               (define-key evil-motion-state-map (kbd "C-i")
+                           'evil-jump-forward))))))
 
 (defcustom evil-want-C-u-scroll nil
   "Whether `C-u' scrolls up (like Vim).
@@ -490,7 +491,8 @@ ubiquity of prefix arguments."
                (define-key evil-motion-state-map (kbd "C-u") nil))
               ((and value
                     (not (lookup-key evil-motion-state-map (kbd "C-u"))))
-               (define-key evil-motion-state-map (kbd "C-u") 'evil-scroll-up))))))
+               (define-key evil-motion-state-map (kbd "C-u")
+                           'evil-scroll-up))))))
 
 (defcustom evil-want-C-d-scroll t
   "Whether `C-d' scrolls down (like Vim)."
@@ -506,7 +508,8 @@ ubiquity of prefix arguments."
                (define-key evil-motion-state-map (kbd "C-d") nil))
               ((and value
                     (not (lookup-key evil-motion-state-map (kbd "C-d"))))
-               (define-key evil-motion-state-map (kbd "C-d") 'evil-scroll-down))))))
+               (define-key evil-motion-state-map (kbd "C-d")
+                           'evil-scroll-down))))))
 
 (defcustom evil-want-C-u-delete nil
   "Whether `C-u' deletes back to indentation in insert state.
@@ -527,8 +530,10 @@ ubiquity of prefix arguments."
                (define-key evil-replace-state-map (kbd "C-u") nil))
               ((and value
                     (not (lookup-key evil-insert-state-map (kbd "C-u"))))
-               (define-key evil-insert-state-map (kbd "C-u") 'evil-delete-back-to-indentation)
-               (define-key evil-replace-state-map (kbd "C-u") 'evil-delete-back-to-indentation))))))
+               (define-key evil-insert-state-map (kbd "C-u")
+                           'evil-delete-back-to-indentation)
+               (define-key evil-replace-state-map (kbd "C-u")
+                           'evil-delete-back-to-indentation))))))
 
 (defcustom evil-want-C-w-delete t
   "Whether `C-w' deletes a word in Insert/Ex/Search state."
@@ -553,22 +558,22 @@ ubiquity of prefix arguments."
              (cond
               ((and (not value)
                     (eq (lookup-key evil-ex-search-keymap (kbd "C-w"))
-                        'backward-kill-word))
+                        #'backward-kill-word))
                (define-key evil-ex-search-keymap (kbd "C-w") 'evil-search-yank-word))
               ((and value
                     (eq (lookup-key evil-ex-search-keymap (kbd "C-w"))
                         'evil-search-yank-word))
-               (define-key evil-ex-search-keymap (kbd "C-w") 'backward-kill-word))))
+               (define-key evil-ex-search-keymap (kbd "C-w") #'backward-kill-word))))
            (when (boundp 'evil-ex-completion-map)
              (cond
               ((and (not value)
                     (eq (lookup-key evil-ex-completion-map (kbd "C-w"))
-                        'backward-kill-word))
+                        #'backward-kill-word))
                (define-key evil-ex-completion-map (kbd "C-w") nil))
               ((and value
                     (eq (lookup-key evil-ex-completion-map (kbd "C-w"))
                         nil))
-               (define-key evil-ex-completion-map (kbd "C-w") 'backward-kill-word))))))
+               (define-key evil-ex-completion-map (kbd "C-w") #'backward-kill-word))))))
 
 (defcustom evil-want-C-h-delete nil
   "Whether `C-h' deletes a char in Insert state."
@@ -586,8 +591,10 @@ ubiquity of prefix arguments."
                (define-key evil-replace-state-map (kbd "C-h") nil))
               ((and value
                     (not (lookup-key evil-insert-state-map (kbd "C-h"))))
-               (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
-               (define-key evil-replace-state-map (kbd "C-h") 'evil-replace-backspace))))))
+               (define-key evil-insert-state-map (kbd "C-h")
+                           'evil-delete-backward-char-and-join)
+               (define-key evil-replace-state-map (kbd "C-h")
+                           'evil-replace-backspace))))))
 
 (defcustom evil-want-C-g-bindings nil
   "Whether `C-g' postfix can be used in bindings."
@@ -971,7 +978,7 @@ overridden."
                                        'override-state
                                        'evil-make-overriding-map
                                        values))
-  :initialize 'evil-custom-initialize-pending-reset)
+  :initialize #'evil-custom-initialize-pending-reset)
 
 (add-hook 'after-load-functions #'evil-update-pending-maps)
 
@@ -991,7 +998,7 @@ intercepted."
                                        'intercept-state
                                        'evil-make-intercept-map
                                        values))
-  :initialize 'evil-custom-initialize-pending-reset)
+  :initialize #'evil-custom-initialize-pending-reset)
 
 (defcustom evil-motions
   '(back-to-indentation
@@ -1090,8 +1097,8 @@ intercepted."
   "Non-Evil commands to initialize to motions."
   :type  '(repeat symbol)
   :group 'evil
-  :set 'evil-set-custom-motions
-  :initialize 'evil-custom-initialize-pending-reset)
+  :set #'evil-set-custom-motions
+  :initialize #'evil-custom-initialize-pending-reset)
 
 (defcustom evil-visual-newline-commands
   '(LaTeX-section
@@ -1100,8 +1107,8 @@ intercepted."
 These commands work better without this newline."
   :type  '(repeat symbol)
   :group 'evil
-  :set 'evil-set-visual-newline-commands
-  :initialize 'evil-custom-initialize-pending-reset)
+  :set #'evil-set-visual-newline-commands
+  :initialize #'evil-custom-initialize-pending-reset)
 
 (defcustom evil-want-visual-char-semi-exclusive nil
   "DEPRECATED.  Will be removed in a future version.
@@ -1252,7 +1259,7 @@ only has influence if the Evil search module is chosen in
   "If non-nil Vim-style backslash codes are supported in search patterns.
 See `evil-transform-vim-style-regexp' for the supported backslash
 codes.  Note that this only affects the search command if
-`evil-search-module' is set to 'evil-search. The isearch module
+`evil-search-module' is set to `evil-search'.  The isearch module
 always uses plain Emacs regular expressions."
   :type 'boolean
   :group 'evil)
@@ -1298,7 +1305,7 @@ used."
 
 (defcustom evil-ex-search-incremental t
   "If t, use incremental search. Note that this only affects the
-search command if `evil-search-module' is set to 'evil-search."
+search command if `evil-search-module' is set to `evil-search'."
   :type 'boolean
   :group 'evil)
 
@@ -1321,12 +1328,10 @@ the replacement is shown interactively."
 
 (defcustom evil-ex-substitute-global nil
   "If non-nil substitute patterns are global by default.
-Usually (if this variable is nil) a substitution works only on
-the first match of a pattern in a line unless the 'g' flag is
-given, in which case the substitution happens on all matches in a
-line. If this option is non-nil, this behaviour is reversed: the
-substitution works on all matches unless the 'g' pattern is
-specified, then is works only on the first match."
+Standardly (if this variable is nil) a substitution works only on the
+first match of the pattern in a line unless the \"g\" flag is
+given, in which case the substitution happens on all matches in the
+line. If this option is non-nil, this behavior is reversed."
   :type  'boolean
   :group 'evil)
 
@@ -1855,7 +1860,7 @@ the format:
 MODES acts as a predicate, containing the symbols of all major or
 minor modes for which the handler should match.  For example:
 
-  '((outline-minor-mode org-mode) ...)
+  \\='((outline-minor-mode org-mode) ...)
 
 would match for either outline-minor-mode or org-mode, even though the
 former is a minor mode and the latter is a major.
@@ -1910,11 +1915,16 @@ when Ex is started interactively.")
 (defvar evil-ex-history nil
   "History of Ex commands.")
 
-(defvar evil-ex-current-buffer nil
-  "The buffer from which Ex was started.")
+(define-obsolete-variable-alias
+  'evil-ex-current-buffer 'evil-ex-original-buffer "1.15.0")
+(defvar evil-ex-original-buffer nil
+  "Buffer that was current when the Evil command line was started.")
 
 (defvar evil-ex-point nil
   "The point position when the Ex command was called.")
+
+(defvar evil-called-from-ex-p nil
+  "Non-nil if a command is currently being called as an Ex command.")
 
 (defvar evil-ex-range nil
   "The current range of the Ex command.")
@@ -1940,7 +1950,7 @@ when Ex is started interactively.")
   "The history for the search command.")
 
 (defvar evil-ex-search-direction nil
-  "The direction of the current search, either 'forward or 'backward.")
+  "The direction of the current search, either `forward' or `backward'.")
 
 (defvar evil-ex-search-count nil
   "The count of the current search.")
@@ -1981,16 +1991,13 @@ Otherwise the previous command is assumed as substitute.")
 
 ;;; Command line window
 
-(defvar evil-command-window-current-buffer nil
-  "The buffer from which the command line window was called.")
-
 (evil-define-local-var evil-command-window-execute-fn nil
   "The command to execute when exiting the command line window.")
 
 (evil-define-local-var evil-command-window-cmd-key nil
   "The key for the command that opened the command line window (:, /, or ?).")
 
-;; The lazy-highlighting framework.
+;; The lazy-highlighting framework
 (evil-define-local-var evil-ex-active-highlights-alist nil
   "An alist of currently active highlights.")
 
@@ -1999,7 +2006,7 @@ Otherwise the previous command is assumed as substitute.")
 
 (defvar evil-ex-search-keymap (make-sparse-keymap)
   "Keymap used in ex-search-mode.")
-(define-key evil-ex-search-keymap [escape] 'abort-recursive-edit)
+(define-key evil-ex-search-keymap [escape] #'abort-recursive-edit)
 (set-keymap-parent evil-ex-search-keymap minibuffer-local-map)
 
 (defcustom evil-want-empty-ex-last-command t
@@ -2056,37 +2063,37 @@ This variable must be set before evil is loaded."
 (defun evil--redo-placeholder (_count)
   (user-error "Customize `evil-undo-system' for redo functionality."))
 
-(defvar evil-undo-function 'undo
+(defvar evil-undo-function #'undo
   "Function to be used by `evil-undo'.
 Customized via `evil-undo-system'.")
 
-(defvar evil-redo-function 'evil--redo-placeholder
-  "Function to be used by 'evil-redo'.
+(defvar evil-redo-function #'evil--redo-placeholder
+  "Function to be used by `evil-redo'.
 Customized via `evil-undo-system'.")
 
 (defun evil-set-undo-system (system)
-  "Set `evil-undo-function' and `evil-redo-function` by SYSTEM."
+  "Set `evil-undo-function' and `evil-redo-function' by SYSTEM."
   (cond
    ((not system)
-    (setq evil-undo-function 'undo
-          evil-redo-function 'evil--redo-placeholder))
+    (setq evil-undo-function #'undo
+          evil-redo-function #'evil--redo-placeholder))
    ((eq system 'undo-redo)
-    (setq evil-undo-function 'undo-only
-          evil-redo-function 'undo-redo))
+    (setq evil-undo-function #'undo-only
+          evil-redo-function #'undo-redo))
    ((eq system 'undo-tree)
     (setq evil-undo-function 'undo-tree-undo
           evil-redo-function 'undo-tree-redo))
    ((eq system 'undo-fu)
     (setq evil-undo-function 'undo-fu-only-undo
           evil-redo-function 'undo-fu-only-redo))
-   (t
-    (error "Unknown undo system %s" system))))
+   (t (error "Unknown undo system `%s'" system))))
 
 (defcustom evil-undo-system nil
-  "Undo system Evil should use.  If equal to `undo-tree' or
-`undo-fu', those packages must be installed.  If equal to
-`undo-tree', `undo-tree-mode' must also be activated.  If equal
-to `undo-redo', Evil uses commands natively available in Emacs 28."
+  "Undo system Evil should use.
+If equal to `undo-tree' or `undo-fu', those packages must be
+installed.  If equal to `undo-tree', `undo-tree-mode' must also be
+activated.  If equal to `undo-redo', Evil uses commands natively
+available in Emacs 28."
   :type '(choice (const :tag "Vanilla undo" nil)
                  (const undo-redo)
                  (const undo-tree)
