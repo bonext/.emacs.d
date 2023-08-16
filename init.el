@@ -1,5 +1,4 @@
-; built-ins
-
+                                        ; BUILT-INS
 ;; only spaces
 (setq-default indent-tabs-mode nil)
 
@@ -18,6 +17,9 @@
 
 ;; add russian as C-\ bind
 (setq default-input-method "russian-computer")
+
+;; customize to file
+(setq custom-file "~/.emacs.d/custom.el")
 
                                         ; ORG-MODE
 
@@ -43,10 +45,10 @@
                                         ; PACKAGES
 
 ;; parinfer-rust-mode
+(setq parinfer-rust-auto-download t)
 (add-to-list 'load-path "~/.emacs.d/manual-packages/parinfer-rust-mode")
 (autoload 'parinfer-rust-mode "parinfer-rust-mode" nil t)
 (add-hook 'emacs-lisp-mode 'parinfer-rust-mode)
-(setq parinfer-rust-auto-download t)
 
 ;; TODO: add these as parinfer hooks instead?
 ;; (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
@@ -117,18 +119,3 @@
       (require 'saveplace)
       (setq-default save-place t))
   (save-place-mode 1))
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(browse-url-browser-function 'browse-url-firefox)
- '(package-selected-packages
-   '(base16-theme vimrc-mode markdown-mode slime evil-org org geiser geiser-racket racket-mode solarized-theme org-journal lua-mode paredit geiser-guile company evil))
- '(warning-suppress-types '((comp))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
