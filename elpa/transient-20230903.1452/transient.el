@@ -237,7 +237,7 @@ of this variable use \"C-x t\" when a transient is active."
 This only affects infix arguments that represent command-line
 arguments.  When this option is non-nil, then the key binding
 for infix argument are highlighted when only a long argument
-\(e.g. \"--verbose\") is specified but no shor-thand (e.g \"-v\").
+\(e.g., \"--verbose\") is specified but no shor-thand (e.g \"-v\").
 In the rare case that a short-hand is specified but does not
 match the key binding, then it is highlighted differently.
 
@@ -2176,9 +2176,9 @@ value.  Otherwise return CHILDREN as is."
                   (lambda (spec)
                     (let ((abort t))
                       (unwind-protect
-	                  (prog1 (advice-eval-interactive-spec spec)
-	                    (setq abort nil))
-	                (when abort
+                          (prog1 (advice-eval-interactive-spec spec)
+                            (setq abort nil))
+                        (when abort
                           (when-let ((unwind (oref prefix unwind-suffix)))
                             (transient--debug 'unwind-interactive)
                             (funcall unwind suffix))
@@ -2201,9 +2201,9 @@ value.  Otherwise return CHILDREN as is."
           (lambda (spec)
             (let ((abort t))
               (unwind-protect
-	          (prog1 (advice-eval-interactive-spec spec)
-	            (setq abort nil))
-	        (when abort
+                  (prog1 (advice-eval-interactive-spec spec)
+                    (setq abort nil))
+                (when abort
                   (when-let ((unwind (oref prefix unwind-suffix)))
                     (transient--debug 'unwind-interactive)
                     (funcall unwind suffix))
@@ -2242,7 +2242,19 @@ value.  Otherwise return CHILDREN as is."
     (transient--debug 'post-command)
     (transient--with-emergency-exit
       (cond (transient--exitp (transient--post-exit))
-            ((eq this-command (oref transient--prefix command)))
+            ;; If `this-command' is the current transient prefix, then we
+            ;; have already taken care of updating the transient buffer...
+            ((and (eq this-command (oref transient--prefix command))
+                  ;; ... but if `prefix-arg' is non-nil, then the values
+                  ;; of `this-command' and `real-this-command' are untrue
+                  ;; because `prefix-command-preserve-state' changes them.
+                  ;; We cannot use `current-prefix-arg' because it is set
+                  ;; too late (in `command-execute'), and if it were set
+                  ;; earlier, then we likely still would not be able to
+                  ;; rely on it and `prefix-command-preserve-state-hook'
+                  ;; would have to be used record that a universal
+                  ;; argument is in effect.
+                  (not prefix-arg)))
             ((let ((old transient--redisplay-map)
                    (new (transient--make-redisplay-map)))
                (unless (equal old new)
@@ -2357,7 +2369,7 @@ value.  Otherwise return CHILDREN as is."
 
 (defun transient--emergency-exit ()
   "Exit the current transient command after an error occurred.
-When no transient is active (i.e. when `transient--prefix' is
+When no transient is active (i.e., when `transient--prefix' is
 nil) then do nothing."
   (transient--debug 'emergency-exit)
   (when transient--prefix
@@ -2821,7 +2833,7 @@ user using the reader specified by the `reader' slot (using the
 `transient-infix' method described below).
 
 For some infix classes the value is changed without reading
-anything in the minibuffer, i.e. the mere act of invoking the
+anything in the minibuffer, i.e., the mere act of invoking the
 infix command determines what the new value should be, based
 on the previous value.")
 
@@ -2860,7 +2872,7 @@ the lack of history, for example.
 
 Only for very simple classes that toggle or cycle through a very
 limited number of possible values should you replace this with a
-simple method that does not handle history.  (E.g. for a command
+simple method that does not handle history.  (E.g., for a command
 line switch the only possible values are \"use it\" and \"don't use
 it\", in which case it is pointless to preserve history.)"
   (with-slots (value multi-value always-read allow-empty choices) obj
@@ -3158,8 +3170,8 @@ does nothing." nil)
   "Return nil, which means \"no value\".
 
 Setting the value of a variable is done by, well, setting the
-value of the variable.  I.e. this is a side-effect and does not
-contribute to the value of the transient."
+value of the variable.  I.e., this is a side-effect and does
+not contribute to the value of the transient."
   nil)
 
 ;;;; Utilities
@@ -3502,7 +3514,7 @@ Optional support for popup buttons is also implemented here."
               (setq pre (string-replace "TAB" "C-i" pre))
               (setq suf (string-replace "RET" "C-m" suf))
               (setq suf (string-replace "TAB" "C-i" suf))
-              ;; We use e.g. "-k" instead of the more correct "- k",
+              ;; We use e.g., "-k" instead of the more correct "- k",
               ;; because the former is prettier.  If we did that in
               ;; the definition, then we want to drop the space that
               ;; is reinserted above.  False-positives are possible

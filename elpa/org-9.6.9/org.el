@@ -9,7 +9,7 @@
 ;; URL: https://orgmode.org
 ;; Package-Requires: ((emacs "26.1"))
 
-;; Version: 9.6.8
+;; Version: 9.6.9
 
 ;; This file is part of GNU Emacs.
 ;;
@@ -14759,12 +14759,12 @@ is considered `day' (i.e. only `bracket', `day', and `after' return
 values are possible).
 
 When matching, the match groups are the following:
-  group 1: year, if any
-  group 2: month, if any
-  group 3: day number, if any
-  group 4: day name, if any
-  group 5: hours, if any
-  group 6: minutes, if any"
+  group 2: year, if any
+  group 3: month, if any
+  group 4: day number, if any
+  group 5: day name, if any
+  group 7: hours, if any
+  group 8: minutes, if any"
   (let* ((regexp
           (if extended
               (if (eq extended 'agenda)
