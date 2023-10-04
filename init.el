@@ -77,6 +77,7 @@
 (setq org-journal-dir "~/Documents/journal")
 (setq org-journal-date-format "%Y-%m-%d, %A")
 (setq org-journal-file-format "%F.org") ; yyyy-mm-dd.org
+(global-set-key (kbd "C-c j") 'org-journal-new-entry)
 (require 'org-journal)
 
 ;; company
