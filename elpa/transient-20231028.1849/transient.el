@@ -505,7 +505,13 @@ See info node `(transient)Enabling and Disabling Suffixes'."
 Also see option `transient-highlight-higher-levels'."
   :group 'transient-faces)
 
-(defface transient-separator
+(defface transient-delimiter '((t :inherit shadow))
+  "Face used for delimiters and separators.
+This includes the parentheses around values and the pipe
+character used to separate possible values from each other."
+  :group 'transient-faces)
+
+(defface transient-separator-line
   `((((class color) (background light))
      ,@(and (>= emacs-major-version 27) '(:extend t))
      :background "grey80")
@@ -516,6 +522,9 @@ Also see option `transient-highlight-higher-levels'."
 This is only used if `transient-mode-line-format' is `line'.
 Only the background color is significant."
   :group 'transient-faces)
+
+(define-obsolete-face-alias 'transient-separator 'transient-separator-line
+                            "transient 0.4.4")
 
 (defgroup transient-color-faces
   '((transient-semantic-coloring custom-variable))
@@ -993,30 +1002,31 @@ example, sets a variable, use `transient-define-infix' instead.
 (put 'transient--default-infix-command 'interactive-only t)
 (put 'transient--default-infix-command 'command-modes (list 'not-a-mode))
 
-(defun transient--expand-define-args (args &optional arglist)
-  (unless (listp arglist)
-    (error "Mandatory ARGLIST is missing"))
-  (let (class keys suffixes docstr)
-    (when (stringp (car args))
-      (setq docstr (pop args)))
-    (while (keywordp (car args))
-      (let ((k (pop args))
-            (v (pop args)))
-        (if (eq k :class)
-            (setq class v)
-          (push k keys)
-          (push v keys))))
-    (while (let ((arg (car args)))
-             (or (vectorp arg)
-                 (and arg (symbolp arg))))
-      (push (pop args) suffixes))
-    (list (if (eq (car-safe class) 'quote)
-              (cadr class)
-            class)
-          (nreverse keys)
-          (nreverse suffixes)
-          docstr
-          args)))
+(eval-and-compile
+  (defun transient--expand-define-args (args &optional arglist)
+    (unless (listp arglist)
+      (error "Mandatory ARGLIST is missing"))
+    (let (class keys suffixes docstr)
+      (when (stringp (car args))
+        (setq docstr (pop args)))
+      (while (keywordp (car args))
+        (let ((k (pop args))
+              (v (pop args)))
+          (if (eq k :class)
+              (setq class v)
+            (push k keys)
+            (push v keys))))
+      (while (let ((arg (car args)))
+               (or (vectorp arg)
+                   (and arg (symbolp arg))))
+        (push (pop args) suffixes))
+      (list (if (eq (car-safe class) 'quote)
+                (cadr class)
+              class)
+            (nreverse keys)
+            (nreverse suffixes)
+            docstr
+            args))))
 
 (defun transient--parse-child (prefix spec)
   (cl-etypecase spec
@@ -2486,7 +2496,8 @@ If there is no parent prefix, then behave like `transient--do-exit'."
 
 (defun transient--do-leave ()
   "Call the command without exporting variables and exit the transient."
-  transient--stay)
+  (transient--stack-zap)
+  transient--exit)
 
 (defun transient--do-push-button ()
   "Call the command represented by the activated button.
@@ -2618,18 +2629,16 @@ prefix argument and pivot to `transient-update'."
     (other-window 1)
     (display-warning 'transient "Inconsistent transient state detected.
 This should never happen.
-Please open an issue and post the shown command log.
-This is a heisenbug, so any additional details might help.
-Thanks!" :error)))
+Please open an issue and post the shown command log." :error)))
 
 (defun transient-toggle-common ()
-  "Toggle whether common commands are always shown."
+  "Toggle whether common commands are permanently shown."
   (interactive)
   (setq transient-show-common-commands (not transient-show-common-commands)))
 
 (defun transient-suspend ()
   "Suspend the current transient.
-It can later be resumed using `transient-resume' while no other
+It can later be resumed using `transient-resume', while no other
 transient is active."
   (interactive))
 
@@ -2638,7 +2647,7 @@ transient is active."
   (interactive))
 
 (defun transient-quit-one ()
-  "Exit the current transients, possibly returning to the previous."
+  "Exit the current transients, returning to outer transient, if any."
   (interactive))
 
 (defun transient-quit-seq ()
@@ -2807,6 +2816,22 @@ around `scroll-down-command' (which see)."
         (t
          (message "No suspended transient command"))))
 
+(transient-define-suffix transient-echo-arguments (arguments)
+  "Show the transient's active ARGUMENTS in the echo area.
+Intended for use in prefixes used for demonstration purposes,
+such as when suggesting a new feature or reporting an issue."
+  :transient t
+  :description "Echo arguments"
+  :key "x"
+  (interactive (list (transient-args transient-current-command)))
+  (message "Arguments: %s"
+           (mapconcat (lambda (arg)
+                        (propertize (if (string-match-p " " arg)
+                                        (format "%S" arg)
+                                      arg)
+                                    'face 'transient-argument))
+                      arguments " ")))
+
 ;;; Value
 ;;;; Init
 
@@ -2961,6 +2986,7 @@ it\", in which case it is pointless to preserve history.)"
         (oset obj value nil)
       (let* ((enable-recursive-minibuffers t)
              (reader (oref obj reader))
+             (choices (if (functionp choices) (funcall choices) choices))
              (prompt (transient-prompt obj))
              (value (if multi-value (mapconcat #'identity value ",") value))
              (history-key (or (oref obj history-key)
@@ -3331,7 +3357,7 @@ have a history of their own.")
                    (list (propertize (oref suffix key) 'face 'transient-key)))))
           transient--suffixes)
          #'string<)
-        (propertize "|" 'face 'transient-unreachable-key))))))
+        (propertize "|" 'face 'transient-delimiter))))))
 
 (defun transient--show ()
   (transient--timer-cancel)
@@ -3370,7 +3396,7 @@ have a history of their own.")
                                 (transient--prefix-color transient--prefix))))
                    `(,@(and (>= emacs-major-version 27) '(:extend t))
                      :background ,(face-foreground f))
-                 'transient-separator)))
+                 'transient-separator-line)))
           (insert (propertize "__" 'face face 'display '(space :height (1))))
           (insert (propertize "\n" 'face face 'line-height t))))
       (when transient-force-fixed-pitch
@@ -3635,7 +3661,9 @@ and its value is returned to the caller."
   (and-let* ((desc (oref obj description))
              (desc (if (functionp desc)
                        (with-current-buffer transient--original-buffer
-                         (funcall desc))
+                         (if (= (car (func-arity desc)) 1)
+                             (funcall desc obj)
+                           (funcall desc)))
                      desc)))
     (progn ; work around debbugs#31840
       (when-let ((face (and (slot-exists-p obj 'face) (oref obj face))))
@@ -3701,8 +3729,8 @@ If the OBJ's `key' is currently unreachable, then apply the face
                         'face (if value
                                   'transient-value
                                 'transient-inactive-value))
-            (concat
-             (propertize "[" 'face 'transient-inactive-value)
+            (format
+             (propertize "[%s]" 'face 'transient-delimiter)
              (mapconcat
               (lambda (choice)
                 (propertize choice 'face
@@ -3710,8 +3738,7 @@ If the OBJ's `key' is currently unreachable, then apply the face
                                 'transient-value
                               'transient-inactive-value)))
               choices
-              (propertize "|" 'face 'transient-inactive-value))
-             (propertize "]" 'face 'transient-inactive-value)))))
+              (propertize "|" 'face 'transient-delimiter))))))
 
 (defun transient--key-unreachable-p (obj)
   (and transient--redisplay-key
