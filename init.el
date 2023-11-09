@@ -115,6 +115,10 @@
 ;; ElDoc support
 (require 'eldoc)
 
+;; dts-mode
+(require 'dts-mode)
+(add-to-list 'auto-mode-alist '("\\.keymap\\'" . dts-mode))
+
 ; save position
 (if (version< emacs-version "25.0")
     (progn
