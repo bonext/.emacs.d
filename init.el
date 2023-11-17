@@ -22,6 +22,9 @@
 (setq custom-file "~/.emacs.d/custom.el")
 (load-file custom-file)
 
+;; smoother scrolling
+(pixel-scroll-precision-mode)
+
                                         ; ORG-MODE
 
 ;;; enable scaling of inline images with attr_org width
