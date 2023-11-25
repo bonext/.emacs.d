@@ -25,6 +25,11 @@
 ;; smoother scrolling
 (pixel-scroll-precision-mode)
 
+;; encryption
+(require 'epa-file)
+(setq epa-pinentry-mode 'loopback)
+(epa-file-enable)
+
                                         ; ORG-MODE
 
 ;;; enable scaling of inline images with attr_org width
@@ -80,6 +85,7 @@
 (setq org-journal-dir "~/Documents/journal")
 (setq org-journal-date-format "%Y-%m-%d, %A")
 (setq org-journal-file-format "%F.org") ; yyyy-mm-dd.org
+(setq org-journal-encrypt-journal t)
 (global-set-key (kbd "C-c j") 'org-journal-new-entry)
 (require 'org-journal)
 
@@ -121,6 +127,10 @@
 ;; dts-mode
 (require 'dts-mode)
 (add-to-list 'auto-mode-alist '("\\.keymap\\'" . dts-mode))
+
+;; AoC 2023
+(add-to-list 'load-path "~/src/aoc23-mode")
+(require 'aoc23-mode)
 
 ; save position
 (if (version< emacs-version "25.0")
