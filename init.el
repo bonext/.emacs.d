@@ -129,8 +129,10 @@
 (add-to-list 'auto-mode-alist '("\\.keymap\\'" . dts-mode))
 
 ;; AoC 2023
-(add-to-list 'load-path "~/src/aoc23-mode")
-(require 'aoc23-mode)
+(if (file-directory-p "~/src/aoc23-mode")
+    (progn
+        (add-to-list 'load-path "~/src/aoc23-mode")
+        (require 'aoc23-mode)))
 
 ; save position
 (if (version< emacs-version "25.0")
