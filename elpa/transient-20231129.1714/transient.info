@@ -51,7 +51,7 @@ but suffix commands can also be configured to not exit the transient.
      available at
      <https://github.com/positron-solutions/transient-showcase>.
 
-This manual is for Transient version 0.4.3.
+This manual is for Transient version 0.5.0.
 
      Copyright (C) 2018–2023 Free Software Foundation, Inc.
 
@@ -707,26 +707,30 @@ Auxiliary Options
      displayed right above the echo area, then this probably is not a
      good value.
 
-     If ‘line’ (the default), then the buffer also has no mode-line, but
-     a thin line is drawn instead, using the background color of the
-     face ‘transient-separator’.  Text-mode frames cannot display thin
-     lines, and therefore fall back to treating ‘line’ like ‘nil’.
+     If ‘line’ (the default) or a natural number, then the buffer has no
+     mode-line, but a line is drawn is drawn in its place.  If a number
+     is used, that specifies the thickness of the line.  On termcap
+     frames we cannot draw lines, so there ‘line’ and numbers are
+     synonyms for ‘nil’.
+
+     The color of the line is used to indicate if non-suffixes are
+     allowed and whether they exit the transient.  The foreground color
+     of ‘transient-key-noop’ (if non-suffix are disallowed),
+     ‘transient-key-stay’ (if allowed and transient stays active), or
+     ‘transient-key-exit’ (if allowed and they exit the transient) is
+     used to draw the line.
 
      Otherwise this can be any mode-line format.  See *note (elisp)Mode
      Line Format::, for details.
 
  -- User Option: transient-semantic-coloring
-     This option controls whether prefixes and suffixes are colored in a
-     Hydra-like fashion.
+     This option controls whether colors are used to indicate the
+     transient behavior of commands.
 
      If non-‘nil’, then the key binding of each suffix is colorized to
      indicate whether it exits the transient state or not.  The color of
      the prefix is indicated using the line that is drawn when the value
      of ‘transient-mode-line-format’ is ‘line’.
-
-     For more information about how Hydra uses colors see
-     <https://github.com/abo-abo/hydra#color> and
-     <https://oremacs.com/2015/02/19/hydra-colors-reloaded>.
 
  -- User Option: transient-highlight-mismatched-keys
      This option controls whether key bindings of infix commands that do
@@ -1374,9 +1378,9 @@ prefix, then the outer prefix becomes active again, while ‘nil’ means
 that all outer prefixes are exited at once.
 
    • The behavior for non-suffixes can be set for a particular prefix,
-     by the prefix’s ‘transient-non-suffix’ slot to a boolean, or a
-     suitable pre-command function.  See *note Pre-commands for
-     Non-Suffixes::.
+     by the prefix’s ‘transient-non-suffix’ slot to a boolean, a
+     suitable pre-command function, or a shorthand for such a function.
+     See *note Pre-commands for Non-Suffixes::.
 
    • The common behavior for the suffixes of a particular prefix can be
      set using the prefix’s ‘transient-suffixes’ slot.
@@ -1454,7 +1458,7 @@ or to one of the following pre-commands.
      Call the command after exporting variables and exit the transient.
 
  -- Function: transient--do-return
-     Call the command after exporting variables and return to parent
+     Call the command after exporting variables and return to the parent
      prefix.  If there is no parent prefix, then call
      ‘transient--do-exit’.
 
@@ -1510,15 +1514,15 @@ command results in a warning and the transient stays active.
 
    If you want a different behavior, then set the ‘transient-non-suffix’
 slot of the transient prefix command.  The value should be a boolean,
-answering the question, "is it allowed to invoke non-suffix commands?"
+answering the question, "is it allowed to invoke non-suffix commands?, a
+pre-command function, or a shorthand for such a function.
 
-   If the value is ‘t’ or ‘transient--do-stay’, then non-suffixes can be
-invoked, when it is ‘nil’ or ‘transient--do-warn’ (the default) then
-they cannot be invoked.
+   If the value is ‘t’, then non-suffixes can be invoked, when it is
+‘nil’ (the default) then they cannot be invoked.
 
-   The only other recommended value is ‘transient--do-leave’.  If that
-is used, then non-suffixes can be invoked, but if one is invoked, then
-that exits the transient.
+   The only other recommended value is ‘leave’.  If that is used, then
+non-suffixes can be invoked, but if one is invoked, then that exits the
+transient.
 
  -- Function: transient--do-warn
      Call ‘transient-undefined’ and stay transient.
@@ -2360,7 +2364,7 @@ Appendix D Variable Index
  [index ]
 * Menu:
 
-* transient-align-variable-pitch:        Configuration.       (line 181)
+* transient-align-variable-pitch:        Configuration.       (line 185)
 * transient-current-command:             Using Infix Arguments.
                                                               (line  57)
 * transient-current-prefix:              Using Infix Arguments.
@@ -2369,25 +2373,25 @@ Appendix D Variable Index
                                                               (line  44)
 * transient-default-level:               Enabling and Disabling Suffixes.
                                                               (line  33)
-* transient-detect-key-conflicts:        Configuration.       (line 206)
+* transient-detect-key-conflicts:        Configuration.       (line 210)
 * transient-display-buffer-action:       Configuration.       (line  51)
 * transient-enable-popup-navigation:     Configuration.       (line  36)
-* transient-force-fixed-pitch:           Configuration.       (line 194)
+* transient-force-fixed-pitch:           Configuration.       (line 198)
 * transient-force-single-column:         Configuration.       (line  93)
-* transient-hide-during-minibuffer-read: Configuration.       (line 177)
-* transient-highlight-higher-levels:     Configuration.       (line 219)
-* transient-highlight-mismatched-keys:   Configuration.       (line 131)
+* transient-hide-during-minibuffer-read: Configuration.       (line 181)
+* transient-highlight-higher-levels:     Configuration.       (line 223)
+* transient-highlight-mismatched-keys:   Configuration.       (line 135)
 * transient-history-file:                Using History.       (line  33)
 * transient-history-limit:               Using History.       (line  37)
 * transient-levels-file:                 Enabling and Disabling Suffixes.
                                                               (line  38)
 * transient-mode-line-format:            Configuration.       (line 102)
-* transient-read-with-initial-input:     Configuration.       (line 170)
-* transient-semantic-coloring:           Configuration.       (line 118)
+* transient-read-with-initial-input:     Configuration.       (line 174)
+* transient-semantic-coloring:           Configuration.       (line 126)
 * transient-show-common-commands:        Common Suffix Commands.
                                                               (line  23)
 * transient-show-popup:                  Configuration.       (line  15)
-* transient-substitute-key-function:     Configuration.       (line 149)
+* transient-substitute-key-function:     Configuration.       (line 153)
 * transient-values-file:                 Saving Values.       (line  31)
 
 
@@ -3170,48 +3174,48 @@ Node: Configuration25568
 Ref: Essential Options25848
 Ref: Accessibility Options29509
 Ref: Auxiliary Options29832
-Ref: Developer Options34559
-Node: Modifying Existing Transients35807
-Node: Defining New Commands39999
-Node: Defining Transients40335
-Node: Binding Suffix and Infix Commands42771
-Node: Group Specifications43629
-Node: Suffix Specifications48198
-Node: Defining Suffix and Infix Commands52411
-Node: Using Infix Arguments55617
-Node: Transient State58451
-Ref: Pre-commands for Infixes63234
-Ref: Pre-commands for Suffixes63754
-Ref: Pre-commands for Non-Suffixes66204
-Ref: Special Pre-Commands67350
-Node: Classes and Methods67858
-Node: Group Classes70042
-Node: Group Methods71969
-Node: Prefix Classes73222
-Node: Suffix Classes74313
-Node: Suffix Methods77400
-Node: Suffix Value Methods77721
-Node: Suffix Format Methods80479
-Node: Prefix Slots81958
-Ref: Internal Prefix Slots84093
-Node: Suffix Slots85350
-Ref: Slots of transient-suffix85718
-Ref: Slots of transient-infix86855
-Ref: Slots of transient-variable90151
-Ref: Slots of transient-switches90253
-Node: Predicate Slots90616
-Node: FAQ92051
-Ref: Can I control how the popup buffer is displayed?92180
-Ref: How can I copy text from the popup buffer?92361
-Ref: How does Transient compare to prefix keys and universal arguments?92855
-Ref: How does Transient compare to Magit-Popup and Hydra?93098
-Ref: Why did some of the key bindings change?93292
-Ref: Why does q not quit popups anymore?95645
-Node: Keystroke Index96748
-Node: Command and Function Index98613
-Node: Variable Index105205
-Node: Concept Index107478
-Node: GNU General Public License110222
+Ref: Developer Options34795
+Node: Modifying Existing Transients36043
+Node: Defining New Commands40235
+Node: Defining Transients40571
+Node: Binding Suffix and Infix Commands43007
+Node: Group Specifications43865
+Node: Suffix Specifications48434
+Node: Defining Suffix and Infix Commands52647
+Node: Using Infix Arguments55853
+Node: Transient State58687
+Ref: Pre-commands for Infixes63502
+Ref: Pre-commands for Suffixes64022
+Ref: Pre-commands for Non-Suffixes66476
+Ref: Special Pre-Commands67612
+Node: Classes and Methods68120
+Node: Group Classes70304
+Node: Group Methods72231
+Node: Prefix Classes73484
+Node: Suffix Classes74575
+Node: Suffix Methods77662
+Node: Suffix Value Methods77983
+Node: Suffix Format Methods80741
+Node: Prefix Slots82220
+Ref: Internal Prefix Slots84355
+Node: Suffix Slots85612
+Ref: Slots of transient-suffix85980
+Ref: Slots of transient-infix87117
+Ref: Slots of transient-variable90413
+Ref: Slots of transient-switches90515
+Node: Predicate Slots90878
+Node: FAQ92313
+Ref: Can I control how the popup buffer is displayed?92442
+Ref: How can I copy text from the popup buffer?92623
+Ref: How does Transient compare to prefix keys and universal arguments?93117
+Ref: How does Transient compare to Magit-Popup and Hydra?93360
+Ref: Why did some of the key bindings change?93554
+Ref: Why does q not quit popups anymore?95907
+Node: Keystroke Index97010
+Node: Command and Function Index98875
+Node: Variable Index105467
+Node: Concept Index107740
+Node: GNU General Public License110484
 
 End Tag Table
 

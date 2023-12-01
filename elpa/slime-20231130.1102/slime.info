@@ -15,7 +15,7 @@ SLIME
 *****
 
 SLIME is the “Superior Lisp Interaction Mode for Emacs”.  This is the
-manual for version 2.28.  (Last updated November 25, 2023)
+manual for version 2.28.  (Last updated December 1, 2023)
 
    Written by Luke Gorrie and others.
 
@@ -1005,8 +1005,8 @@ File: slime.info,  Node: Macro-expansion,  Next: Disassembly,  Prev: Cross-refer
 ‘C-c C-m’
 ‘M-x slime-expand-1’
      Macroexpand (or compiler-macroexpand) the expression starting at
-     point once.  If invoked with a prefix argument use macroexpand
-     instead or macroexpand-1 (or compiler-macroexpand instead of
+     point once.  If invoked with a prefix argument, use macroexpand
+     instead of macroexpand-1 (or compiler-macroexpand instead of
      compiler-macroexpand-1).
 
 ‘M-x slime-macroexpand-1’
@@ -3624,37 +3624,37 @@ Variable and Concept Index
 
 Tag Table:
 Node: Top285
-Node: Introduction2528
-Node: Getting started3809
-Node: Platforms4083
-Node: Downloading5281
-Node: Git5782
-Node: Git Incantations6800
-Node: Installation7330
-Node: Running8596
-Node: Setup Tuning9139
-Node: Basic customization9670
-Node: Multiple Lisps10643
-Node: Loading Swank faster13137
-Ref: init-example14230
-Node: SLIME mode14519
-Node: User-interface conventions15117
-Node: Temporary buffers15526
-Node: Inferior-lisp16979
-Node: Multithreading17804
-Node: Key bindings19049
-Ref: describe-key20515
-Ref: describe-bindings20658
-Ref: describe-mode20801
-Ref: view-lossage20985
-Node: Evaluation22180
-Node: Compilation24085
-Node: Completion26844
-Node: Finding definitions27475
-Node: Documentation28615
-Node: Cross-reference30782
-Node: Xref buffer commands32519
-Node: Macro-expansion33078
+Node: Introduction2527
+Node: Getting started3808
+Node: Platforms4082
+Node: Downloading5280
+Node: Git5781
+Node: Git Incantations6799
+Node: Installation7329
+Node: Running8595
+Node: Setup Tuning9138
+Node: Basic customization9669
+Node: Multiple Lisps10642
+Node: Loading Swank faster13136
+Ref: init-example14229
+Node: SLIME mode14518
+Node: User-interface conventions15116
+Node: Temporary buffers15525
+Node: Inferior-lisp16978
+Node: Multithreading17803
+Node: Key bindings19048
+Ref: describe-key20514
+Ref: describe-bindings20657
+Ref: describe-mode20800
+Ref: view-lossage20984
+Node: Evaluation22179
+Node: Compilation24084
+Node: Completion26843
+Node: Finding definitions27474
+Node: Documentation28614
+Node: Cross-reference30781
+Node: Xref buffer commands32518
+Node: Macro-expansion33077
 Node: Disassembly34099
 Node: Recovery34644
 Node: Inspector35413
