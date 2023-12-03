@@ -1,4 +1,5 @@
                                         ; BUILT-INS
+;; (debug)
 ;; only spaces
 (setq-default indent-tabs-mode nil)
 
@@ -43,7 +44,7 @@
 (global-set-key (kbd "C-c c") 'org-capture)
 (global-set-key (kbd "C-c l") 'org-store-link)
 
-; colors
+                                        ; colors
 ;; via https://www.emacswiki.org/emacs/CustomThemes#h5o-3
 ;; (let ((basedir "~/.emacs.d/themes/"))
 ;;   (dolist (f (directory-files basedir))
@@ -129,12 +130,12 @@
 (add-to-list 'auto-mode-alist '("\\.keymap\\'" . dts-mode))
 
 ;; AoC 2023
-(if (file-directory-p "~/src/aoc23-mode")
-    (progn
-        (add-to-list 'load-path "~/src/aoc23-mode")
-        (require 'aoc23-mode)))
+;; (if (file-directory-p "~/src/aoc23-mode")
+;;     (progn
+;;       (add-to-list 'load-path "~/src/aoc23-mode")
+;;       (require 'aoc23-mode)))
 
-; save position
+                                        ; save position
 (if (version< emacs-version "25.0")
     (progn
       (require 'saveplace)
