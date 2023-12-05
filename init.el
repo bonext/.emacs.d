@@ -30,6 +30,9 @@
 (require 'epa-file)
 (setq epa-pinentry-mode 'loopback)
 (epa-file-enable)
+;; workaround for gpg getting stuck
+;; this may have side-effects. If so, downgrading to GnuPG 2.4.0 should help
+(fset 'epg-wait-for-status 'ignore)
 
                                         ; ORG-MODE
 
@@ -58,7 +61,7 @@
 (setq parinfer-rust-auto-download t)
 (add-to-list 'load-path "~/.emacs.d/manual-packages/parinfer-rust-mode")
 (autoload 'parinfer-rust-mode "parinfer-rust-mode" nil t)
-(add-hook 'emacs-lisp-mode 'parinfer-rust-mode)
+(add-hook 'emacs-lisp-mode-hook 'parinfer-rust-mode)
 
 ;; TODO: add these as parinfer hooks instead?
 ;; (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
@@ -134,6 +137,24 @@
 ;;     (progn
 ;;       (add-to-list 'load-path "~/src/aoc23-mode")
 ;;       (require 'aoc23-mode)))
+
+;; wayland clipboard support in terminal
+;; TODO: make this conditional on wayland
+;; credit: yorickvP on Github: https://gist.github.com/yorickvP/6132f237fbc289a45c808d8d75e0e1fb
+(setq wl-copy-process nil)
+(defun wl-copy (text)
+  (setq wl-copy-process (make-process :name "wl-copy"
+                                      :buffer nil
+                                      :command '("wl-copy" "-f" "-n")
+                                      :connection-type 'pipe))
+  (process-send-string wl-copy-process text)
+  (process-send-eof wl-copy-process))
+(defun wl-paste ()
+  (if (and wl-copy-process (process-live-p wl-copy-process))
+      nil ; should return nil if we're the current paste owner
+    (shell-command-to-string "wl-paste -n | tr -d \r")))
+(setq interprogram-cut-function 'wl-copy)
+(setq interprogram-paste-function 'wl-paste)
 
                                         ; save position
 (if (version< emacs-version "25.0")
