@@ -11,7 +11,7 @@
 ;; Package-Version: 3.3.0.50-git
 ;; Package-Requires: (
 ;;     (emacs "25.1")
-;;     (compat "29.1.3.4")
+;;     (compat "29.1.4.4")
 ;;     (dash "2.19.1")
 ;;     (seq "2.24"))
 
@@ -55,6 +55,35 @@
            (not (fboundp 'seq-keep)))
   (unload-feature 'seq 'force))
 (require 'seq)
+;; Furthermore, by default `package' just silently refuses to upgrade.
+(unless (fboundp 'seq-keep)
+  (display-warning 'magit (substitute-command-keys "\
+Magit requires `seq' >= 2.24, but due to
+bad defaults, Emacs' package manager, refuses to upgrade this
+and other built-in packages to higher releases from GNU Elpa.
+
+To fix this, you have to add this to your init file:
+
+  (setq package-install-upgrade-built-in t)
+
+Then evaluate that expression by placing the cursor after it
+and typing \\[eval-last-sexp].
+
+Once you have done that, you have to explicitly upgrade `seq':
+
+  \\[package-upgrade] seq \\`RET'
+
+Then you also must make sure the updated version is loaded,
+by evaluating this form:
+
+  (progn (unload-feature 'seq t) (require 'seq))
+
+Until you do this, you will get random errors about `seq-keep'
+being undefined while using Magit.
+
+If you don't use the `package' package manager but still get
+this warning, then your chosen package manager likely has a
+similar defect.") :emergency))
 
 (require 'cursor-sensor)
 (require 'format-spec)
