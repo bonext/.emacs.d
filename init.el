@@ -1,5 +1,4 @@
                                         ; BUILT-INS
-;; (debug)
 ;; only spaces
 (setq-default indent-tabs-mode nil)
 
@@ -34,6 +33,15 @@
 ;; this may have side-effects. If so, downgrading to GnuPG 2.4.0 should help
 (fset 'epg-wait-for-status 'ignore)
 
+;; tree-sitter
+;; install grammars to ~/.emacs.d/tree-sitter
+(setq treesit-language-source-alist
+   '((python "https://github.com/tree-sitter/tree-sitter-python")))
+
+;; eglot
+(with-eval-after-load 'eglot
+  (add-to-list 'eglot-server-programs
+               '((python-mode python-ts-mode) . ("~/.local/bin/python-lsp-entrypoint.sh"))))
                                         ; ORG-MODE
 
 ;;; enable scaling of inline images with attr_org width
