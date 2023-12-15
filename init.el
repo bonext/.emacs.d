@@ -36,7 +36,8 @@
 ;; tree-sitter
 ;; install grammars to ~/.emacs.d/tree-sitter
 (setq treesit-language-source-alist
-   '((python "https://github.com/tree-sitter/tree-sitter-python")))
+      '((python "https://github.com/tree-sitter/tree-sitter-python")))
+(add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
 
 ;; eglot
 (with-eval-after-load 'eglot
@@ -87,10 +88,21 @@
  'package-archives
  '("melpa" . "http://melpa.org/packages/")
  t)
-(package-initialize)
+(package-initialize
 
 ;; solarized-dark
-(load-theme 'solarized-dark t)
+;; cf. https://github.com/bbatsov/solarized-emacs
+;; (load-theme 'solarized-dark t)
+;; Don't change size of org-mode headlines (but keep other size-changes)
+;; (setq solarized-scale-org-headlines nil
+
+;; nord theme
+;; (load-theme 'nord t)
+
+;; modus theme
+;; https://protesilaos.com/emacs/modus-themes
+;; included in emacs
+ (load-theme 'modus-vivendi))
 
 ;; org-journal
 (setq org-journal-file-type 'daily)
@@ -141,10 +153,10 @@
 (add-to-list 'auto-mode-alist '("\\.keymap\\'" . dts-mode))
 
 ;; AoC 2023
-;; (if (file-directory-p "~/src/aoc23-mode")
-;;     (progn
-;;       (add-to-list 'load-path "~/src/aoc23-mode")
-;;       (require 'aoc23-mode)))
+(if (file-directory-p "~/src/aoc23-mode")
+    (progn
+      (add-to-list 'load-path "~/src/aoc23-mode")
+      (require 'aoc23-mode)))
 
 ;; wayland clipboard support in terminal
 ;; TODO: make this conditional on wayland

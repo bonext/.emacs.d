@@ -228,7 +228,10 @@ The pattern can have the form:
                always (ignore-errors
                         (cl-etypecase p
                           (symbol (slime-beginning-of-list)
-                                  (eq (read (current-buffer)) p))
+                                  (let ((x (read (current-buffer))))
+                                    (and (symbolp x)
+                                         (string-equal-ignore-case (symbol-name x)
+                                                                   (symbol-name p)))))
                           (number (backward-up-list p)
                                   t)))))))
 
@@ -310,9 +313,9 @@ Point is placed before the first expression in the list."
          (format "(macro-function '%s)" symbol))
         ((:define-compiler-macro symbol)
          (format "(compiler-macro-function '%s)" symbol))
-        ((:defmethod symbol &rest args)
+        ((:defmethod &rest args)
          (declare (ignore args))
-         (format "#'%s" symbol))
+         (format "%s" toplevel))
         (((:defparameter :defvar :defconstant) symbol)
          (format "'%s" symbol))
         (((:defclass :defstruct) symbol)
