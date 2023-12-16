@@ -6,8 +6,12 @@
 (setq ring-bell-function 'ignore)
 (setq visible-bell t)
 
-;; disable menu bar (it causes glitches on wayland)
+;; disable tool bar (it causes glitches on wayland)
 (tool-bar-mode -1)
+;; disable menu
+(menu-bar-mode -1)
+;; disable scroll bars
+(scroll-bar-mode -1)
 
 ;; show lines in programming modes
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
