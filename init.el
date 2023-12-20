@@ -47,7 +47,9 @@
 (with-eval-after-load 'eglot
   (add-to-list 'eglot-server-programs
                '((python-mode python-ts-mode) . ("~/.local/bin/python-lsp-entrypoint.sh"))))
-                                        ; ORG-MODE
+
+
+;; ORG-MODE
 
 ;;; enable scaling of inline images with attr_org width
 (setq org-image-actual-width nil)
@@ -57,20 +59,14 @@
 (setq org-directory "~/Documents/Notes")
 (setq org-default-notes-file (concat org-directory "/captured.org"))
 ;;; suggested shortcut keys
+(global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
 (global-set-key (kbd "C-c l") 'org-store-link)
 
-                                        ; colors
-;; via https://www.emacswiki.org/emacs/CustomThemes#h5o-3
-;; (let ((basedir "~/.emacs.d/themes/"))
-;;   (dolist (f (directory-files basedir))
-;;     (if (and (not (or (equal f ".") (equal f "..")))
-;;              (file-directory-p (concat basedir f)))
-;;         (add-to-list 'custom-theme-load-path (concat basedir f)))))
-
                                         ; PACKAGES
-
+                                        ; manual
 ;; parinfer-rust-mode
+
 (setq parinfer-rust-auto-download t)
 (add-to-list 'load-path "~/.emacs.d/manual-packages/parinfer-rust-mode")
 (autoload 'parinfer-rust-mode "parinfer-rust-mode" nil t)
@@ -83,7 +79,7 @@
 ;; (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
 ;; (add-hook 'scheme-mode-hook           #'enable-paredit-mode)
 
-;; actual packages
+                                        ; auto packages
 (require 'package)
 
 ;; MELPA
@@ -156,12 +152,6 @@
 (require 'dts-mode)
 (add-to-list 'auto-mode-alist '("\\.keymap\\'" . dts-mode))
 
-;; AoC 2023
-(if (file-directory-p "~/src/aoc23-mode")
-    (progn
-      (add-to-list 'load-path "~/src/aoc23-mode")
-      (require 'aoc23-mode)))
-
 ;; wayland clipboard support in terminal
 ;; TODO: make this conditional on wayland
 ;; credit: yorickvP on Github: https://gist.github.com/yorickvP/6132f237fbc289a45c808d8d75e0e1fb
@@ -179,10 +169,3 @@
     (shell-command-to-string "wl-paste -n | tr -d \r")))
 (setq interprogram-cut-function 'wl-copy)
 (setq interprogram-paste-function 'wl-paste)
-
-                                        ; save position
-(if (version< emacs-version "25.0")
-    (progn
-      (require 'saveplace)
-      (setq-default save-place t))
-  (save-place-mode 1))
