@@ -43,11 +43,6 @@
       '((python "https://github.com/tree-sitter/tree-sitter-python")))
 (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
 
-;; eglot
-(with-eval-after-load 'eglot
-  (add-to-list 'eglot-server-programs
-               '((python-mode python-ts-mode) . ("~/.local/bin/python-lsp-entrypoint.sh"))))
-
 
 ;; ORG-MODE
 
