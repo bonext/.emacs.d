@@ -764,6 +764,16 @@
 (register-definition-prefixes "base16-material-vivid-theme" '("base16-material-vivid-theme-colors"))
 
 
+;;; Generated autoloads from base16-measured-dark-theme.el
+
+(register-definition-prefixes "base16-measured-dark-theme" '("base16-measured-dark-theme-colors"))
+
+
+;;; Generated autoloads from base16-measured-light-theme.el
+
+(register-definition-prefixes "base16-measured-light-theme" '("base16-measured-light-theme-colors"))
+
+
 ;;; Generated autoloads from base16-mellow-purple-theme.el
 
 (register-definition-prefixes "base16-mellow-purple-theme" '("base16-mellow-purple-theme-colors"))
@@ -942,6 +952,11 @@
 ;;; Generated autoloads from base16-rose-pine-theme.el
 
 (register-definition-prefixes "base16-rose-pine-theme" '("base16-rose-pine-theme-colors"))
+
+
+;;; Generated autoloads from base16-saga-theme.el
+
+(register-definition-prefixes "base16-saga-theme" '("base16-saga-theme-colors"))
 
 
 ;;; Generated autoloads from base16-sagelight-theme.el
