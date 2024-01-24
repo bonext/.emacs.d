@@ -8,3 +8,5 @@ eln-cache/
 parinfer-rust/
 tree-sitter/
 url/
+ede-projects.el
+projectile-bookmarks.eld

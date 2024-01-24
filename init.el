@@ -109,7 +109,7 @@
 (require 'org-journal)
 
 ;; company
-(setq company-minimum-prefix-length 5)
+(setq company-minimum-prefix-length 3)
 (add-hook 'after-init-hook 'global-company-mode)
 
 ;; evil
@@ -164,3 +164,13 @@
     (shell-command-to-string "wl-paste -n | tr -d \r")))
 (setq interprogram-cut-function 'wl-copy)
 (setq interprogram-paste-function 'wl-paste)
+
+;; projectile
+(require 'projectile)
+;; Recommended keymap prefix on Windows/Linux
+(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+(projectile-mode +1)
+
+;; TODO: https://docs.projectile.mx/projectile/projects.html#adding-custom-project-types
+;;       should work for poetry
+;; for now, sticking with manual projectile settings
