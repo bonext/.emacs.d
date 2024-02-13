@@ -89,6 +89,14 @@
  
 (package-initialize)
 
+;; colors
+(use-package nord-theme
+  :ensure t)
+(use-package solarized-theme
+  :ensure t)
+(use-package base16-theme
+  :ensure t)
+
 ;; solarized-dark
 ;; cf. https://github.com/bbatsov/solarized-emacs
 ;; (load-theme 'solarized-dark t)
@@ -104,8 +112,9 @@
 (load-theme 'modus-vivendi)
 
 ;; org-journal
-(use-package 'org-journal
+(use-package org-journal
   :ensure t
+  :after org
   :init
  (setq org-journal-file-type 'daily)
  (setq org-journal-dir "~/Documents/journal")
@@ -115,8 +124,11 @@
  (global-set-key (kbd "C-c j") 'org-journal-new-entry))
   
 ;; company
-(setq company-minimum-prefix-length 3)
-(add-hook 'after-init-hook 'global-company-mode)
+(use-package company
+  :ensure t
+  :config
+  (setq company-minimum-prefix-length 3)
+  (add-hook 'after-init-hook 'global-company-mode))
 
 ;; evil
 ;;; evil setup goes here
@@ -131,27 +143,71 @@
 (evil-mode 1)
 
 ;; evil-org
-(require 'evil-org)
-(add-hook 'org-mode-hook 'evil-org-mode)
-(evil-org-set-key-theme '(navigation insert textobjects additional calendar))
-(require 'evil-org-agenda)
-(evil-org-agenda-set-keys)
+(use-package evil-org
+  :ensure t
+  :after org
+  :hook org-mode-hook
+  :config
+  (require 'evil-org-agenda)
+  (evil-org-set-key-theme '(navigation insert textobjects additional calendar))
+  (evil-org-agenda-set-keys))
 
 ;; slime
-(setq inferior-lisp-program "/usr/bin/sbcl")
+;; TODO: check for binaries maybe?
+(use-package slime
+  :ensure t
+  :config
+  (setq inferior-lisp-program "/usr/bin/sbcl"))
+
+;; paredit
+(use-package paredit
+  :ensure t)
 
 ;; geiser
+;; TODO: check for binaries maybe?
 ;;; racket
-(setq geiser-racket-binary "/usr/bin/racket")
-;;; guile
-(setq geiser-guile-binary "/usr/bin/guile")
+(use-package geiser-racket
+  :ensure t
+  :config
+  (setq geiser-racket-binary "/usr/bin/racket"))
 
 ;; ElDoc support
+;; TODO: wtf is this?
+;; TODO: is this bundled?
 (require 'eldoc)
 
 ;; dts-mode
-(require 'dts-mode)
-(add-to-list 'auto-mode-alist '("\\.keymap\\'" . dts-mode))
+;; TODO: wtf is this?
+(use-package dts-mode
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.keymap\\'" . dts-mode)))
+
+;; nix-mode
+(use-package nix-mode
+  :ensure t)
+
+;; vimrc-mode
+;; (use-package vimrc-mode
+;;   :ensure t)
+
+;; markdown-mode
+(use-package markdown-mode
+  :ensure t)
+
+;; lua-mode
+(use-package lua-mode
+  :ensure t)
+
+;; projectile
+(use-package projectile
+  :ensure t
+  :config
+  ;; Recommended keymap prefix on Windows/Linux
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  (projectile-mode +1))
+
+                                        ; MISC
 
 ;; wayland clipboard support in terminal
 ;; TODO: make this conditional on wayland
@@ -170,13 +226,3 @@
     (shell-command-to-string "wl-paste -n | tr -d \r")))
 (setq interprogram-cut-function 'wl-copy)
 (setq interprogram-paste-function 'wl-paste)
-
-;; projectile
-(require 'projectile)
-;; Recommended keymap prefix on Windows/Linux
-(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-(projectile-mode +1)
-
-;; TODO: https://docs.projectile.mx/projectile/projects.html#adding-custom-project-types
-;;       should work for poetry
-;; for now, sticking with manual projectile settings
