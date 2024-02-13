@@ -59,6 +59,10 @@
 (global-set-key (kbd "C-c l") 'org-store-link)
 
                                         ; PACKAGES
+;; TODO: move to use-package
+;; https://www.gnu.org/software/emacs/manual/html_node/use-package/index.html
+;; https://jwiegley.github.io/use-package/keywords
+
                                         ; manual
 ;; parinfer-rust-mode
 
@@ -78,12 +82,12 @@
 (require 'package)
 
 ;; MELPA
-;;; set up to bleeding-edge
-(add-to-list
- 'package-archives
- '("melpa" . "http://melpa.org/packages/")
+;; set up to stable for pinning
+(add-to-list 'package-archives
+ '("melpa-stable" . "https://stable.melpa.org/packages/")
  t)
-(package-initialize
+ 
+(package-initialize)
 
 ;; solarized-dark
 ;; cf. https://github.com/bbatsov/solarized-emacs
@@ -97,17 +101,19 @@
 ;; modus theme
 ;; https://protesilaos.com/emacs/modus-themes
 ;; included in emacs
- (load-theme 'modus-vivendi))
+(load-theme 'modus-vivendi)
 
 ;; org-journal
-(setq org-journal-file-type 'daily)
-(setq org-journal-dir "~/Documents/journal")
-(setq org-journal-date-format "%Y-%m-%d, %A")
-(setq org-journal-file-format "%F.org") ; yyyy-mm-dd.org
-(setq org-journal-encrypt-journal t)
-(global-set-key (kbd "C-c j") 'org-journal-new-entry)
-(require 'org-journal)
-
+(use-package 'org-journal
+  :ensure t
+  :init
+ (setq org-journal-file-type 'daily)
+ (setq org-journal-dir "~/Documents/journal")
+ (setq org-journal-date-format "%Y-%m-%d, %A")
+ (setq org-journal-file-format "%F.org") ; yyyy-mm-dd.org
+ (setq org-journal-encrypt-journal t)
+ (global-set-key (kbd "C-c j") 'org-journal-new-entry))
+  
 ;; company
 (setq company-minimum-prefix-length 3)
 (add-hook 'after-init-hook 'global-company-mode)
