@@ -23,8 +23,10 @@
 (setq default-input-method "russian-computer")
 
 ;; customize to file
-(setq custom-file "~/.emacs.d/custom.el")
-(load-file custom-file)
+(if (file-exists-p "~/.emacs.d/custom.el")
+    (progn
+      (setq custom-file "~/.emacs.d/custom.el")
+      (load-file custom-file)))
 
 ;; smoother scrolling
 (pixel-scroll-precision-mode)
@@ -44,7 +46,7 @@
 (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
 
 
-;; ORG-MODE
+                                        ; ORG-MODE
 
 ;;; enable scaling of inline images with attr_org width
 (setq org-image-actual-width nil)
@@ -59,13 +61,9 @@
 (global-set-key (kbd "C-c l") 'org-store-link)
 
                                         ; PACKAGES
-;; TODO: move to use-package
-;; https://www.gnu.org/software/emacs/manual/html_node/use-package/index.html
-;; https://jwiegley.github.io/use-package/keywords
 
                                         ; manual
 ;; parinfer-rust-mode
-
 (setq parinfer-rust-auto-download t)
 (add-to-list 'load-path "~/.emacs.d/manual-packages/parinfer-rust-mode")
 (autoload 'parinfer-rust-mode "parinfer-rust-mode" nil t)
@@ -114,13 +112,13 @@
 ;; org-journal
 (use-package org-journal
   :ensure t
-  :after org
   :init
  (setq org-journal-file-type 'daily)
  (setq org-journal-dir "~/Documents/journal")
  (setq org-journal-date-format "%Y-%m-%d, %A")
  (setq org-journal-file-format "%F.org") ; yyyy-mm-dd.org
  (setq org-journal-encrypt-journal t)
+ :config
  (global-set-key (kbd "C-c j") 'org-journal-new-entry))
   
 ;; company
@@ -131,16 +129,16 @@
   (add-hook 'after-init-hook 'global-company-mode))
 
 ;; evil
-;;; evil setup goes here
-;;; (setq ...)
-;; uncomment to go evil on demand
-;; (setq evil-default-state 'emacs)
-(require 'evil)
-;;; disable evil-mode in some buffers (by their name, cf. C-xC-b)
-;; (add-to-list 'evil-buffer-regexps '("^\\*info\\*$"))
-(add-to-list 'evil-buffer-regexps '("^\\*Geiser.*REPL\\*$"))
-(add-to-list 'evil-buffer-regexps '("^\\*slime-repl.*\\*$"))
-(evil-mode 1)
+(use-package evil
+  :ensure t
+  :init
+  (setq evil-default-state 'emacs)
+  :config
+  ;; disable evil-mode in some buffers (by their name, cf. C-xC-b)
+  (add-to-list 'evil-buffer-regexps '("^\\*Geiser.*REPL\\*$"))
+  (add-to-list 'evil-buffer-regexps '("^\\*slime-repl.*\\*$"))
+  (evil-mode 1))
+  
 
 ;; evil-org
 (use-package evil-org
@@ -153,43 +151,39 @@
   (evil-org-agenda-set-keys))
 
 ;; slime
-;; TODO: check for binaries maybe?
-(use-package slime
-  :ensure t
-  :config
-  (setq inferior-lisp-program "/usr/bin/sbcl"))
+(if (file-exists-p "/usr/bin/sbcl")
+    (progn
+      (use-package slime
+        :ensure t
+        :config
+        (setq inferior-lisp-program "/usr/bin/sbcl"))))
 
 ;; paredit
 (use-package paredit
   :ensure t)
 
 ;; geiser
-;; TODO: check for binaries maybe?
 ;;; racket
-(use-package geiser-racket
-  :ensure t
-  :config
-  (setq geiser-racket-binary "/usr/bin/racket"))
+(if (file-exists-p "/usr/bin/racket")
+    (use-package geiser-racket
+      :ensure t
+      :config
+      (setq geiser-racket-binary "/usr/bin/racket")))
 
 ;; ElDoc support
-;; TODO: wtf is this?
-;; TODO: is this bundled?
+;; (this shows fn arguments in echo)
 (require 'eldoc)
 
 ;; dts-mode
-;; TODO: wtf is this?
 (use-package dts-mode
   :ensure t
   :config
+  ;; setup for zmk keymaps
   (add-to-list 'auto-mode-alist '("\\.keymap\\'" . dts-mode)))
 
 ;; nix-mode
 (use-package nix-mode
   :ensure t)
-
-;; vimrc-mode
-;; (use-package vimrc-mode
-;;   :ensure t)
 
 ;; markdown-mode
 (use-package markdown-mode
