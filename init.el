@@ -23,10 +23,23 @@
 (setq default-input-method "russian-computer")
 
 ;; customize to file
-(if (file-exists-p "~/.emacs.d/custom.el")
-    (progn
-      (setq custom-file "~/.emacs.d/custom.el")
-      (load-file custom-file)))
+(setq custom-file "~/.emacs.d/custom.el")
+(when (file-exists-p "~/.emacs.d/custom.el")
+  (load-file custom-file))
+
+;; Dired
+(with-eval-after-load 'dired
+  (require 'dired-x))
+  ;; Set dired-x global variables here.  For example:
+  ;; (setq dired-x-hands-off-my-keys nil)
+  
+(add-hook 'dired-mode-hook
+          (lambda ()
+            ;; Set dired-x buffer-local variables here.  For example:
+            (dired-omit-mode 1)))
+            
+;; dired cd with 'a' to reuse buffer
+(put 'dired-find-alternate-file 'disabled nil)
 
 ;; smoother scrolling
 (pixel-scroll-precision-mode)
@@ -47,35 +60,62 @@
 
 
                                         ; ORG-MODE
+(setq org-directory "~/Documents/Notes")
+
+;; populate org-agenda
+;; TODO: make this a function and reload agenda by shortcut
+(load-library "find-lisp")
+(setq org-agenda-files
+      (append
+       (find-lisp-find-files org-directory "\.org$")))
+       
 
 ;;; enable scaling of inline images with attr_org width
 (setq org-image-actual-width nil)
+
 ;;; show inline images by default
 (setq org-startup-with-inline-images t)
+
 ;;; capture setup
-(setq org-directory "~/Documents/Notes")
 (setq org-default-notes-file (concat org-directory "/captured.org"))
+
+;; Make C-c a t reuse current window
+(setq org-agenda-window-setup 'current-window)
+
+;; offer tags from all agenda files (not current buffer)
+(setq org-complete-tags-always-offer-all-agenda-tags t)
+
+;; wrap text by default
+(setq org-startup-truncated nil)
+
+;; log time when todos are done
+;; cf. https://orgmode.org/guide/Progress-Logging.html
+(setq org-log-into-drawer "LOGBOOK")
+(setq org-log-done 'time)
+(setq org-todo-keywords
+      '((sequence "TODO(!)" "DONE(!)")))
+
+(setq org-refile-targets
+      '((nil :maxlevel . 9)))
+(setq org-outline-path-complete-in-steps nil)         ; Refile in a single go
+(setq org-refile-use-outline-path t)                  ; Show full paths for refiling
+
+(setq org-capture-templates
+ '(("b" "book" entry
+    (file "~/Documents/Notes/finished-books.org")
+    (file "~/.emacs.d/org-capture-templates/book")
+    :kill-buffer t)
+   ("d" "mind dump" entry
+    (file "~/Documents/Notes/mind-dumps.org")
+    (file "~/.emacs.d/org-capture-templates/dump")
+    :prepend t :kill-buffer t)))
+
 ;;; suggested shortcut keys
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
 (global-set-key (kbd "C-c l") 'org-store-link)
 
                                         ; PACKAGES
-
-                                        ; manual
-;; parinfer-rust-mode
-(setq parinfer-rust-auto-download t)
-(add-to-list 'load-path "~/.emacs.d/manual-packages/parinfer-rust-mode")
-(autoload 'parinfer-rust-mode "parinfer-rust-mode" nil t)
-(add-hook 'emacs-lisp-mode-hook 'parinfer-rust-mode)
-
-;; TODO: add these as parinfer hooks instead?
-;; (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
-;; (add-hook 'ielm-mode-hook             #'enable-paredit-mode)
-;; (add-hook 'lisp-mode-hook             #'enable-paredit-mode)
-;; (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
-;; (add-hook 'scheme-mode-hook           #'enable-paredit-mode)
-
                                         ; auto packages
 (require 'package)
 
@@ -161,6 +201,12 @@
 ;; paredit
 (use-package paredit
   :ensure t)
+;; TODO: add these as parinfer hooks instead?
+;; (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
+;; (add-hook 'ielm-mode-hook             #'enable-paredit-mode)
+;; (add-hook 'lisp-mode-hook             #'enable-paredit-mode)
+;; (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
+;; (add-hook 'scheme-mode-hook           #'enable-paredit-mode)
 
 ;; geiser
 ;;; racket
