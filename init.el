@@ -85,7 +85,10 @@
 (use-package evil
   :ensure t
   :init
-  (setq evil-default-state 'emacs)
+  ; uncomment for opt-in evil
+  ;; (setq evil-default-state 'emacs)
+  ;; enable org-mode visibility cycle with tab
+  (setq evil-want-C-i-jump nil)
   :config
   ;; disable evil-mode in some buffers (by their name, cf. C-xC-b)
   (add-to-list 'evil-buffer-regexps '("^\\*Geiser.*REPL\\*$"))

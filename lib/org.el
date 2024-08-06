@@ -21,9 +21,7 @@
   (if (display-graphic-p)
       (let* ((variable-tuple
               (cond
-               ((x-list-fonts "Source Sans Pro") '(:family "Source Sans Pro"))
-               ((x-list-fonts "IBM Plex Sans") '(:family "IBM Plex Sans"))
-               ((x-list-fonts "PT Sans") '(:family "PT Sans"))))
+               ((x-list-fonts "PT Serif") '(:family "PT Serif" :height 120))))
              (fixed-tuple
               (cond
                ((x-list-fonts "Adobe Source Pro") '(:family "Adobe Source Pro"))
@@ -33,9 +31,9 @@
              (headline `(:inherit default :weight bold :foreground ,base-font-color)))
         (custom-theme-set-faces
          'user
-         `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.75))))
-         `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.5))))
-         `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.25))))
+         `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.4))))
+         `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.3))))
+         `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.2))))
          `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.1))))
          `(org-level-5 ((t (,@headline ,@variable-tuple))))
          `(org-level-6 ((t (,@headline ,@variable-tuple))))

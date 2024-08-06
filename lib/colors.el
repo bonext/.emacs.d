@@ -5,6 +5,9 @@
 (use-package solarized-theme
   :ensure t)
 
+(use-package gruvbox-theme
+  :ensure t)
+
 ;; solarized-dark
 ;; cf. https://github.com/bbatsov/solarized-emacs
 
@@ -20,9 +23,9 @@
     (use-package darkman
       :ensure t
       :config
-      (setq darkman-themes '(:light solarized-selenized-white :dark solarized-dark))
+      (setq darkman-themes '(:light solarized-selenized-white :dark solarized-selenized-black))
       (darkman-mode))
   ;; otherwise fallback to simpler solutions
   (cond
-   ((> (decoded-time-hour (decode-time)) 21) (load-theme 'solarized-dark t))
+   ((> (decoded-time-hour (decode-time)) 21) (load-theme 'solarized-selenized-black t))
    (t (load-theme 'solarized-selenized-white t))))
