@@ -1,4 +1,7 @@
                                         ; COLORS
+(use-package ef-themes
+  :ensure t)
+
 (use-package nord-theme
   :ensure t)
 

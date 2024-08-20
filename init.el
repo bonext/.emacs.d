@@ -56,6 +56,7 @@
 ;; install grammars to ~/.emacs.d/tree-sitter
 (setq treesit-language-source-alist
       '((python "https://github.com/tree-sitter/tree-sitter-python")
+        (bash "https://github.com/tree-sitter/tree-sitter-bash")
         (nix "https://github.com/nix-community/tree-sitter-nix")))
 (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
 (add-to-list 'major-mode-remap-alist '(nix-mode . nix-ts-mode))
