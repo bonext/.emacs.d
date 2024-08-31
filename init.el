@@ -54,6 +54,7 @@
             (dired-omit-mode 1)))
             
 ;; dired cd with 'a' to reuse buffer
+;; NOTE: this kills existing dired buffer so current directory is lost in dired
 (put 'dired-find-alternate-file 'disabled nil)
 
 ;; smoother scrolling
@@ -69,15 +70,14 @@
 
 ;; tree-sitter
 ;; install grammars to ~/.emacs.d/tree-sitter
+;; install with `M-x treesit-install-language-grammar`
 (setq treesit-language-source-alist
       '((python "https://github.com/tree-sitter/tree-sitter-python")
-        (bash "https://github.com/tree-sitter/tree-sitter-bash")
         (nix "https://github.com/nix-community/tree-sitter-nix")))
 (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
 (add-to-list 'major-mode-remap-alist '(nix-mode . nix-ts-mode))
 
                                         ; PACKAGES
-                                        ; auto packages
 (require 'package)
 ;; MELPA
 ;; https://melpa.org/
@@ -103,10 +103,17 @@
 ;; ivy completion engine
 ;; counsel also pulls in ivy and swiper
 ;; cf. https://www.reddit.com/r/emacs/comments/910pga/tip_how_to_use_ivy_and_its_utilities_in_your/
+(use-package counsel
+  :after ivy
+  :bind (("M-x" . counsel-M-x)
+	 ("C-x b" . counsel-ibuffer)
+         ("C-x C-f" . counsel-find-file))
+  :config (counsel-mode))
+
 (use-package ivy
-  :diminish ;; do not show in modeline
+  :diminish  ;; do not show in modeline
   :defer 0.1 ;; load after .1s idle emacs (otherwise waits)
-  :bind ( ;; this causes ivy to delay loading (probably)
+  :bind (;; this causes ivy to delay loading (probably)
          :map ivy-minibuffer-map
          ("TAB" . ivy-alt-done)	
          ("C-l" . ivy-alt-done)
@@ -119,8 +126,26 @@
          :map ivy-reverse-i-search-map
          ("C-k" . ivy-previous-line)
          ("C-d" . ivy-reverse-i-search-kill))
+  :custom
+  (setq ivy-use-virtual-buffers t)
+  (setq ivy-count-format "(%d/%d) ")
   :config
   (ivy-mode))
+
+(use-package ivy-rich
+  :after ivy
+  :custom
+  (ivy-virtual-abbreviate 'full
+                          ivy-rich-switch-buffer-align-virtual-buffer t
+                          ivy-rich-path-style 'abbrev)
+  :config
+  (ivy-set-display-transformer 'ivy-switch-buffer
+                               'ivy-rich-switch-buffer-transformer))
+
+(use-package swiper
+  :after ivy
+  :bind (("C-s" . swiper)
+         ("C-r" . swiper)))
 
 ;; rainbow delims
 (use-package rainbow-delimiters
@@ -134,19 +159,6 @@
   :diminish which-key-mode
   :config
   (setq which-key-idle-delay 0.3))
-
-(use-package counsel
-  :diminish
-  :after ivy
-  :bind (("M-x" . counsel-M-x)
-	 ("C-x b" . counsel-ibuffer)
-         ("C-x C-f" . counsel-find-file))
-  :config (counsel-mode))
-
-(use-package ivy-rich
-  :diminish
-  :after ivy
-  :init (ivy-rich-mode 1))
 
 ;; helpful cfg directly out of emacs-from-scratch
 ;; TODO: research
