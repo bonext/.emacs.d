@@ -92,6 +92,21 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
+;; all-the-icons
+;; NOTE: messes up with ~/.local/share/fonts
+;; requires `M-x all-the-icons-install-fonts`
+(use-package all-the-icons
+  :if (display-graphic-p))
+
+;; doom-modeline
+;; doom-modeline relies on nerd-icons
+;; NOTE: messes up with ~/.local/share/fonts
+;; requires `M-x nerd-icons-install-fonts`
+(use-package nerd-icons)
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1))
+
 ;; diminish hides modes from modeline
 ;; requires for `:diminish` keyword in use-package
 (use-package diminish)
