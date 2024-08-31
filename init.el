@@ -27,7 +27,8 @@
 (column-number-mode)
 (global-display-line-numbers-mode t)
 ;; disable line numbers for certain modes
-(dolist (mode '(eshell-mode-hook))
+(dolist (mode '(eshell-mode-hook
+                org-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
 ;; startup to scratch
