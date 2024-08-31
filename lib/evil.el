@@ -8,6 +8,8 @@
   (setq evil-want-C-u-scroll t)
   ;; enable org-mode visibility cycle with tab
   (setq evil-want-C-i-jump nil)
+  ;; setup undo-redo
+  (setq evil-undo-system 'undo-redo)
   :config
   (evil-mode 1)
   ;; C-g does Insert -> Normal in evil
