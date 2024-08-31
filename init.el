@@ -1,10 +1,6 @@
                                         ; BUILT-INS
-;; only spaces
-(setq-default indent-tabs-mode nil)
-
-;; beep -> visual bell
-(setq ring-bell-function 'ignore)
-(setq visible-bell t)
+;; UI
+(setq inhibit-startup-message t)
 
 ;; disable tool bar (it causes glitches on wayland)
 (tool-bar-mode -1)
@@ -12,9 +8,27 @@
 (menu-bar-mode -1)
 ;; disable scroll bars
 (scroll-bar-mode -1)
+;; TODO: research
+(set-fringe-mode 10)
+;; TODO: research
+(tooltip-mode -1)
 
-;; show lines in programming modes
-(add-hook 'prog-mode-hook 'display-line-numbers-mode)
+;; only spaces
+(setq-default indent-tabs-mode nil)
+
+;; beep -> visual bell
+(setq ring-bell-function 'ignore)
+(setq visible-bell t)
+
+;; Make ESC quit prompts
+(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+
+;; line numbers
+(column-number-mode)
+(global-display-line-numbers-mode t)
+;; disable line numbers for certain modes
+(dolist (mode '(eshell-mode-hook))
+  (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
 ;; startup to scratch
 ;; (setq inhibit-startup-screen t)
@@ -71,53 +85,110 @@
              t) 
 (package-initialize)
 
+(unless package-archive-contents
+  (package-refresh-contents))
+
+(require 'use-package)
+(setq use-package-always-ensure t)
+
+;; diminish hides modes from modeline
+;; requires for `:diminish` keyword in use-package
+(use-package diminish)
+
+;; show keys and combinations
+;; TODO: enable global and toggle bufffer
+(use-package command-log-mode)
+
+;; ivy completion engine
+;; counsel also pulls in ivy and swiper
+;; cf. https://www.reddit.com/r/emacs/comments/910pga/tip_how_to_use_ivy_and_its_utilities_in_your/
+(use-package ivy
+  :diminish ;; do not show in modeline
+  :defer 0.1 ;; load after .1s idle emacs (otherwise waits)
+  :bind ( ;; this causes ivy to delay loading (probably)
+         :map ivy-minibuffer-map
+         ("TAB" . ivy-alt-done)	
+         ("C-l" . ivy-alt-done)
+         ("C-j" . ivy-next-line)
+         ("C-k" . ivy-previous-line)
+         :map ivy-switch-buffer-map
+         ("C-k" . ivy-previous-line)
+         ("C-l" . ivy-done)
+         ("C-d" . ivy-switch-buffer-kill)
+         :map ivy-reverse-i-search-map
+         ("C-k" . ivy-previous-line)
+         ("C-d" . ivy-reverse-i-search-kill))
+  :config
+  (ivy-mode))
+
+;; rainbow delims
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
+
+;; which-key
+;; shows help on key prefix after `which-key-idle-delay` seconds
+;; will be in emacs-30
+(use-package which-key
+  :init (which-key-mode)
+  :diminish which-key-mode
+  :config
+  (setq which-key-idle-delay 0.3))
+
+(use-package counsel
+  :diminish
+  :after ivy
+  :bind (("M-x" . counsel-M-x)
+	 ("C-x b" . counsel-ibuffer)
+         ("C-x C-f" . counsel-find-file))
+  :config (counsel-mode))
+
+(use-package ivy-rich
+  :diminish
+  :after ivy
+  :init (ivy-rich-mode 1))
+
+;; helpful cfg directly out of emacs-from-scratch
+;; TODO: research
+(use-package helpful
+  :diminish
+  :after counsel
+  :custom
+  (counsel-describe-function-function #'helpful-callable)
+  (counsel-describe-variable-function #'helpful-variable)
+  :bind
+  ([remap describe-function] . counsel-describe-function)
+  ([remap describe-command] . helpful-command)
+  ([remap describe-variable] . counsel-describe-variable)
+  ([remap describe-key] . helpful-key))
+
+;; TODO: research general.el
+;; tldr: key definer for easy leader prefix
+;; https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-03.org#bindings-with-generalel
+
+;; TODO: research hydra
+;; tldr: transient keybindings
+;; https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-03.org#hydra
+
 (load (concat user-emacs-directory "lib/colors.el"))
 (load (concat user-emacs-directory "lib/org.el"))
 (load (concat user-emacs-directory "lib/wayland.el"))
+(load (concat user-emacs-directory "lib/evil.el"))
 
 ;; company
 (use-package company
-  :ensure t
   :config
   (setq company-minimum-prefix-length 3)
   (add-hook 'after-init-hook 'global-company-mode))
-
-;; evil
-(use-package evil
-  :ensure t
-  :init
-  ; uncomment for opt-in evil
-  ;; (setq evil-default-state 'emacs)
-  ;; enable org-mode visibility cycle with tab
-  (setq evil-want-C-i-jump nil)
-  :config
-  ;; disable evil-mode in some buffers (by their name, cf. C-xC-b)
-  (add-to-list 'evil-buffer-regexps '("^\\*Geiser.*REPL\\*$"))
-  (add-to-list 'evil-buffer-regexps '("^\\*slime-repl.*\\*$"))
-  (evil-mode 1))
-  
-
-;; evil-org
-(use-package evil-org
-  :ensure t
-  :after org
-  :hook org-mode-hook
-  :config
-  (require 'evil-org-agenda)
-  (evil-org-set-key-theme '(navigation insert textobjects additional calendar))
-  (evil-org-agenda-set-keys))
 
 ;; slime
 (if (file-exists-p "/usr/bin/sbcl")
     (progn
       (use-package slime
-        :ensure t
         :config
         (setq inferior-lisp-program "/usr/bin/sbcl"))))
 
 ;; paredit
 (use-package paredit
-  :ensure t
   :config
   (add-hook 'lisp-mode-hook #'enable-paredit-mode)
   (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode))
@@ -126,7 +197,6 @@
 ;;; racket
 (if (file-exists-p "/usr/bin/racket")
     (use-package geiser-racket
-      :ensure t
       :config
       (setq geiser-racket-binary "/usr/bin/racket")))
 
@@ -136,27 +206,15 @@
 
 ;; dts-mode
 (use-package dts-mode
-  :ensure t
   :config
   ;; setup for zmk keymaps
   (add-to-list 'auto-mode-alist '("\\.keymap\\'" . dts-mode)))
 
 ;; nix-mode
-(use-package nix-ts-mode
-  :ensure t)
+(use-package nix-ts-mode)
 
 ;; markdown-mode
-(use-package markdown-mode
-  :ensure t)
+(use-package markdown-mode)
 
 ;; lua-mode
-(use-package lua-mode
-  :ensure t)
-
-;; projectile
-;; (use-package projectile
-;;   :ensure t
-;;   :config
-;;   ;; Recommended keymap prefix on Windows/Linux
-;;   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-;;   (projectile-mode +1))
+(use-package lua-mode)

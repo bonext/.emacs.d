@@ -116,13 +116,11 @@
 
 ;; org-bullets
 (use-package org-bullets
-  :ensure t
   :init
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
 ;; org-journal
 (use-package org-journal
-  :ensure t
   :init
   (setq org-journal-file-type 'daily)
   (setq org-journal-dir "~/Documents/journal")

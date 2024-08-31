@@ -1,19 +1,14 @@
                                         ; COLORS
-(use-package ef-themes
-  :ensure t)
+(use-package ef-themes)
 
-(use-package nord-theme
-  :ensure t)
+(use-package nord-theme)
 
-(use-package solarized-theme
-  :ensure t)
+(use-package solarized-theme)
 
-(use-package gruvbox-theme
-  :ensure t)
+(use-package gruvbox-theme)
 
 ;; solarized-dark
 ;; cf. https://github.com/bbatsov/solarized-emacs
-
 
 ;; modus theme
 ;; https://protesilaos.com/emacs/modus-themes
@@ -24,7 +19,6 @@
 ;; to integrate with https://darkman.whynothugo.nl/
 (if (file-exists-p "/usr/bin/darkman")
     (use-package darkman
-      :ensure t
       :config
       (setq darkman-themes '(:light solarized-selenized-white :dark solarized-selenized-black))
       (darkman-mode))
