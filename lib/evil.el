@@ -14,6 +14,8 @@
   (evil-mode 1)
   ;; C-g does Insert -> Normal in evil
   (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+  ;; C-h in insert mode deletes back (as in vim)
+  (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
   ;; support visual-line-mode navigation
   (evil-global-set-key 'motion "j" 'evil-next-visual-line)
   (evil-global-set-key 'motion "k" 'evil-previous-visual-line))
@@ -23,11 +25,3 @@
   :config
   (evil-collection-init))
   
-;; ;; evil-org
-;; (use-package evil-org
-;;   :after org
-;;   :hook org-mode-hook
-;;   :config
-;;   (require 'evil-org-agenda)
-;;   (evil-org-set-key-theme '(navigation insert textobjects additional calendar))
-;;   (evil-org-agenda-set-keys))
