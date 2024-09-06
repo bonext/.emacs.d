@@ -1,7 +1,7 @@
                                         ; BUILT-INS
 ;; UI
+;; start to scratch
 (setq inhibit-startup-message t)
-
 ;; disable tool bar (it causes glitches on wayland)
 (tool-bar-mode -1)
 ;; disable menu
@@ -12,6 +12,9 @@
 (set-fringe-mode 10)
 ;; TODO: research
 (tooltip-mode -1)
+;; smoother scrolling
+(pixel-scroll-precision-mode)
+
 
 ;; only spaces
 (setq-default indent-tabs-mode nil)
@@ -30,9 +33,6 @@
 (dolist (mode '(eshell-mode-hook
                 org-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
-
-;; startup to scratch
-;; (setq inhibit-startup-screen t)
 
 ;; add russian as C-\ bind
 (setq default-input-method "russian-computer")
@@ -56,9 +56,6 @@
 ;; dired cd with 'a' to reuse buffer
 ;; NOTE: this kills existing dired buffer so current directory is lost in dired
 (put 'dired-find-alternate-file 'disabled nil)
-
-;; smoother scrolling
-(pixel-scroll-precision-mode)
 
 ;; encryption
 (require 'epa-file)
@@ -159,8 +156,7 @@
 
 (use-package swiper
   :after ivy
-  :bind (("C-s" . swiper)
-         ("C-r" . swiper)))
+  :bind (("C-s" . swiper)))
 
 ;; rainbow delims
 (use-package rainbow-delimiters
@@ -197,10 +193,10 @@
 ;; tldr: transient keybindings
 ;; https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-03.org#hydra
 
-(load (concat user-emacs-directory "lib/colors.el"))
-(load (concat user-emacs-directory "lib/org.el"))
 (load (concat user-emacs-directory "lib/wayland.el"))
+(load (concat user-emacs-directory "lib/colors.el"))
 (load (concat user-emacs-directory "lib/evil.el"))
+(load (concat user-emacs-directory "lib/org.el"))
 
 ;; company
 (use-package company
