@@ -14,6 +14,8 @@
 (tooltip-mode -1)
 ;; smoother scrolling
 (pixel-scroll-precision-mode)
+;; default font
+(set-face-attribute 'default nil :font "Fira Code Retina" :height 100)
 
 
 ;; only spaces
