@@ -117,13 +117,6 @@
 ;; ivy completion engine
 ;; counsel also pulls in ivy and swiper
 ;; cf. https://www.reddit.com/r/emacs/comments/910pga/tip_how_to_use_ivy_and_its_utilities_in_your/
-(use-package counsel
-  :after ivy
-  :bind (("M-x" . counsel-M-x)
-	 ("C-x b" . counsel-ibuffer)
-         ("C-x C-f" . counsel-find-file))
-  :config (counsel-mode))
-
 (use-package ivy
   :diminish  ;; do not show in modeline
   :defer 0.1 ;; load after .1s idle emacs (otherwise waits)
@@ -145,6 +138,13 @@
   (setq ivy-count-format "(%d/%d) ")
   :config
   (ivy-mode))
+
+(use-package counsel
+  :after ivy
+  :bind (("M-x" . counsel-M-x)
+	 ("C-x b" . counsel-ibuffer)
+         ("C-x C-f" . counsel-find-file))
+  :config (counsel-mode))
 
 (use-package ivy-rich
   :after ivy
@@ -199,6 +199,7 @@
 (load (concat user-emacs-directory "lib/colors.el"))
 (load (concat user-emacs-directory "lib/evil.el"))
 (load (concat user-emacs-directory "lib/org.el"))
+(load (concat user-emacs-directory "lib/org-roam.el"))
 
 ;; company
 (use-package company
