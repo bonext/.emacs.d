@@ -67,14 +67,28 @@
   :hook (org-mode . aa/org-mode-visual-fill))
 
 ;; org-journal
+(defun aa/org-journal-setup ()
+  ;; common steps
+  (setq org-journal-dir "~/Documents/journal")
+  ;; "2024-05-13, Monday"
+  (setq org-journal-date-format "%Y-%m-%d, %A")
+  ;; 2024-05-13.org
+  (setq org-journal-file-format "%F.org")
+  ;; system-specific
+  (cond
+   ;; osx-specific stuff
+   (t (progn
+        (setq org-journal-file-type 'daily)
+        (setq org-journal-encrypt-journal t)))))
+  
 (use-package org-journal
   :after org
   :init
-  (setq org-journal-file-type 'daily)
-  (setq org-journal-dir "~/Documents/journal")
-  (setq org-journal-date-format "%Y-%m-%d, %A")
-  (setq org-journal-file-format "%F.org") ; yyyy-mm-dd.org
-  (setq org-journal-encrypt-journal t))
+  (aa/org-journal-setup))
 
 ;; separate because the package load is deferred
 (global-set-key (kbd "C-c j") 'org-journal-new-entry)
+
+;; TODO: research
+;; support for image paste
+;; https://github.com/abo-abo/org-download
