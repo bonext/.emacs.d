@@ -1,3 +1,7 @@
+(cond
+ ;; osx-specific stuff goes here
+ (t (setq aa/org-font-height 140)))
+
 (defun aa/org-setup-fonts ()
   ;; Replace list hyphen with dot
   (font-lock-add-keywords
@@ -10,16 +14,17 @@
   ;; and https://zzamboni.org/post/beautifying-org-mode-in-emacs/
   (let* (
          ;;
-         (font-height 140)
+         (font-height aa/org-font-height)
          ;; variable-width font setup
          (variable-tuple
           (cond
+           ((x-list-fonts "PT Sans") `(:family "PT Sans" :height ,font-height))
            ((x-list-fonts "Source Sans Pro") `(:family "Source Sans Pro" :height ,font-height))
-           ((x-list-fonts "IBM Plex Sans") `(:family "IBM Plex Sans" :height ,font-height))
-           ((x-list-fonts "PT Serif") `(:family "PT Serif" :height ,font-height))))
+           ((x-list-fonts "IBM Plex Sans") `(:family "IBM Plex Sans" :height ,font-height))))
          ;; fixed-width font setup
          (fixed-tuple
           (cond
+           ((x-list-fonts "Fira Code Retina") '(:family "Fira Code Retina"))
            ((x-list-fonts "Adobe Source Pro") '(:family "Adobe Source Pro"))
            ((x-list-fonts "IBM Plex Mono") '(:family "IBM Plex Mono"))
            ((x-list-fonts "PT Mono") '(:family "PT Mono"))))
