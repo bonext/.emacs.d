@@ -9,12 +9,14 @@
   ;; via https://yannesposito.com/posts/0020-cool-looking-org-mode/index.html
   ;; and https://zzamboni.org/post/beautifying-org-mode-in-emacs/
   (let* (
+         ;;
+         (font-height 140)
          ;; variable-width font setup
          (variable-tuple
           (cond
-           ((x-list-fonts "Source Sans Pro") '(:family "Source Sans Pro" :height 120))
-           ((x-list-fonts "IBM Plex Sans") '(:family "IBM Plex Sans" :height 120))
-           ((x-list-fonts "PT Serif") '(:family "PT Serif" :height 120))))
+           ((x-list-fonts "Source Sans Pro") `(:family "Source Sans Pro" :height ,font-height))
+           ((x-list-fonts "IBM Plex Sans") `(:family "IBM Plex Sans" :height ,font-height))
+           ((x-list-fonts "PT Serif") `(:family "PT Serif" :height ,font-height))))
          ;; fixed-width font setup
          (fixed-tuple
           (cond
@@ -46,7 +48,7 @@
      `(org-document-title ((t (,@headline ,@variable-tuple :height 1.5 :underline nil))))
 
      ;; things that should be fixed-pitch
-     '(org-ellipsis ((t (:inherit fixed-pitch :foreground "gray40" :underline nil))))
+     '(org-ellipsis ((t (:inherit fixed-pitch :foreground "gray60" :underline nil))))
      '(org-block            ((t (:inherit fixed-pitch))))
      '(org-block-begin-line ((t (:inherit fixed-pitch))))
      '(org-block-end-line   ((t (:inherit fixed-pitch))))
