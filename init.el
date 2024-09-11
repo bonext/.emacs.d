@@ -245,3 +245,14 @@
 
 ;; lua-mode
 (use-package lua-mode)
+
+;; terminal emulation
+;; colors
+(use-package eterm-256color
+  :hook
+  (term-mode-hook . eterm-256color-mode)
+  (vterm-mode-hook . eterm-256color-mode))
+;; vterm
+(use-package vterm
+  :config
+  (setq vterm-max-scrollback 10000))
