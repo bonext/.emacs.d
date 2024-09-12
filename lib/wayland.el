@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
                                         ; WAYLAND SUPPORT
 
 (defun aa/wayland-p ()

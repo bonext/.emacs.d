@@ -1,4 +1,4 @@
-;; org-roam
+;; org-roam  -*- lexical-binding: t; -*-
 ;; mostly via https://systemcrafters.net/build-a-second-brain-in-emacs/getting-started-with-org-roam/
 (use-package org-roam
   :custom

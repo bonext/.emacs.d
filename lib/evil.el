@@ -1,4 +1,4 @@
-;; evil
+;; evil  -*- lexical-binding: t; -*-
 (use-package evil
   :init
   ;; the first two are due to evil-collection

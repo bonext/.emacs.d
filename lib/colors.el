@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
                                         ; COLORS
 (use-package ef-themes)
 

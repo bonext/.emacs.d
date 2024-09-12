@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (cond
  ;; osx-specific stuff goes here
  (t (setq aa/org-font-height 140)))

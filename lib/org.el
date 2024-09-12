@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (defun aa/org-common-hooks ()
   (org-indent-mode)
   (variable-pitch-mode 1)

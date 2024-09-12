@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
                                         ; BUILT-INS
 ;; UI
 ;; start to scratch
@@ -201,6 +202,7 @@
 
 ;; company
 (use-package company
+  :diminish
   :config
   (setq company-minimum-prefix-length 3)
   (add-hook 'after-init-hook 'global-company-mode))
