@@ -102,9 +102,7 @@
 ;; NOTE: messes up with ~/.local/share/fonts
 ;; requires `M-x nerd-icons-install-fonts`
 (use-package nerd-icons)
-(use-package doom-modeline
-  :ensure t
-  :init (doom-modeline-mode 1))
+(use-package doom-modeline)
 
 ;; diminish hides modes from modeline
 ;; requires for `:diminish` keyword in use-package
