@@ -20,7 +20,7 @@
 (cond
  ;; osx-specific setup goes here
  (t (progn
-      (setq aa/light-theme 'solarized-selenized-white)
+      (setq aa/light-theme 'solarized-selenized-light)
       (setq aa/dark-theme 'gruvbox-dark-hard))))
 
 (if (file-exists-p "/usr/bin/darkman")
