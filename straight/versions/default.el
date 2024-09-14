@@ -1,6 +1,7 @@
 (("annalist.el" . "e1ef5dad75fa502d761f70d9ddf1aeb1c423f41d")
  ("autothemer" . "cb4d4b69f8bb1f8158d2311692b7607794b75829")
  ("compat" . "c1f94ac75d6ea7f93c8da51e3f78ab3f39dbc2a2")
+ ("corfu" . "12c30824b3d177cc3a65eba440c5cf499e06017a")
  ("darkman.el" . "136eac628595c6777eb6b2246a014dfcb3b6c625")
  ("dash.el" . "1de9dcb83eacfb162b6d9a118a4770b1281bcd84")
  ("diminish.el" . "fbd5d846611bad828e336b25d2e131d1bc06b83d")

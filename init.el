@@ -1,4 +1,4 @@
-;; -*- lexical-binding: t; -*-
+; -*- lexical-binding: t; -*-
                                         ; straight.el bootstrap
 ;; straight configuration
 
@@ -62,12 +62,22 @@
 ;; add russian as C-\ bind
 (setq default-input-method "russian-computer")
 
+;; minibuffers inside minibuffers
+(setq enable-recursive-minibuffers t)
+
+;; hide commands in M-x that do not apply in current mode
+;; if no completion-predicate is specified for command then
+;; predicate is true when command is applicable to major or any of minor modes
+;; setopt is code way to set customized variables
+;; cf. https://www.gnu.org/software/emacs/manual/html_node/elisp/Setting-Variables.html#index-setopt
+(setopt read-extended-command-predicate #'command-completion-default-include-p)
+
 ;; customize to file
 (setq custom-file (concat user-emacs-directory "custom.el"))
 (when (file-exists-p custom-file)
   (load-file custom-file))
 
-;; Dired
+                                        ; Dired
 (with-eval-after-load 'dired
   (require 'dired-x))
   ;; Set dired-x global variables here.  For example:
@@ -126,6 +136,7 @@
                                         ; COMPLETIONS
 
 (load (concat user-emacs-directory "lib/completions.el"))
+
 
 ;; which-key
 ;; shows help on key prefix after `which-key-idle-delay` seconds
