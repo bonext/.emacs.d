@@ -1,6 +1,6 @@
 ;; org-roam  -*- lexical-binding: t; -*-
-;; mostly via https://systemcrafters.net/build-a-second-brain-in-emacs/getting-started-with-org-roam/
 (use-package org-roam
+  :straight t
   :custom
   (org-roam-directory "~/Documents/RoamNotes")
   :bind (("C-c n l" . org-roam-buffer-toggle)

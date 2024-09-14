@@ -7,6 +7,7 @@
 (load (concat user-emacs-directory "lib/org-fonts.el"))
 
 (use-package org
+  :straight t
   :hook (org-mode . aa/org-common-hooks)
   :config
   (setq org-directory "~/Documents/Notes")
@@ -54,6 +55,7 @@
   (global-set-key (kbd "C-c l") 'org-store-link))
 
 (use-package org-bullets
+  :straight t
   :after org
   :hook (org-mode . org-bullets-mode)
   :custom
@@ -65,6 +67,7 @@
  (visual-fill-column-mode 1))
 
 (use-package visual-fill-column
+  :straight t
   :hook (org-mode . aa/org-mode-visual-fill))
 
 ;; org-journal
@@ -83,6 +86,7 @@
         (setq org-journal-encrypt-journal t)))))
   
 (use-package org-journal
+  :straight t
   :after org
   :init
   (aa/org-journal-setup))

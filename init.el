@@ -209,9 +209,9 @@
 ;; ;; tldr: transient keybindings
 ;; ;; https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-03.org#hydra
 
-
-;; (load (concat user-emacs-directory "lib/org.el"))
-;; (load (concat user-emacs-directory "lib/org-roam.el"))
+                                        ; ORG
+(load (concat user-emacs-directory "lib/org.el"))
+(load (concat user-emacs-directory "lib/org-roam.el"))
 
                                         ; PACKAGES - CODE
 ;; rainbow delims
