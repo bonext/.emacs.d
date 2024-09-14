@@ -20,6 +20,9 @@
 
                                         ; UI
 
+;; wayland support (mostly cross-app clipboard)
+(load (concat user-emacs-directory "lib/wayland.el"))
+
 ;; start to scratch
 (setq inhibit-startup-message t)
 ;; disable tool bar (it causes glitches on wayland)
@@ -205,18 +208,10 @@
 ;; ;; tldr: transient keybindings
 ;; ;; https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-03.org#hydra
 
-;; (load (concat user-emacs-directory "lib/wayland.el"))
 ;; (load (concat user-emacs-directory "lib/colors.el"))
 
 ;; (load (concat user-emacs-directory "lib/org.el"))
 ;; (load (concat user-emacs-directory "lib/org-roam.el"))
-
-;; ;; company
-;; (use-package company
-;;   :diminish
-;;   :config
-;;   (setq company-minimum-prefix-length 3)
-;;   (add-hook 'after-init-hook 'global-company-mode))
 
 ;; ;; slime
 ;; (if (file-exists-p "/usr/bin/sbcl")
