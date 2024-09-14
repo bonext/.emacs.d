@@ -123,51 +123,9 @@
 ;; ;; TODO: enable global and toggle bufffer
 ;; (use-package command-log-mode)
 
-;; ;; vy completion engine
-;; ;; counsel also pulls in ivy and swiper
-;; ;; cf. https://www.reddit.com/r/emacs/comments/910pga/tip_how_to_use_ivy_and_its_utilities_in_your/
-;; (use-package ivy
-;;   :diminish  ;; do not show in modeline
-;;   :defer 0.1 ;; load after .1s idle emacs (otherwise waits)
-;;   :bind (;; this causes ivy to delay loading (probably)
-;;          :map ivy-minibuffer-map
-;;          ("TAB" . ivy-alt-done)	
-;;          ("C-l" . ivy-alt-done)
-;;          ("C-j" . ivy-next-line)
-;;          ("C-k" . ivy-previous-line)
-;;          :map ivy-switch-buffer-map
-;;          ("C-k" . ivy-previous-line)
-;;          ("C-l" . ivy-done)
-;;          ("C-d" . ivy-switch-buffer-kill)
-;;          :map ivy-reverse-i-search-map
-;;          ("C-k" . ivy-previous-line)
-;;          ("C-d" . ivy-reverse-i-search-kill))
-;;   :custom
-;;   (setq ivy-use-virtual-buffers t)
-;;   (setq ivy-count-format "(%d/%d) ")
-;;   :config
-;;   (ivy-mode))
+                                        ; COMPLETIONS
 
-;; (use-package counsel
-;;   :after ivy
-;;   :bind (("M-x" . counsel-M-x)
-;; 	 ("C-x b" . counsel-ibuffer)
-;;          ("C-x C-f" . counsel-find-file))
-;;   :config (counsel-mode))
-
-;; (use-package ivy-rich
-;;   :after ivy
-;;   :custom
-;;   (ivy-virtual-abbreviate 'full
-;;                           ivy-rich-switch-buffer-align-virtual-buffer t
-;;                           ivy-rich-path-style 'abbrev)
-;;   :config
-;;   (ivy-set-display-transformer 'ivy-switch-buffer
-;;                                'ivy-rich-switch-buffer-transformer))
-
-;; (use-package swiper
-;;   :after ivy
-;;   :bind (("C-s" . swiper)))
+(load (concat user-emacs-directory "lib/completions.el"))
 
 ;; which-key
 ;; shows help on key prefix after `which-key-idle-delay` seconds

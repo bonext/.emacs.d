@@ -38,6 +38,7 @@
  ("solarized-emacs" . "80ee6b99b022b20c27ffb44fb146f5878c9b5776")
  ("straight.el" . "88e574ae75344e39b436f863ef0344135c7b6517")
  ("use-package" . "a6e856418d2ebd053b34e0ab2fda328abeba731c")
+ ("vertico" . "b8c9e39dbc39d2c4cd4e116c4bc6f835ed2f114b")
  ("visual-fill-column" . "e04d3521b6dc2435de4c4a4b9cac5feb194f0d5b")
  ("xterm-color" . "2ad407c651e90fff2ea85d17bf074cee2c022912"))
 :gamma
