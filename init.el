@@ -106,6 +106,9 @@
 ;; evil-mode
 (load (concat user-emacs-directory "lib/evil.el"))
 
+;; color scheme
+(load (concat user-emacs-directory "lib/colors.el"))
+
 ;; ;; all-the-icons
 ;; ;; NOTE: messes up with ~/.local/share/fonts
 ;; ;; requires `M-x all-the-icons-install-fonts`
@@ -208,7 +211,6 @@
 ;; ;; tldr: transient keybindings
 ;; ;; https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-03.org#hydra
 
-;; (load (concat user-emacs-directory "lib/colors.el"))
 
 ;; (load (concat user-emacs-directory "lib/org.el"))
 ;; (load (concat user-emacs-directory "lib/org-roam.el"))
