@@ -177,10 +177,6 @@
 ;;   :after ivy
 ;;   :bind (("C-s" . swiper)))
 
-;; ;; rainbow delims
-;; (use-package rainbow-delimiters
-;;   :hook (prog-mode . rainbow-delimiters-mode))
-
 ;; which-key
 ;; shows help on key prefix after `which-key-idle-delay` seconds
 ;; will be in emacs-30
@@ -217,52 +213,57 @@
 ;; (load (concat user-emacs-directory "lib/org.el"))
 ;; (load (concat user-emacs-directory "lib/org-roam.el"))
 
-;; ;; slime
-;; (if (file-exists-p "/usr/bin/sbcl")
-;;     (progn
-;;       (use-package slime
-;;         :config
-;;         (setq inferior-lisp-program "/usr/bin/sbcl"))))
+                                        ; PACKAGES - CODE
+;; rainbow delims
+(use-package rainbow-delimiters
+  :straight t
+  :hook (prog-mode . rainbow-delimiters-mode))
 
-;; ;; paredit
-;; (use-package paredit
-;;   :config
-;;   (add-hook 'lisp-mode-hook #'enable-paredit-mode)
-;;   (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode))
+;; slime
+(straight-register-package 'slime)
+(if (file-exists-p "/usr/bin/sbcl")
+    (use-package slime
+      :straight t
+      :config
+      (setq inferior-lisp-program "/usr/bin/sbcl")))
 
-;; ;; geiser
-;; ;;; racket
-;; (if (file-exists-p "/usr/bin/racket")
-;;     (use-package geiser-racket
-;;       :config
-;;       (setq geiser-racket-binary "/usr/bin/racket")))
+;; paredit
+(use-package paredit
+  :straight t
+  :config
+  (add-hook 'lisp-mode-hook #'enable-paredit-mode)
+  (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode))
 
-;; ;; ElDoc support
-;; ;; (this shows fn arguments in echo)
-;; (require 'eldoc)
+;; ElDoc support
+;; (this shows fn arguments in echo)
+(use-package eldoc
+  :straight t)
 
-;; ;; dts-mode
-;; (use-package dts-mode
-;;   :config
-;;   ;; setup for zmk keymaps
-;;   (add-to-list 'auto-mode-alist '("\\.keymap\\'" . dts-mode)))
+;; dts-mode
+(use-package dts-mode
+  :straight t
+  :config
+  ;; setup for zmk keymaps
+  (add-to-list 'auto-mode-alist '("\\.keymap\\'" . dts-mode)))
 
-;; ;; nix-mode
-;; (use-package nix-ts-mode)
+;; nix-mode
+(use-package nix-ts-mode
+  :straight t)
 
-;; ;; markdown-mode
-;; (use-package markdown-mode)
+;; markdown-mode
+(use-package markdown-mode
+  :straight t)
 
-;; ;; lua-mode
-;; (use-package lua-mode)
 
-;; ;; terminal emulation
-;; ;; colors
-;; (use-package eterm-256color
-;;   :hook
-;;   (term-mode-hook . eterm-256color-mode)
-;;   (vterm-mode-hook . eterm-256color-mode))
-;; ;; vterm
-;; (use-package vterm
-;;   :config
-;;   (setq vterm-max-scrollback 10000))
+                                        ; terminal emulation
+;; colors
+(use-package eterm-256color
+  :straight t
+  :hook
+  (term-mode-hook . eterm-256color-mode)
+  (vterm-mode-hook . eterm-256color-mode))
+;; vterm
+(use-package vterm
+  :straight t
+  :config
+  (setq vterm-max-scrollback 10000))
