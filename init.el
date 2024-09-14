@@ -96,20 +96,12 @@
 (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
 (add-to-list 'major-mode-remap-alist '(nix-mode . nix-ts-mode))
 
-;;                                         ; PACKAGES
-;; (require 'package)
-;; ;; MELPA
-;; ;; https://melpa.org/
-;; (add-to-list 'package-archives
-;;              '("melpa" . "https://melpa.org/packages/")
-;;              t) 
-;; (package-initialize)
+                                        ; PACKAGES
+;; use-package
+(straight-use-package 'use-package)
 
-;; (unless package-archive-contents
-;;   (package-refresh-contents))
-
-;; (require 'use-package)
-;; (setq use-package-always-ensure t)
+;; evil-mode
+(load (concat user-emacs-directory "lib/evil.el"))
 
 ;; ;; all-the-icons
 ;; ;; NOTE: messes up with ~/.local/share/fonts
@@ -215,7 +207,7 @@
 
 ;; (load (concat user-emacs-directory "lib/wayland.el"))
 ;; (load (concat user-emacs-directory "lib/colors.el"))
-;; (load (concat user-emacs-directory "lib/evil.el"))
+
 ;; (load (concat user-emacs-directory "lib/org.el"))
 ;; (load (concat user-emacs-directory "lib/org-roam.el"))
 

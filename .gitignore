@@ -15,3 +15,5 @@ custom.el
 eshell/
 tramp
 org-roam.db
+straight/
+!straight/versions/default.el

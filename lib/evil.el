@@ -1,5 +1,6 @@
 ;; evil  -*- lexical-binding: t; -*-
 (use-package evil
+  :straight t
   :init
   ;; the first two are due to evil-collection
   (setq evil-want-integration t)
@@ -21,6 +22,7 @@
   (evil-global-set-key 'motion "k" 'evil-previous-visual-line))
 
 (use-package evil-collection
+  :straight t
   :after evil
   :config
   (evil-collection-init))

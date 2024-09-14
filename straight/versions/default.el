@@ -1,0 +1,12 @@
+(("annalist.el" . "e1ef5dad75fa502d761f70d9ddf1aeb1c423f41d")
+ ("el-get" . "2f3d2be393d70dab3047ac21512628dc91ec3a35")
+ ("emacsmirror-mirror" . "6c72db6e360c77e9c9b230b4da1daf605e890256")
+ ("evil" . "5db0bdc7dcd9300b983526d37cbe480f35e36211")
+ ("evil-collection" . "6365e7c8ae728f7a26294db261b6778d089a6263")
+ ("gnu-elpa-mirror" . "4654b388ea470965f5e7c6c2e166b4c6b09855da")
+ ("goto-chg" . "72f556524b88e9d30dc7fc5b0dc32078c166fda7")
+ ("melpa" . "bfa04bef05bdeab1a097cb5204263ee9078f83a9")
+ ("nongnu-elpa" . "94966229ca17882de6cbc1b709120e19a030d35d")
+ ("straight.el" . "88e574ae75344e39b436f863ef0344135c7b6517")
+ ("use-package" . "a6e856418d2ebd053b34e0ab2fda328abeba731c"))
+:gamma
