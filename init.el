@@ -1,6 +1,25 @@
 ;; -*- lexical-binding: t; -*-
-                                        ; BUILT-INS
-;; UI
+                                        ; straight.el bootstrap
+;; straight configuration
+
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name
+        "straight/repos/straight.el/bootstrap.el"
+        (or (bound-and-true-p straight-base-dir)
+            user-emacs-directory)))
+      (bootstrap-version 7))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+
+                                        ; UI
+
 ;; start to scratch
 (setq inhibit-startup-message t)
 ;; disable tool bar (it causes glitches on wayland)
@@ -77,182 +96,182 @@
 (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
 (add-to-list 'major-mode-remap-alist '(nix-mode . nix-ts-mode))
 
-                                        ; PACKAGES
-(require 'package)
-;; MELPA
-;; https://melpa.org/
-(add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/")
-             t) 
-(package-initialize)
+;;                                         ; PACKAGES
+;; (require 'package)
+;; ;; MELPA
+;; ;; https://melpa.org/
+;; (add-to-list 'package-archives
+;;              '("melpa" . "https://melpa.org/packages/")
+;;              t) 
+;; (package-initialize)
 
-(unless package-archive-contents
-  (package-refresh-contents))
+;; (unless package-archive-contents
+;;   (package-refresh-contents))
 
-(require 'use-package)
-(setq use-package-always-ensure t)
+;; (require 'use-package)
+;; (setq use-package-always-ensure t)
 
-;; all-the-icons
-;; NOTE: messes up with ~/.local/share/fonts
-;; requires `M-x all-the-icons-install-fonts`
-(use-package all-the-icons
-  :if (display-graphic-p))
+;; ;; all-the-icons
+;; ;; NOTE: messes up with ~/.local/share/fonts
+;; ;; requires `M-x all-the-icons-install-fonts`
+;; (use-package all-the-icons
+;;   :if (display-graphic-p))
 
-;; doom-modeline
-;; doom-modeline relies on nerd-icons
-;; NOTE: messes up with ~/.local/share/fonts
-;; requires `M-x nerd-icons-install-fonts`
-(use-package nerd-icons)
-(use-package doom-modeline)
+;; ;; doom-modeline
+;; ;; doom-modeline relies on nerd-icons
+;; ;; NOTE: messes up with ~/.local/share/fonts
+;; ;; requires `M-x nerd-icons-install-fonts`
+;; (use-package nerd-icons)
+;; (use-package doom-modeline)
 
-;; diminish hides modes from modeline
-;; requires for `:diminish` keyword in use-package
-(use-package diminish)
+;; ;; diminish hides modes from modeline
+;; ;; requires for `:diminish` keyword in use-package
+;; (use-package diminish)
 
-;; show keys and combinations
-;; TODO: enable global and toggle bufffer
-(use-package command-log-mode)
+;; ;; show keys and combinations
+;; ;; TODO: enable global and toggle bufffer
+;; (use-package command-log-mode)
 
-;; ivy completion engine
-;; counsel also pulls in ivy and swiper
-;; cf. https://www.reddit.com/r/emacs/comments/910pga/tip_how_to_use_ivy_and_its_utilities_in_your/
-(use-package ivy
-  :diminish  ;; do not show in modeline
-  :defer 0.1 ;; load after .1s idle emacs (otherwise waits)
-  :bind (;; this causes ivy to delay loading (probably)
-         :map ivy-minibuffer-map
-         ("TAB" . ivy-alt-done)	
-         ("C-l" . ivy-alt-done)
-         ("C-j" . ivy-next-line)
-         ("C-k" . ivy-previous-line)
-         :map ivy-switch-buffer-map
-         ("C-k" . ivy-previous-line)
-         ("C-l" . ivy-done)
-         ("C-d" . ivy-switch-buffer-kill)
-         :map ivy-reverse-i-search-map
-         ("C-k" . ivy-previous-line)
-         ("C-d" . ivy-reverse-i-search-kill))
-  :custom
-  (setq ivy-use-virtual-buffers t)
-  (setq ivy-count-format "(%d/%d) ")
-  :config
-  (ivy-mode))
+;; ;; vy completion engine
+;; ;; counsel also pulls in ivy and swiper
+;; ;; cf. https://www.reddit.com/r/emacs/comments/910pga/tip_how_to_use_ivy_and_its_utilities_in_your/
+;; (use-package ivy
+;;   :diminish  ;; do not show in modeline
+;;   :defer 0.1 ;; load after .1s idle emacs (otherwise waits)
+;;   :bind (;; this causes ivy to delay loading (probably)
+;;          :map ivy-minibuffer-map
+;;          ("TAB" . ivy-alt-done)	
+;;          ("C-l" . ivy-alt-done)
+;;          ("C-j" . ivy-next-line)
+;;          ("C-k" . ivy-previous-line)
+;;          :map ivy-switch-buffer-map
+;;          ("C-k" . ivy-previous-line)
+;;          ("C-l" . ivy-done)
+;;          ("C-d" . ivy-switch-buffer-kill)
+;;          :map ivy-reverse-i-search-map
+;;          ("C-k" . ivy-previous-line)
+;;          ("C-d" . ivy-reverse-i-search-kill))
+;;   :custom
+;;   (setq ivy-use-virtual-buffers t)
+;;   (setq ivy-count-format "(%d/%d) ")
+;;   :config
+;;   (ivy-mode))
 
-(use-package counsel
-  :after ivy
-  :bind (("M-x" . counsel-M-x)
-	 ("C-x b" . counsel-ibuffer)
-         ("C-x C-f" . counsel-find-file))
-  :config (counsel-mode))
+;; (use-package counsel
+;;   :after ivy
+;;   :bind (("M-x" . counsel-M-x)
+;; 	 ("C-x b" . counsel-ibuffer)
+;;          ("C-x C-f" . counsel-find-file))
+;;   :config (counsel-mode))
 
-(use-package ivy-rich
-  :after ivy
-  :custom
-  (ivy-virtual-abbreviate 'full
-                          ivy-rich-switch-buffer-align-virtual-buffer t
-                          ivy-rich-path-style 'abbrev)
-  :config
-  (ivy-set-display-transformer 'ivy-switch-buffer
-                               'ivy-rich-switch-buffer-transformer))
+;; (use-package ivy-rich
+;;   :after ivy
+;;   :custom
+;;   (ivy-virtual-abbreviate 'full
+;;                           ivy-rich-switch-buffer-align-virtual-buffer t
+;;                           ivy-rich-path-style 'abbrev)
+;;   :config
+;;   (ivy-set-display-transformer 'ivy-switch-buffer
+;;                                'ivy-rich-switch-buffer-transformer))
 
-(use-package swiper
-  :after ivy
-  :bind (("C-s" . swiper)))
+;; (use-package swiper
+;;   :after ivy
+;;   :bind (("C-s" . swiper)))
 
-;; rainbow delims
-(use-package rainbow-delimiters
-  :hook (prog-mode . rainbow-delimiters-mode))
+;; ;; rainbow delims
+;; (use-package rainbow-delimiters
+;;   :hook (prog-mode . rainbow-delimiters-mode))
 
-;; which-key
-;; shows help on key prefix after `which-key-idle-delay` seconds
-;; will be in emacs-30
-(use-package which-key
-  :init (which-key-mode)
-  :diminish which-key-mode
-  :config
-  (setq which-key-idle-delay 0.3))
+;; ;; which-key
+;; ;; shows help on key prefix after `which-key-idle-delay` seconds
+;; ;; will be in emacs-30
+;; (use-package which-key
+;;   :init (which-key-mode)
+;;   :diminish which-key-mode
+;;   :config
+;;   (setq which-key-idle-delay 0.3))
 
-;; helpful cfg directly out of emacs-from-scratch
-;; TODO: research
-(use-package helpful
-  :diminish
-  :after counsel
-  :custom
-  (counsel-describe-function-function #'helpful-callable)
-  (counsel-describe-variable-function #'helpful-variable)
-  :bind
-  ([remap describe-function] . counsel-describe-function)
-  ([remap describe-command] . helpful-command)
-  ([remap describe-variable] . counsel-describe-variable)
-  ([remap describe-key] . helpful-key))
+;; ;; helpful cfg directly out of emacs-from-scratch
+;; ;; TODO: research
+;; (use-package helpful
+;;   :diminish
+;;   :after counsel
+;;   :custom
+;;   (counsel-describe-function-function #'helpful-callable)
+;;   (counsel-describe-variable-function #'helpful-variable)
+;;   :bind
+;;   ([remap describe-function] . counsel-describe-function)
+;;   ([remap describe-command] . helpful-command)
+;;   ([remap describe-variable] . counsel-describe-variable)
+;;   ([remap describe-key] . helpful-key))
 
-;; TODO: research general.el
-;; tldr: key definer for easy leader prefix
-;; https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-03.org#bindings-with-generalel
+;; ;; TODO: research general.el
+;; ;; tldr: key definer for easy leader prefix
+;; ;; https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-03.org#bindings-with-generalel
 
-;; TODO: research hydra
-;; tldr: transient keybindings
-;; https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-03.org#hydra
+;; ;; TODO: research hydra
+;; ;; tldr: transient keybindings
+;; ;; https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-03.org#hydra
 
-(load (concat user-emacs-directory "lib/wayland.el"))
-(load (concat user-emacs-directory "lib/colors.el"))
-(load (concat user-emacs-directory "lib/evil.el"))
-(load (concat user-emacs-directory "lib/org.el"))
-(load (concat user-emacs-directory "lib/org-roam.el"))
+;; (load (concat user-emacs-directory "lib/wayland.el"))
+;; (load (concat user-emacs-directory "lib/colors.el"))
+;; (load (concat user-emacs-directory "lib/evil.el"))
+;; (load (concat user-emacs-directory "lib/org.el"))
+;; (load (concat user-emacs-directory "lib/org-roam.el"))
 
-;; company
-(use-package company
-  :diminish
-  :config
-  (setq company-minimum-prefix-length 3)
-  (add-hook 'after-init-hook 'global-company-mode))
+;; ;; company
+;; (use-package company
+;;   :diminish
+;;   :config
+;;   (setq company-minimum-prefix-length 3)
+;;   (add-hook 'after-init-hook 'global-company-mode))
 
-;; slime
-(if (file-exists-p "/usr/bin/sbcl")
-    (progn
-      (use-package slime
-        :config
-        (setq inferior-lisp-program "/usr/bin/sbcl"))))
+;; ;; slime
+;; (if (file-exists-p "/usr/bin/sbcl")
+;;     (progn
+;;       (use-package slime
+;;         :config
+;;         (setq inferior-lisp-program "/usr/bin/sbcl"))))
 
-;; paredit
-(use-package paredit
-  :config
-  (add-hook 'lisp-mode-hook #'enable-paredit-mode)
-  (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode))
+;; ;; paredit
+;; (use-package paredit
+;;   :config
+;;   (add-hook 'lisp-mode-hook #'enable-paredit-mode)
+;;   (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode))
 
-;; geiser
-;;; racket
-(if (file-exists-p "/usr/bin/racket")
-    (use-package geiser-racket
-      :config
-      (setq geiser-racket-binary "/usr/bin/racket")))
+;; ;; geiser
+;; ;;; racket
+;; (if (file-exists-p "/usr/bin/racket")
+;;     (use-package geiser-racket
+;;       :config
+;;       (setq geiser-racket-binary "/usr/bin/racket")))
 
-;; ElDoc support
-;; (this shows fn arguments in echo)
-(require 'eldoc)
+;; ;; ElDoc support
+;; ;; (this shows fn arguments in echo)
+;; (require 'eldoc)
 
-;; dts-mode
-(use-package dts-mode
-  :config
-  ;; setup for zmk keymaps
-  (add-to-list 'auto-mode-alist '("\\.keymap\\'" . dts-mode)))
+;; ;; dts-mode
+;; (use-package dts-mode
+;;   :config
+;;   ;; setup for zmk keymaps
+;;   (add-to-list 'auto-mode-alist '("\\.keymap\\'" . dts-mode)))
 
-;; nix-mode
-(use-package nix-ts-mode)
+;; ;; nix-mode
+;; (use-package nix-ts-mode)
 
-;; markdown-mode
-(use-package markdown-mode)
+;; ;; markdown-mode
+;; (use-package markdown-mode)
 
-;; lua-mode
-(use-package lua-mode)
+;; ;; lua-mode
+;; (use-package lua-mode)
 
-;; terminal emulation
-;; colors
-(use-package eterm-256color
-  :hook
-  (term-mode-hook . eterm-256color-mode)
-  (vterm-mode-hook . eterm-256color-mode))
-;; vterm
-(use-package vterm
-  :config
-  (setq vterm-max-scrollback 10000))
+;; ;; terminal emulation
+;; ;; colors
+;; (use-package eterm-256color
+;;   :hook
+;;   (term-mode-hook . eterm-256color-mode)
+;;   (vterm-mode-hook . eterm-256color-mode))
+;; ;; vterm
+;; (use-package vterm
+;;   :config
+;;   (setq vterm-max-scrollback 10000))
