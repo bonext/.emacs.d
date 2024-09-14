@@ -22,6 +22,7 @@
  ("goto-chg" . "72f556524b88e9d30dc7fc5b0dc32078c166fda7")
  ("macrostep" . "4939d88779761e8b5461b4cf73f86600172987db")
  ("magit" . "9395de2c94cc430ca865f497046c16f66deccf16")
+ ("marginalia" . "16b7d03088656b597a253418e41a4a62c811993d")
  ("markdown-mode" . "6102ac5b7301b4c4fc0262d9c6516693d5a33f2b")
  ("melpa" . "bfa04bef05bdeab1a097cb5204263ee9078f83a9")
  ("nix-ts-mode" . "9fa93268f72eb283f6d0aacf09a3e33151722fa1")
