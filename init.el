@@ -122,9 +122,10 @@
 ;; (use-package nerd-icons)
 ;; (use-package doom-modeline)
 
-;; ;; diminish hides modes from modeline
-;; ;; requires for `:diminish` keyword in use-package
-;; (use-package diminish)
+;; diminish hides modes from modeline
+;; requires for `:diminish` keyword in use-package
+(use-package diminish
+  :straight t)
 
 ;; ;; show keys and combinations
 ;; ;; TODO: enable global and toggle bufffer
@@ -180,14 +181,15 @@
 ;; (use-package rainbow-delimiters
 ;;   :hook (prog-mode . rainbow-delimiters-mode))
 
-;; ;; which-key
-;; ;; shows help on key prefix after `which-key-idle-delay` seconds
-;; ;; will be in emacs-30
-;; (use-package which-key
-;;   :init (which-key-mode)
-;;   :diminish which-key-mode
-;;   :config
-;;   (setq which-key-idle-delay 0.3))
+;; which-key
+;; shows help on key prefix after `which-key-idle-delay` seconds
+;; will be in emacs-30
+(use-package which-key
+  :straight t
+  :init (which-key-mode)
+  :diminish which-key-mode
+  :config
+  (setq which-key-idle-delay 0.3))
 
 ;; ;; helpful cfg directly out of emacs-from-scratch
 ;; ;; TODO: research
