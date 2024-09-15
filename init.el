@@ -108,14 +108,6 @@
 ;; evil-mode
 (load (concat user-emacs-directory "lib/evil.el"))
 
-;; general
-(global-unset-key (kbd "C-SPC"))
-(use-package general
-  :straight t
-  :config
-  (general-create-definer aa/with-leader
-    :prefix "C-SPC"))
-
 ;; color scheme
 (load (concat user-emacs-directory "lib/colors.el"))
 
