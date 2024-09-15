@@ -92,7 +92,7 @@
 ;; NOTE: this kills existing dired buffer so current directory is lost in dired
 (put 'dired-find-alternate-file 'disabled nil)
 
-;; encryption
+                                        ; encryption
 (require 'epa-file)
 (setq epa-pinentry-mode 'loopback)
 (epa-file-enable)
@@ -138,6 +138,9 @@
 ;; via https://github.com/noctuid/evil-guide?tab=readme-ov-file#leader-key
 (defvar aa/leader-map (make-sparse-keymap))
 (define-key global-map (kbd "C-SPC") aa/leader-map)
+
+;; dired bindings
+(define-key aa/leader-map (kbd "d j") #'dired-jump)
 
                                         ; COMPLETIONS
 
