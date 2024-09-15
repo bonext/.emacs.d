@@ -30,6 +30,7 @@
  ("melpa" . "bfa04bef05bdeab1a097cb5204263ee9078f83a9")
  ("nix-ts-mode" . "9fa93268f72eb283f6d0aacf09a3e33151722fa1")
  ("nongnu-elpa" . "94966229ca17882de6cbc1b709120e19a030d35d")
+ ("orderless" . "60da48a698dc502454ac5563fcdecba1fa16fc99")
  ("org" . "07dd3bcae6b7b5e0692fc40dd307a7e841179b52")
  ("org-bullets" . "767f55feb58b840a5a04eabfc3fbbf0d257c4792")
  ("org-journal" . "17b34ce8df9649a73b715c13698220bde1628668")

@@ -45,3 +45,13 @@
   (aa/with-leader
       "/" #'consult-ripgrep
       "o" #'consult-outline))
+
+                                        ; completion styling
+
+;; orderless
+(use-package orderless
+  :straight t
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-overrides
+   '((file (styles basic partial-completion)))))
