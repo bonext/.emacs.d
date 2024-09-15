@@ -3,8 +3,9 @@
   :straight t
   :custom
   (org-roam-directory "~/Documents/RoamNotes")
-  :bind (("C-c n l" . org-roam-buffer-toggle)
-         ("C-c n f" . org-roam-node-find)
-         ("C-c n i" . org-roam-node-insert))
+  :bind (:map aa/leader-map
+              ("r l" . org-roam-buffer-toggle)
+              ("r f" . org-roam-node-find)
+              ("r i" . org-roam-node-insert))
   :config
   (org-roam-setup))

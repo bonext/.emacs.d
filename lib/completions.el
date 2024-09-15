@@ -16,6 +16,7 @@
   :init
   (marginalia-mode))
 
+
                                         ; in-buffer
 
 ;; corfu (frontend)
@@ -33,3 +34,10 @@
   :init
   (global-corfu-mode))
 
+                                        ; completing-read
+
+(use-package consult
+  :straight t
+  :bind (:map aa/leader-map
+              ("b" . consult-buffer)
+              ("/" . consult-ripgrep)))

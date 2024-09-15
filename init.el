@@ -133,6 +133,12 @@
 ;; ;; TODO: enable global and toggle bufffer
 ;; (use-package command-log-mode)
 
+                                        ; leader-like keymap
+
+;; via https://github.com/noctuid/evil-guide?tab=readme-ov-file#leader-key
+(defvar aa/leader-map (make-sparse-keymap))
+(define-key global-map (kbd "C-SPC") aa/leader-map)
+
                                         ; COMPLETIONS
 
 (load (concat user-emacs-directory "lib/completions.el"))
