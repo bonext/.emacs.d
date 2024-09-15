@@ -1,11 +1,13 @@
 ;; org-roam  -*- lexical-binding: t; -*-
 (use-package org-roam
   :straight t
+  :general
+  (aa/with-leader
+    "r" '(:ignore t :which-key "org-roam")
+    "rf" #'org-roam-node-find
+    "ri" #'org-roam-node-insert
+    "rl" #'org-roam-buffer-toggle)
   :custom
   (org-roam-directory "~/Documents/RoamNotes")
-  :bind (:map aa/leader-map
-              ("r l" . org-roam-buffer-toggle)
-              ("r f" . org-roam-node-find)
-              ("r i" . org-roam-node-insert))
   :config
   (org-roam-setup))

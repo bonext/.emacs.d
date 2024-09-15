@@ -39,8 +39,9 @@
 (use-package consult
   :straight t
   :bind
-  (([remap switch-to-buffer] . consult-buffer)
-   :map aa/leader-map
-   ("b" . consult-buffer)
-   ("/" . consult-ripgrep)
-   ("o" . consult-outline)))
+  ;; TODO: convert this to general as well
+  ([remap switch-to-buffer] . consult-buffer)
+  :general
+  (aa/with-leader
+      "/" #'consult-ripgrep
+      "o" #'consult-outline))

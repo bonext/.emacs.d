@@ -20,6 +20,7 @@
  ("evil" . "5db0bdc7dcd9300b983526d37cbe480f35e36211")
  ("evil-collection" . "6365e7c8ae728f7a26294db261b6778d089a6263")
  ("f.el" . "1e7020dc0d4c52d3da9bd610d431cab13aa02d8c")
+ ("general.el" . "826bf2b97a0fb4a34c5eb96ec2b172d682fd548f")
  ("gnu-elpa-mirror" . "4654b388ea470965f5e7c6c2e166b4c6b09855da")
  ("goto-chg" . "72f556524b88e9d30dc7fc5b0dc32078c166fda7")
  ("macrostep" . "4939d88779761e8b5461b4cf73f86600172987db")

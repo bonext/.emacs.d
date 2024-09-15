@@ -133,14 +133,14 @@
 ;; ;; TODO: enable global and toggle bufffer
 ;; (use-package command-log-mode)
 
-                                        ; leader-like keymap
+                                        ; general
+(use-package general
+  :straight t)
 
-;; via https://github.com/noctuid/evil-guide?tab=readme-ov-file#leader-key
-(defvar aa/leader-map (make-sparse-keymap))
-(define-key global-map (kbd "C-SPC") aa/leader-map)
-
-;; dired bindings
-(define-key aa/leader-map (kbd "d j") #'dired-jump)
+;; could not fit these into any of use-package keywords
+(general-auto-unbind-keys)
+(general-create-definer aa/with-leader
+  :prefix "C-SPC")
 
                                         ; COMPLETIONS
 
