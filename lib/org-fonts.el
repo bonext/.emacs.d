@@ -73,3 +73,6 @@
      '(org-table            ((t (:inherit fixed-pitch))))
      '(org-tag              ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
      '(org-verbatim         ((t (:inherit (shadow fixed-pitch))))))))
+
+;; hook this function to load-theme to avoid reloading emacs on theme switch
+(add-hook 'aa/after-load-theme-hook #'aa/org-setup-font)

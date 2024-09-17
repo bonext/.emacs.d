@@ -109,6 +109,12 @@
 (load (concat user-emacs-directory "lib/evil.el"))
 
 ;; color scheme
+;; hook to be called on theme reload
+(defvar aa/after-load-theme-hook nil
+  "Hook run after a color theme is loaded with `load-theme`.")
+(defadvice load-theme (after aa/run-after-load-theme-hook activate)
+  "Run `aa/after-load-theme-hook`."
+  (run-hooks 'aa/after-load-theme-hook))
 (load (concat user-emacs-directory "lib/colors.el"))
 
 ;; ;; all-the-icons
