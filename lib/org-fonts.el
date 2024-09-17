@@ -25,6 +25,7 @@
          ;; fixed-width font setup
          (fixed-tuple
           (cond
+           ((x-list-fonts "Cascadia Code NF") '(:family "Cascadia Code NF"))
            ((x-list-fonts "Fira Code Retina") '(:family "Fira Code Retina"))
            ((x-list-fonts "Adobe Source Pro") '(:family "Adobe Source Pro"))
            ((x-list-fonts "IBM Plex Mono") '(:family "IBM Plex Mono"))
