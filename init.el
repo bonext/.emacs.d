@@ -149,7 +149,7 @@
 ;; could not fit these into any of use-package keywords
 (general-auto-unbind-keys)
 (general-create-definer aa/with-leader
-  :prefix "C-SPC")
+  :prefix "SPC")
 
                                         ; COMPLETIONS
 

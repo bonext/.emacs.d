@@ -3,6 +3,8 @@
   :straight t
   :general
   (aa/with-leader
+    :states 'normal
+    :keymaps 'override
     "r" '(:ignore t :which-key "org-roam")
     "rf" #'org-roam-node-find
     "ri" #'org-roam-node-insert

@@ -43,8 +43,11 @@
   ([remap switch-to-buffer] . consult-buffer)
   :general
   (aa/with-leader
-      "/" #'consult-ripgrep
-      "o" #'consult-outline))
+    :states 'normal
+    :keymaps 'override
+    "/" #'consult-line
+    "f" #'consult-ripgrep
+    "o" #'consult-outline))
 
                                         ; completion styling
 
