@@ -23,6 +23,7 @@
  ("general.el" . "826bf2b97a0fb4a34c5eb96ec2b172d682fd548f")
  ("gnu-elpa-mirror" . "4654b388ea470965f5e7c6c2e166b4c6b09855da")
  ("goto-chg" . "72f556524b88e9d30dc7fc5b0dc32078c166fda7")
+ ("keycast" . "c44618d2867fc2410e5061fef2a805e974198cf2")
  ("macrostep" . "4939d88779761e8b5461b4cf73f86600172987db")
  ("magit" . "9395de2c94cc430ca865f497046c16f66deccf16")
  ("marginalia" . "16b7d03088656b597a253418e41a4a62c811993d")

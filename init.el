@@ -108,8 +108,24 @@
 ;; use-package
 (straight-use-package 'use-package)
 
+                                        ; keys
+
 ;; evil-mode
 (load (concat user-emacs-directory "lib/evil.el"))
+
+;; general
+(use-package general
+  :straight t)
+
+;; show current key in the modeline
+(use-package keycast
+  :straight t
+  :init (keycast-header-line-mode))
+
+;; could not fit these into any of use-package keywords
+(general-auto-unbind-keys)
+(general-create-definer aa/with-leader
+  :prefix "SPC")
 
 ;; color scheme
 ;; hook to be called on theme reload
@@ -137,19 +153,6 @@
 ;; requires for `:diminish` keyword in use-package
 (use-package diminish
   :straight t)
-
-;; ;; show keys and combinations
-;; ;; TODO: enable global and toggle bufffer
-;; (use-package command-log-mode)
-
-                                        ; general
-(use-package general
-  :straight t)
-
-;; could not fit these into any of use-package keywords
-(general-auto-unbind-keys)
-(general-create-definer aa/with-leader
-  :prefix "SPC")
 
                                         ; COMPLETIONS
 
