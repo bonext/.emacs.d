@@ -213,6 +213,7 @@
 (use-package vterm
   :straight t
   :config
-  (setq vterm-max-scrollback 10000
+  (setq vterm-shell "/usr/bin/bash"
+        vterm-max-scrollback 10000
         vterm-kill-buffer-on-exit t
         vterm-buffer-name-string "vterm %s"))
