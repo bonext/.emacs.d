@@ -33,8 +33,9 @@
   (add-to-list 'auto-mode-alist '("\\.keymap\\'" . dts-mode)))
 
 ;; nix-mode
-(use-package nix-ts-mode
-  :straight t)
+(use-package nix-mode
+  :straight t
+  :mode "\\.nix\\'")
 
 ;; markdown-mode
 (use-package markdown-mode
@@ -45,9 +46,7 @@
 ;; install grammars to ~/.emacs.d/tree-sitter
 ;; install with `M-x treesit-install-language-grammar`
 (setq treesit-language-source-alist
-      '((python "https://github.com/tree-sitter/tree-sitter-python")
-        (nix "https://github.com/nix-community/tree-sitter-nix")))
+      '((python "https://github.com/tree-sitter/tree-sitter-python")))
 
 ;; TODO: when is this needed?
 (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
-(add-to-list 'major-mode-remap-alist '(nix-mode . nix-ts-mode))
