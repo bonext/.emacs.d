@@ -26,11 +26,16 @@
   (setq interprogram-paste-function 'aa/wayland-paste))
 
 
-(if (aa/wayland-p)
-    (progn
+(when (aa/wayland-p)
+    (when (eq aa/host 'home)
       ;; setup interprogram clipboard
       (aa/wayland-setup-clipboard)
       
       ;; disable window decorations
       ;; cf. https://codeberg.org/river/wiki#woraround-for-emacs
-      (setq default-frame-alist '((undecorated . t)))))
+      (setq default-frame-alist '((undecorated . t))))
+    (when (eq aa/host 'wsl)
+      (setq select-active-regions nil)
+      (setq select-enable-clipboard 't)
+      (setq select-enable-primary nil)
+      (setq interprogram-cut-function #'gui-select-text)))
