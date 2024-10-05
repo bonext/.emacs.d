@@ -18,6 +18,16 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
+                                        ; host detection
+
+(setq aa/host
+      (cond
+       ((and (eq system-type 'gnu/linux)
+             (string-match "-[Mm]icrosoft" operating-system-release))
+        'wsl)
+       ((eq system-type 'darwin) 'work)
+       (t 'home)))
+
                                         ; UI
 
 ;; wayland support (mostly cross-app clipboard)
