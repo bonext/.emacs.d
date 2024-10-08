@@ -59,3 +59,12 @@
 
 ;; TODO: when is this needed?
 (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
+
+                                        ; eglot
+
+;; the following assumes that language-servers are in $PATH
+;; eglot is opt-in (M-x eglot or whatever)
+(with-eval-after-load 'eglot
+  (dolist (mode '((nix-mode . ("nixd"))
+                  (zig-mode . ("zls"))))
+    (add-to-list 'eglot-server-programs mode)))
