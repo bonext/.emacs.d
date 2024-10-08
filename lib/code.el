@@ -31,6 +31,9 @@
   ;; setup for zmk keymaps
   :mode "\\.keymap\\'")
 
+;; nix
+;; $PATH
+(setenv "PATH" (concat "~/.nix-profile/bin:/nix/var/nix/profiles/default/bin:" (getenv "PATH")))
 ;; nix-mode
 (use-package nix-mode
   :straight t
