@@ -28,9 +28,8 @@
 ;; dts-mode
 (use-package dts-mode
   :straight t
-  :config
   ;; setup for zmk keymaps
-  (add-to-list 'auto-mode-alist '("\\.keymap\\'" . dts-mode)))
+  :mode "\\.keymap\\'")
 
 ;; nix-mode
 (use-package nix-mode
@@ -41,6 +40,11 @@
 (use-package markdown-mode
   :straight t)
 
+;; direnv-mode
+(use-package direnv
+  :straight t
+  :config
+  (direnv-mode))
                                         ; tree-sitter
 
 ;; install grammars to ~/.emacs.d/tree-sitter
