@@ -40,6 +40,11 @@
 (use-package markdown-mode
   :straight t)
 
+;; zig-mode
+(use-package zig-mode
+  :straight t
+  :mode "\\.zig\\'")
+
 ;; direnv-mode
 (use-package direnv
   :straight t
