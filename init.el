@@ -137,6 +137,9 @@
 (general-create-definer aa/with-leader
   :prefix "SPC")
 
+(general-create-definer aa/with-insert-leader
+  :prefix "C-c")
+
 ;; color scheme
 ;; hook to be called on theme reload
 (defvar aa/after-load-theme-hook nil
