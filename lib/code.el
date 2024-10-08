@@ -71,3 +71,8 @@
   (dolist (mode '((nix-mode . ("nixd"))
                   (zig-mode . ("zls"))))
     (add-to-list 'eglot-server-programs mode)))
+
+(aa/with-leader
+  :states 'normal
+  :keymaps 'override
+  "e" #'eglot)
