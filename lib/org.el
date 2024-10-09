@@ -93,6 +93,11 @@
 
 ;; separate because the package load is deferred
 (global-set-key (kbd "C-c j") 'org-journal-new-entry)
+(aa/with-leader
+  :states 'normal
+  :keymaps 'override
+  "j" '(:ignore t :which-key "org-journal")
+  "jj" #'org-journal-new-entry)
 
 ;; TODO: research
 ;; support for image paste
