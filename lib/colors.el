@@ -1,16 +1,12 @@
 ;; -*- lexical-binding: t; -*-
                                         ; COLORS
-(use-package ef-themes
-  :straight t)
+(use-package ef-themes)
 
-(use-package nord-theme
-  :straight t)
+(use-package nord-theme)
 
-(use-package solarized-theme
-  :straight t)
+(use-package solarized-theme)
 
-(use-package gruvbox-theme
-  :straight t)
+(use-package gruvbox-theme)
 
 (cond
  ;; osx-specific setup goes here
@@ -21,13 +17,8 @@
 ;; use https://git.sr.ht/~grtcdr/darkman.el
 ;; to integrate with https://darkman.whynothugo.nl/
 
-;; register darkman.el with straight
-;; cf. https://github.com/radian-software/straight.el?tab=readme-ov-file#loading-packages-conditionaly
-(straight-register-package 'darkman)
-
 (if (file-exists-p "/usr/bin/darkman")
     (use-package darkman
-      :straight t
       :config
       (setq darkman-themes `(:light ,aa/light-theme :dark ,aa/dark-theme))
       (darkman-mode))

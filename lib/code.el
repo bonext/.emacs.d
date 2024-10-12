@@ -2,32 +2,26 @@
 
 ;; rainbow delims
 (use-package rainbow-delimiters
-  :straight t
   :hook (prog-mode . rainbow-delimiters-mode))
 
 ;; slime
-(straight-register-package 'slime)
 (if (file-exists-p "/usr/bin/sbcl")
     (use-package slime
-      :straight t
       :config
       (setq inferior-lisp-program "/usr/bin/sbcl")))
 
 ;; paredit
 (use-package paredit
-  :straight t
   :config
   (add-hook 'lisp-mode-hook #'enable-paredit-mode)
   (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode))
 
 ;; ElDoc support
 ;; (this shows fn arguments in echo)
-(use-package eldoc
-  :straight t)
+(use-package eldoc)
 
 ;; dts-mode
 (use-package dts-mode
-  :straight t
   ;; setup for zmk keymaps
   :mode "\\.keymap\\'")
 
@@ -36,21 +30,17 @@
 (setenv "PATH" (concat "~/.nix-profile/bin:/nix/var/nix/profiles/default/bin:" (getenv "PATH")))
 ;; nix-mode
 (use-package nix-mode
-  :straight t
   :mode "\\.nix\\'")
 
 ;; markdown-mode
-(use-package markdown-mode
-  :straight t)
+(use-package markdown-mode)
 
 ;; zig-mode
 (use-package zig-mode
-  :straight t
   :mode "\\.zig\\'")
 
 ;; direnv-mode
 (use-package direnv
-  :straight t
   :config
   (direnv-mode))
                                         ; tree-sitter

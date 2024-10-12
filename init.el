@@ -1,23 +1,4 @@
 ; -*- lexical-binding: t; -*-
-                                        ; straight.el bootstrap
-;; straight configuration
-
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name
-        "straight/repos/straight.el/bootstrap.el"
-        (or (bound-and-true-p straight-base-dir)
-            user-emacs-directory)))
-      (bootstrap-version 7))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
-
                                         ; host detection
 
 (setq aa/host
@@ -115,8 +96,15 @@
 
 
                                         ; PACKAGES
+(require 'package)
+(setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                         ("org" . "https://orgmode.org/elpa/")
+                         ("elpa" . "https://elpa.gnu.org/packages/")))
+(package-initialize)
+
 ;; use-package
-(straight-use-package 'use-package)
+(require 'use-package)
+(setq use-package-always-ensure t)
 
                                         ; keys
 
@@ -124,12 +112,10 @@
 (load (concat user-emacs-directory "lib/evil.el"))
 
 ;; general
-(use-package general
-  :straight t)
+(use-package general)
 
 ;; show current key in the modeline
 (use-package keycast
-  :straight t
   :init (keycast-header-line-mode))
 
 ;; could not fit these into any of use-package keywords
@@ -164,8 +150,7 @@
 
 ;; diminish hides modes from modeline
 ;; requires for `:diminish` keyword in use-package
-(use-package diminish
-  :straight t)
+(use-package diminish) 
 
                                         ; COMPLETIONS
 
@@ -176,7 +161,6 @@
 ;; shows help on key prefix after `which-key-idle-delay` seconds
 ;; will be in emacs-30
 (use-package which-key
-  :straight t
   :init (which-key-mode)
   :diminish which-key-mode
   :config
@@ -218,13 +202,11 @@
 
 ;; colors
 (use-package eterm-256color
-  :straight t
   :hook
   (term-mode-hook . eterm-256color-mode)
   (vterm-mode-hook . eterm-256color-mode))
 ;; vterm
 (use-package vterm
-  :straight t
   :config
   (cond
    ;; osx-specific setup

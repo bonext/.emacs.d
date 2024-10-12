@@ -1,6 +1,5 @@
 ;; org-roam  -*- lexical-binding: t; -*-
 (use-package org-roam
-  :straight t
   :general
   (aa/with-leader
     :states 'normal

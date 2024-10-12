@@ -5,14 +5,12 @@
 ;; vertico (frontend)
 ;; changes default completion buffer to vertical scrollable thing
 (use-package vertico
-  :straight t
   :init
   (vertico-mode))
 
 ;; marginalia provides marninalia info to completions in minibuffer
 ;; annotations are per-category
 (use-package marginalia
-  :straight t
   :init
   (marginalia-mode))
 
@@ -21,7 +19,6 @@
 
 ;; corfu (frontend)
 (use-package corfu
-  :straight t
   :custom
   ;; enable auto completion
   (corfu-auto t)
@@ -37,7 +34,6 @@
                                         ; completing-read
 
 (use-package consult
-  :straight t
   :bind
   ;; TODO: convert this to general as well
   ([remap switch-to-buffer] . consult-buffer)
@@ -53,7 +49,6 @@
 
 ;; orderless
 (use-package orderless
-  :straight t
   :custom
   (completion-styles '(orderless basic))
   (completion-category-overrides
