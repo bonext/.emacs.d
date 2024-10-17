@@ -214,3 +214,18 @@
   (setq vterm-max-scrollback 10000
         vterm-kill-buffer-on-exit t
         vterm-buffer-name-string "vterm %s"))
+
+                                        ; package management
+
+(defun aa/recompile-all-packages nil
+  (interactive)
+  (message "recompiling elpa/ contents")
+  (native-compile-async "~/.emacs.d/elpa/" t))
+
+(aa/with-leader
+  :states 'normal
+  :keymaps 'override
+  "p" '(:ignore t :which-key "org-journal")
+  "pl" #'list-packages
+  "pr" #'aa/recompile-all-packages)
+
