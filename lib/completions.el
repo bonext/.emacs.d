@@ -1,5 +1,10 @@
 ;; -*- lexical-binding: t; -*-
 
+                                        ; emacs built-in
+
+;; disable ispell completion
+(setopt text-mode-ispell-word-completion nil)
+
                                         ; minibuffer
 
 ;; vertico (frontend)
