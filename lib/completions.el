@@ -43,7 +43,8 @@
     :keymaps 'override
     "/" #'consult-line
     "f" #'consult-ripgrep
-    "o" #'consult-outline))
+    "o" #'consult-outline
+    "b" #'consult-buffer))
 
                                         ; completion styling
 

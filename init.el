@@ -201,6 +201,7 @@
   :hook
   (term-mode-hook . eterm-256color-mode)
   (vterm-mode-hook . eterm-256color-mode))
+
 ;; vterm
 (use-package vterm
   :config
@@ -210,6 +211,12 @@
   (setq vterm-max-scrollback 10000
         vterm-kill-buffer-on-exit t
         vterm-buffer-name-string "vterm %s"))
+
+(aa/with-leader
+  :states 'normal
+  :keymaps 'override
+  "t" '(:ignore t :which-key "terminal")
+  "tt" #'vterm)
 
                                         ; package management
 
@@ -225,3 +232,12 @@
   "pl" #'list-packages
   "pr" #'aa/recompile-all-packages)
 
+
+                                        ; unsorted goodies
+
+;; switch to other window even in a different frame
+(aa/with-leader
+  :states 'normal
+  :keymaps 'override
+  "w" '(:ignore t :which-key "window")
+  "wo" #'next-multiframe-window)
