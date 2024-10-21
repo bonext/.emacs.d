@@ -11,7 +11,7 @@
 (cond
  ;; osx-specific setup goes here
  (t (progn
-      (setq aa/light-theme 'solarized-selenized-light)
+      (setq aa/light-theme 'ef-kassio)
       (setq aa/dark-theme 'gruvbox-dark-hard))))
 
 ;; use https://git.sr.ht/~grtcdr/darkman.el

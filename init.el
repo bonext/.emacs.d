@@ -180,10 +180,6 @@
 ;;   ([remap describe-variable] . counsel-describe-variable)
 ;;   ([remap describe-key] . helpful-key))
 
-;; ;; TODO: research general.el
-;; ;; tldr: key definer for easy leader prefix
-;; ;; https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-03.org#bindings-with-generalel
-
 ;; ;; TODO: research hydra
 ;; ;; tldr: transient keybindings
 ;; ;; https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-03.org#hydra
@@ -225,7 +221,7 @@
 (aa/with-leader
   :states 'normal
   :keymaps 'override
-  "p" '(:ignore t :which-key "org-journal")
+  "p" '(:ignore t :which-key "packages")
   "pl" #'list-packages
   "pr" #'aa/recompile-all-packages)
 
