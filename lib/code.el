@@ -43,6 +43,7 @@
 (use-package direnv
   :config
   (direnv-mode))
+
 (use-package systemd)
                                         ; tree-sitter
 
@@ -62,7 +63,11 @@
 (with-eval-after-load 'eglot
   (dolist (mode '((nix-mode . ("nixd"))
                   (zig-mode . ("zls"))))
-    (add-to-list 'eglot-server-programs mode)))
+    (add-to-list 'eglot-server-programs mode))
+  ;; https://github.com/joaotavora/eglot/discussions/1393
+  (setq eglot-ignored-server-capabilites
+        (cons :documentOnTypeFormattingProvider
+                    eglot-ignored-server-capabilites)))
 
 (aa/with-leader
   :states 'normal
