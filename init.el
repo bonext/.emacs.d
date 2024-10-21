@@ -216,7 +216,8 @@
 (defun aa/recompile-all-packages nil
   (interactive)
   (message "recompiling elpa/ contents")
-  (native-compile-async "~/.emacs.d/elpa/" t))
+  (native-compile-async "~/.emacs.d/elpa/" t)
+  (message "recomiling elpa/ contents: DONE"))
 
 (aa/with-leader
   :states 'normal
