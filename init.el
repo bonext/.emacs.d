@@ -34,7 +34,6 @@
  (t (set-face-attribute 'default nil :font "Cascadia Code NF" :height 100)))
 
 
-
 ;; only spaces
 (setq-default indent-tabs-mode nil)
 
@@ -71,6 +70,10 @@
 (when (file-exists-p custom-file)
   (load-file custom-file))
 
+;; backup files
+(setopt backup-by-copying t)
+(unless backup-directory-alist
+  (setopt backup-directory-alist `(("." . ,(concat user-emacs-directory "backups")))))
                                         ; Dired
 (with-eval-after-load 'dired
   (require 'dired-x))

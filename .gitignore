@@ -18,3 +18,4 @@ org-roam.db
 straight/
 !straight/versions/default.el
 3rdparty/
+backups/
