@@ -43,6 +43,7 @@
 (use-package direnv
   :config
   (direnv-mode))
+(use-package systemd)
                                         ; tree-sitter
 
 ;; install grammars to ~/.emacs.d/tree-sitter
