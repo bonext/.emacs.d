@@ -10,6 +10,9 @@
   :hook (org-mode . aa/org-common-hooks)
   :config
   (setq org-directory "~/Documents/Notes")
+  (setq org-agenda-files '("~/Documents/Notes"
+                           "~/Documents/RoamNotes"
+                           "~/Documents/RoamNotes/daily"))
   ;; TODO: make the following part of fonts
   (setq org-ellipsis " ▾")
   (setq org-hide-emphasis-markers t)
@@ -51,7 +54,11 @@
   (aa/org-setup-fonts)
   (global-set-key (kbd "C-c a") 'org-agenda)
   (global-set-key (kbd "C-c c") 'org-capture)
-  (global-set-key (kbd "C-c l") 'org-store-link))
+  (global-set-key (kbd "C-c l") 'org-store-link)
+  (aa/with-leader
+    :states 'normal
+    :keymaps 'override
+    "a" '(org-agenda :which-key "org-agenda")))
 
 (use-package org-bullets
   :after org
