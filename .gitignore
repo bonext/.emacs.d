@@ -19,3 +19,4 @@ straight/
 !straight/versions/default.el
 3rdparty/
 backups/
+local-settings.el
