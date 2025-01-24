@@ -12,7 +12,7 @@
  ;; osx-specific setup goes here
  (t (progn
       (setq aa/light-theme 'ef-kassio)
-      (setq aa/dark-theme 'gruvbox-dark-hard))))
+      (setq aa/dark-theme 'ef-duo-dark))))
 
 ;; use https://git.sr.ht/~grtcdr/darkman.el
 ;; to integrate with https://darkman.whynothugo.nl/
