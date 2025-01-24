@@ -1,4 +1,6 @@
 ;; -*- lexical-binding: t; -*-
+(require 'aa/use-package-presets)
+(require 'aa/leader)
 
 ;; rainbow delims
 (use-package rainbow-delimiters
@@ -73,3 +75,5 @@
   :states 'normal
   :keymaps 'override
   "e" #'eglot)
+
+(provide 'aa/coding-presets)

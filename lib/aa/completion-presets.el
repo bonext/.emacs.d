@@ -1,4 +1,6 @@
 ;; -*- lexical-binding: t; -*-
+(require 'aa/use-package-presets)
+(require 'aa/leader)
 
                                         ; emacs built-in
 
@@ -59,3 +61,5 @@
   (completion-styles '(orderless basic))
   (completion-category-overrides
    '((file (styles basic partial-completion)))))
+
+(provide 'aa/completion-presets)

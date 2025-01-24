@@ -1,11 +1,16 @@
 ;; -*- lexical-binding: t; -*-
-                                        ; COLORS
+(require 'aa/use-package-presets)
+
+;; hook to be called on theme reload
+(defvar aa/after-load-theme-hook nil
+  "Hook run after a color theme is loaded with `load-theme`.")
+(defadvice load-theme (after aa/run-after-load-theme-hook activate)
+  "Run `aa/after-load-theme-hook`."
+  (run-hooks 'aa/after-load-theme-hook))
+
 (use-package ef-themes)
-
 (use-package nord-theme)
-
 (use-package solarized-theme)
-
 (use-package gruvbox-theme)
 
 (cond
@@ -26,3 +31,5 @@
   (cond
    ((> (decoded-time-hour (decode-time)) 20) (load-theme aa/dark-theme t))
    (t (load-theme aa/light-theme t))))
+
+(provide 'aa/ui-colors)

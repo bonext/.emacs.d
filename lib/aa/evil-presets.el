@@ -1,4 +1,4 @@
-;; evil  -*- lexical-binding: t; -*-
+;; -*- lexical-binding: t; -*-
 (use-package evil
   :init
   ;; the first two are due to evil-collection
@@ -24,4 +24,4 @@
   :after evil
   :config
   (evil-collection-init))
-  
+(provide 'aa/evil-presets)

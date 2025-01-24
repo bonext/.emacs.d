@@ -78,3 +78,5 @@
 
 ;; hook this function to load-theme to avoid reloading emacs on theme switch
 (add-hook 'aa/after-load-theme-hook #'aa/org-setup-fonts)
+
+(provide 'aa/org-font-presets)

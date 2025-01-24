@@ -9,6 +9,9 @@
        ((eq system-type 'darwin) 'work)
        (t 'home)))
 
+(add-to-list 'load-path
+              (file-name-concat user-emacs-directory "lib"))
+
                                         ; UI
 
 ;; wayland support (mostly cross-app clipboard)
@@ -74,6 +77,7 @@
 (setopt backup-by-copying t)
 (unless backup-directory-alist
   (setopt backup-directory-alist `(("." . ,(concat user-emacs-directory "backups")))))
+
                                         ; Dired
 (with-eval-after-load 'dired
   (require 'dired-x))
@@ -105,69 +109,32 @@
                          ("elpa" . "https://elpa.gnu.org/packages/")))
 (package-initialize)
 
-;; use-package
-(require 'use-package)
-(setq use-package-always-ensure t)
+(require 'aa/use-package-presets)
 
                                         ; keys
 
 ;; evil-mode
-(load (concat user-emacs-directory "lib/evil.el"))
+(require 'aa/evil-presets)
 
-;; general
-(use-package general)
+(require 'aa/leader)
 
 ;; show current key in the modeline
 (use-package keycast
   :init (keycast-header-line-mode))
 
-;; could not fit these into any of use-package keywords
-(general-auto-unbind-keys)
-(general-create-definer aa/with-leader
-  :prefix "SPC")
-
-(general-create-definer aa/with-insert-leader
-  :prefix "C-c")
-
-;; color scheme
-;; hook to be called on theme reload
-(defvar aa/after-load-theme-hook nil
-  "Hook run after a color theme is loaded with `load-theme`.")
-(defadvice load-theme (after aa/run-after-load-theme-hook activate)
-  "Run `aa/after-load-theme-hook`."
-  (run-hooks 'aa/after-load-theme-hook))
-(load (concat user-emacs-directory "lib/colors.el"))
-
-;; ;; all-the-icons
-;; ;; NOTE: messes up with ~/.local/share/fonts
-;; ;; requires `M-x all-the-icons-install-fonts`
-;; (use-package all-the-icons
-;;   :if (display-graphic-p))
-
-;; ;; doom-modeline
-;; ;; doom-modeline relies on nerd-icons
-;; ;; NOTE: messes up with ~/.local/share/fonts
-;; ;; requires `M-x nerd-icons-install-fonts`
-;; (use-package nerd-icons)
-;; (use-package doom-modeline)
-
-;; diminish hides modes from modeline
-;; requires for `:diminish` keyword in use-package
-(use-package diminish) 
-
-                                        ; COMPLETIONS
-
-(load (concat user-emacs-directory "lib/completions.el"))
-
-
-;; which-key
-;; shows help on key prefix after `which-key-idle-delay` seconds
-;; will be in emacs-30
+;; show help on key prefix after `which-key-idle-delay` seconds
 (use-package which-key
   :init (which-key-mode)
   :diminish which-key-mode
   :config
   (setq which-key-idle-delay 0.3))
+
+;; color scheme
+(require 'aa/ui-colors)
+
+                                        ; COMPLETIONS
+
+(require 'aa/completion-presets)
 
 ;; ;; helpful cfg directly out of emacs-from-scratch
 ;; ;; TODO: research
@@ -189,38 +156,13 @@
 
                                         ; ORG
 
-(load (concat user-emacs-directory "lib/org.el"))
-(load (concat user-emacs-directory "lib/org-roam.el"))
+(require 'aa/org-presets)
 
                                         ; CODE
 
-(load (concat user-emacs-directory "lib/code.el"))
+(require 'aa/coding-presets)
 
-
-                                        ; terminal emulation
-
-;; colors
-(use-package eterm-256color
-  :hook
-  (term-mode-hook . eterm-256color-mode)
-  (vterm-mode-hook . eterm-256color-mode))
-
-;; vterm
-(use-package vterm
-  :config
-  (cond
-   ;; osx-specific setup
-   (t (setq vterm-shell "/usr/bin/bash")))
-  (setq vterm-max-scrollback 10000
-        vterm-kill-buffer-on-exit t
-        vterm-buffer-name-string "vterm %s"))
-
-(aa/with-leader
-  :states 'normal
-  :keymaps 'override
-  "t" '(:ignore t :which-key "terminal")
-  "tt" #'vterm)
-
+(require 'aa/term-presets)
                                         ; package management
 
 (defun aa/recompile-all-packages nil
