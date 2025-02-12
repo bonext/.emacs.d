@@ -1,6 +1,7 @@
 ;; -*- lexical-binding: t; -*-
 (require 'aa/use-package-presets)
 (require 'aa/leader)
+(require 'aa/wk-presets)
 
 ;; colors
 (use-package eterm-256color
