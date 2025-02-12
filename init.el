@@ -110,12 +110,7 @@
 (package-initialize)
 
 (require 'aa/use-package-presets)
-
-                                        ; keys
-
-;; evil-mode
 (require 'aa/evil-presets)
-
 (require 'aa/leader)
 
 ;; show current key in the modeline
@@ -129,39 +124,20 @@
   :config
   (setq which-key-idle-delay 0.3))
 
-;; color scheme
 (require 'aa/ui-colors)
-
-                                        ; COMPLETIONS
-
 (require 'aa/completion-presets)
 
-;; ;; helpful cfg directly out of emacs-from-scratch
-;; ;; TODO: research
-;; (use-package helpful
-;;   :diminish
-;;   :after counsel
-;;   :custom
-;;   (counsel-describe-function-function #'helpful-callable)
-;;   (counsel-describe-variable-function #'helpful-variable)
-;;   :bind
-;;   ([remap describe-function] . counsel-describe-function)
-;;   ([remap describe-command] . helpful-command)
-;;   ([remap describe-variable] . counsel-describe-variable)
-;;   ([remap describe-key] . helpful-key))
-
-;; ;; TODO: research hydra
-;; ;; tldr: transient keybindings
-;; ;; https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-03.org#hydra
-
-                                        ; ORG
+;; richer help
+(use-package helpful
+  :diminish
+  :bind
+  ([remap describe-function] . helpful-callable)
+  ([remap describe-command] . helpful-command)
+  ([remap describe-variable] . helpful-variable)
+  ([remap describe-key] . helpful-key))
 
 (require 'aa/org-presets)
-
-                                        ; CODE
-
 (require 'aa/coding-presets)
-
 (require 'aa/term-presets)
                                         ; package management
 
@@ -177,7 +153,6 @@
   "pl" #'list-packages
   "pr" #'aa/recompile-all-packages)
 
-
                                         ; unsorted goodies
 
 ;; switch to other window even in a different frame
@@ -186,3 +161,7 @@
   :keymaps 'override
   "w" '(:ignore t :which-key "window")
   "wo" #'next-multiframe-window)
+
+;; ;; TODO: research hydra
+;; ;; tldr: transient keybindings
+;; ;; https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-03.org#hydra
