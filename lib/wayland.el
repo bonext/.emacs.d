@@ -1,4 +1,5 @@
 ;; -*- lexical-binding: t; -*-
+(require 'aa/detect-host)
                                         ; WAYLAND SUPPORT
 
 (defun aa/wayland-p ()

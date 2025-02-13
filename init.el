@@ -1,17 +1,8 @@
 ; -*- lexical-binding: t; -*-
-                                        ; host detection
-
-(setq aa/host
-      (cond
-       ((and (eq system-type 'gnu/linux)
-             (string-match "-[Mm]icrosoft" operating-system-release))
-        'wsl)
-       ((eq system-type 'darwin) 'work)
-       (t 'home)))
-
 (add-to-list 'load-path
-              (file-name-concat user-emacs-directory "lib"))
+             (file-name-concat user-emacs-directory "lib"))
 
+(require 'aa/detect-host)
                                         ; UI
 
 ;; wayland support (mostly cross-app clipboard)
@@ -103,23 +94,17 @@
 
 
                                         ; PACKAGES
-(require 'package)
-(setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                         ("org" . "https://orgmode.org/elpa/")
-                         ("elpa" . "https://elpa.gnu.org/packages/")))
-(package-initialize)
-
 (require 'aa/use-package-presets)
+
 (require 'aa/evil-presets)
 (require 'aa/leader)
-
+(require 'aa/wk-presets)
 ;; show current key in the modeline
 (use-package keycast
   :init (keycast-header-line-mode))
 
-(require 'aa/wk-presets)
-
 (require 'aa/ui-colors)
+
 (require 'aa/completion-presets)
 
 ;; richer help
@@ -132,31 +117,16 @@
   ([remap describe-key] . helpful-key))
 
 (require 'aa/org-presets)
+
 (require 'aa/coding-presets)
+
 (require 'aa/term-presets)
-                                        ; package management
 
-(defun aa/recompile-all-packages nil
-  (interactive)
-  (message "recompiling elpa/ contents")
-  (native-compile-async "~/.emacs.d/elpa/" t))
+(require 'aa/shortcuts-unsorted)
 
-(aa/with-leader
-  :states 'normal
-  :keymaps 'override
-  "p" '(:ignore t :which-key "packages")
-  "pl" #'list-packages
-  "pr" #'aa/recompile-all-packages)
+;; TODO: research hydra
+;; tldr: transient keybindings
+;; https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-03.org#hydra
 
-                                        ; unsorted goodies
-
-;; switch to other window even in a different frame
-(aa/with-leader
-  :states 'normal
-  :keymaps 'override
-  "w" '(:ignore t :which-key "window")
-  "wo" #'next-multiframe-window)
-
-;; ;; TODO: research hydra
-;; ;; tldr: transient keybindings
-;; ;; https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-03.org#hydra
+;; TODO: consider beam for extra project support
+;; https://github.com/rpav/beam.el
