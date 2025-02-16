@@ -47,6 +47,11 @@
   (direnv-mode))
 
 (use-package systemd)
+
+;; requires M-x treesit-install-language-grammar for `vim`
+;; taken from https://github.com/tree-sitter-grammars/tree-sitter-vim
+(use-package vimscript-ts-mode
+  :mode "\\vifmrc\\'")
                                         ; tree-sitter
 
 ;; install grammars to ~/.emacs.d/tree-sitter
