@@ -48,6 +48,9 @@
 
 (use-package systemd)
 
+(use-package caddyfile-mode
+  :mode (("Caddyfile\\'" . caddyfile-mode)
+         ("caddy\\.conf\\'" . caddyfile-mode)))
 ;; requires M-x treesit-install-language-grammar for `vim`
 ;; taken from https://github.com/tree-sitter-grammars/tree-sitter-vim
 (use-package vimscript-ts-mode
