@@ -5,9 +5,6 @@
 (require 'aa/detect-host)
                                         ; UI
 
-;; wayland support (mostly cross-app clipboard)
-(load (concat user-emacs-directory "lib/wayland.el"))
-
 ;; start to scratch
 (setq inhibit-startup-message t)
 ;; disable tool bar (it causes glitches on wayland)
