@@ -116,7 +116,7 @@
     :keymaps 'override
     "r" '(:ignore t :which-key "org-roam")
     "rf" #'org-roam-node-find
-    "ri" #'org-roam-node-insert
+    "rc" #'org-roam-capture
     "rl" #'org-roam-buffer-toggle
     "rd" '(:ignore t :which-key "dailies")
     "rdc" '(org-roam-dailies-capture-today :which-key "capture today")
