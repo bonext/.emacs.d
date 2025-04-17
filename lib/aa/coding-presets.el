@@ -12,6 +12,9 @@
       :config
       (setq inferior-lisp-program "/usr/bin/sbcl")))
 
+;; racket
+(use-package racket-mode)
+
 ;; paredit
 (use-package paredit
   :config
@@ -55,6 +58,8 @@
 ;; taken from https://github.com/tree-sitter-grammars/tree-sitter-vim
 (use-package vimscript-ts-mode
   :mode "\\vifmrc\\'")
+
+(use-package pollen-mode)
                                         ; tree-sitter
 
 ;; install grammars to ~/.emacs.d/tree-sitter
