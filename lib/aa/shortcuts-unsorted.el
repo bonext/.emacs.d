@@ -23,4 +23,11 @@
   "w" '(:ignore t :which-key "window")
   "wo" #'next-multiframe-window)
 
+(aa/with-leader
+  :states 'normal
+  :keymaps 'override
+  "d" '(:ignore t :which-key "dired")
+  "dd" #'dired
+  "dj" #'dired-jump)
+
 (provide 'aa/shortcuts-unsorted)
