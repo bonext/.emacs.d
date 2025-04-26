@@ -20,3 +20,4 @@ straight/
 3rdparty/
 backups/
 local-settings.el
+.org-id-locations
