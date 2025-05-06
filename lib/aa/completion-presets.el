@@ -38,6 +38,18 @@
   :init
   (global-corfu-mode))
 
+;; cape (completion-at-point extensions)
+;; use prefix map for now
+(use-package cape
+  :general
+  (aa/with-insert-leader
+    :states 'insert
+    "p" #'cape-prefix-map)
+  :init
+  (add-hook 'completion-at-point-functions #'cape-dabbrev)
+  (add-hook 'completion-at-point-functions #'cape-file))
+
+
                                         ; completing-read
 
 (use-package consult
