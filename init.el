@@ -6,7 +6,7 @@
                                         ; UI
 
 ;; start to scratch
-(setq inhibit-startup-message t)
+(setopt inhibit-startup-message t)
 ;; disable tool bar (it causes glitches on wayland)
 (tool-bar-mode -1)
 ;; disable menu
@@ -29,8 +29,8 @@
 (setq-default indent-tabs-mode nil)
 
 ;; beep -> visual bell
-(setq ring-bell-function 'ignore)
-(setq visible-bell t)
+(setopt ring-bell-function 'ignore)
+(setopt visible-bell t)
 
 ;; Make ESC quit prompts
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
@@ -44,10 +44,10 @@
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
 ;; add russian as C-\ bind
-(setq default-input-method "russian-computer")
+(setopt default-input-method "russian-computer")
 
 ;; minibuffers inside minibuffers
-(setq enable-recursive-minibuffers t)
+(setopt enable-recursive-minibuffers t)
 
 ;; hide commands in M-x that do not apply in current mode
 ;; if no completion-predicate is specified for command then
@@ -57,7 +57,7 @@
 (setopt read-extended-command-predicate #'command-completion-default-include-p)
 
 ;; customize to file
-(setq custom-file (concat user-emacs-directory "custom.el"))
+(setopt custom-file (concat user-emacs-directory "custom.el"))
 (when (file-exists-p custom-file)
   (load-file custom-file))
 
@@ -83,7 +83,7 @@
 
                                         ; encryption
 (require 'epa-file)
-(setq epa-pinentry-mode 'loopback)
+(setopt epg-pinentry-mode 'loopback)
 (epa-file-enable)
 ;; workaround for gpg getting stuck
 ;; this may have side-effects. If so, downgrading to GnuPG 2.4.0 should help
