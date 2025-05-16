@@ -21,3 +21,4 @@ straight/
 backups/
 local-settings.el
 .org-id-locations
+ielm-history.eld

@@ -14,10 +14,10 @@
   :config
   (cond
    ;; osx-specific setup
-   (t (setq vterm-shell "/usr/bin/bash")))
+   (t (setq vterm-shell "bash")))
   (setq vterm-max-scrollback 10000
         vterm-kill-buffer-on-exit t
-        vterm-buffer-name-string "vterm %s"))
+        vterm-buffer-name-string "T %s"))
 
 (aa/with-leader
   :states 'normal
