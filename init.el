@@ -23,7 +23,8 @@
 (cond
  ;; osx-specific setup
  (t (set-face-attribute 'default nil :font "Cascadia Code NF" :height 100)))
-
+;; remove window titlebar
+(add-to-list 'default-frame-alist '(undecorated . t))
 
 ;; only spaces
 (setq-default indent-tabs-mode nil)

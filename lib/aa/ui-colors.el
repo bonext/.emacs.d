@@ -16,7 +16,7 @@
 (cond
  ;; osx-specific setup goes here
  (t (progn
-      (setq aa/light-theme 'ef-kassio)
+      (setq aa/light-theme 'solarized-dark)
       (setq aa/dark-theme 'ef-duo-dark))))
 
 ;; use https://git.sr.ht/~grtcdr/darkman.el
