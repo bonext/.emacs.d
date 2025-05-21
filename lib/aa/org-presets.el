@@ -118,6 +118,7 @@
     "rf" #'org-roam-node-find
     "rc" #'org-roam-capture
     "rl" #'org-roam-buffer-toggle
+    "ra" #'org-roam-alias-add
     "rd" '(:ignore t :which-key "dailies")
     "rdc" '(org-roam-dailies-capture-today :which-key "capture today")
     "rdd" '(org-roam-dailies-goto-date :which-key "goto date")
