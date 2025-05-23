@@ -92,6 +92,11 @@
                                         ; PACKAGES
 (require 'aa/use-package-presets)
 
+;; keybindings
+(require 'aa/evil-presets)
+(require 'aa/leader)
+(require 'aa/wk-presets)
+
 ;; ui tweaks
 (use-package ultra-scroll
   :vc (:url "https://github.com/jdtsmith/ultra-scroll")
@@ -100,9 +105,23 @@
         scroll-margin 0)
   :config
   (ultra-scroll-mode 1))
-(require 'aa/evil-presets)
-(require 'aa/leader)
-(require 'aa/wk-presets)
+
+;; highlight cursor
+(use-package pulsar
+  :config
+  (pulsar-global-mode 1)
+  :general
+  (aa/with-leader
+    :states 'normal
+    :keymaps 'override
+    "SPC" #'pulsar-pulse-line))
+
+
+(aa/with-leader
+  :states 'normal
+  :keymaps 'override
+  "e" #'eglot)
+
 ;; show current key in the modeline
 (use-package keycast
   :init (keycast-header-line-mode))
