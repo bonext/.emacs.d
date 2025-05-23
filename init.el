@@ -17,8 +17,6 @@
 (set-fringe-mode 10)
 ;; TODO: research
 (tooltip-mode -1)
-;; smoother scrolling
-(pixel-scroll-precision-mode)
 ;; default font
 (cond
  ;; osx-specific setup
@@ -94,6 +92,14 @@
                                         ; PACKAGES
 (require 'aa/use-package-presets)
 
+;; ui tweaks
+(use-package ultra-scroll
+  :vc (:url "https://github.com/jdtsmith/ultra-scroll")
+  :init
+  (setq scroll-conservatively 3
+        scroll-margin 0)
+  :config
+  (ultra-scroll-mode 1))
 (require 'aa/evil-presets)
 (require 'aa/leader)
 (require 'aa/wk-presets)
