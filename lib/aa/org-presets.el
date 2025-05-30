@@ -13,9 +13,7 @@
   :hook (org-mode . aa/org-common-hooks)
   :config
   (setq org-directory "~/Documents/Notes")
-  (setq org-agenda-files '("~/Documents/Notes"
-                           "~/Documents/RoamNotes"
-                           "~/Documents/RoamNotes/daily"))
+  (setq org-agenda-files `(,org-directory))
   ;; TODO: make the following part of fonts
   (setq org-ellipsis " ▾")
   (setq org-hide-emphasis-markers t)
@@ -30,6 +28,8 @@
   ;; wrap text by default
   ;; TODO: do we need this?
   (setq org-startup-truncated nil)
+  ;; show table of contents on load
+  (setq org-startup-folded 'content)
   ;; log time when todos are done
   ;; cf. https://orgmode.org/guide/Progress-Logging.html
   (setq org-log-into-drawer "LOGBOOK")
@@ -37,22 +37,22 @@
   (setq org-todo-keywords
         '((sequence "TODO(!)" "DONE(!)")))
   (setq org-refile-targets
-        '((nil :maxlevel . 9)))
+        '((nil :maxlevel . 5)))
   ;; refile in a single go
   (setq org-outline-path-complete-in-steps nil)
   ;; show full paths for refiling
   (setq org-refile-use-outline-path t)
   ;; capture setup
   (setq org-default-notes-file (concat org-directory "/captured.org"))
-  (setq org-my-capture-templates-dir (concat user-emacs-directory "org-capture-templates"))
+  (setq aa/capture-templates-dir (concat user-emacs-directory "org-capture-templates"))
   (setq org-capture-templates
-        '(("b" "book" entry
-           (file "~/Documents/Notes/finished-books.org")
-           (file "~/.emacs.d/book")
+        `(("b" "book" entry
+           (file ,(concat org-directory "/finished-books.org"))
+           (file ,(concat aa/capture-templates-dir "/book"))
            :kill-buffer t)
           ("d" "mind dump" entry
-           (file "~/Documents/Notes/mind-dumps.org")
-           (file "~/.emacs.d/dump")
+           (file ,(concat org-directory "/mind-dumps.org"))
+           (file ,(concat aa/capture-templates-dir "/dump"))
            :prepend t :kill-buffer t)))
   (aa/org-setup-fonts)
   (global-set-key (kbd "C-c a") 'org-agenda)
