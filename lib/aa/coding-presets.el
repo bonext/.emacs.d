@@ -83,6 +83,8 @@
   (setq eglot-ignored-server-capabilites
         (cons :documentOnTypeFormattingProvider
                     eglot-ignored-server-capabilites)))
+;; let project.el recognize python project roots
+(add-to-list 'project-vc-extra-root-markers "pyproject.toml")
 
 (aa/with-leader
   :states 'normal
