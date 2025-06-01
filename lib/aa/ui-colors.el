@@ -1,4 +1,5 @@
 ;; -*- lexical-binding: t; -*-
+(require 'aa/detect-host)
 (require 'aa/use-package-presets)
 
 ;; hook to be called on theme reload
@@ -12,17 +13,23 @@
 (use-package nord-theme)
 (use-package solarized-theme)
 (use-package gruvbox-theme)
+(use-package color-theme-sanityinc-tomorrow)
+(use-package doom-themes
+  :config
+  (setq doom-themes-enable-bold t
+        doom-themes-enable-italic t) )
+(use-package base16-theme)
 
 (cond
- ;; osx-specific setup goes here
- (t (progn
-      (setq aa/light-theme 'solarized-dark)
-      (setq aa/dark-theme 'ef-duo-dark))))
+ ((aa/work-p) (setq aa/light-theme 'nord
+                    aa/dark-theme 'nord))
+ (t (setq aa/light-theme 'solarized-dark
+                           aa/dark-theme 'base16-tokyodark)))
 
 ;; use https://git.sr.ht/~grtcdr/darkman.el
 ;; to integrate with https://darkman.whynothugo.nl/
 
-(if (file-exists-p "/usr/bin/darkman")
+(if (and (aa/home-p) (file-exists-p "/usr/bin/darkman"))
     (use-package darkman
       :config
       (setq darkman-themes `(:light ,aa/light-theme :dark ,aa/dark-theme))
