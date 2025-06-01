@@ -66,15 +66,16 @@
   (setopt backup-directory-alist `(("." . ,(concat user-emacs-directory "backups")))))
 
                                         ; Dired
+(use-package dired
+  :custom
+  (dired-listing-switches "-agho --group-directories-first")
+  :init
+  (add-hook 'dired-mode-hook (lambda () (dired-omit-mode 1))))
+
 (with-eval-after-load 'dired
   (require 'dired-x))
   ;; Set dired-x global variables here.  For example:
   ;; (setq dired-x-hands-off-my-keys nil)
-  
-(add-hook 'dired-mode-hook
-          (lambda ()
-            ;; Set dired-x buffer-local variables here.  For example:
-            (dired-omit-mode 1)))
             
 ;; dired cd with 'a' to reuse buffer
 ;; NOTE: this kills existing dired buffer so current directory is lost in dired
@@ -153,3 +154,6 @@
 
 ;; TODO: consider beam for extra project support
 ;; https://github.com/rpav/beam.el
+
+;; load org-mode
+(with-temp-buffer (org-mode))

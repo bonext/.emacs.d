@@ -18,7 +18,9 @@
   :config
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t) )
-(use-package base16-theme)
+(use-package base16-theme
+  :config
+  (setq base16-theme-distinct-fringe-background nil))
 
 (cond
  ((aa/work-p) (setq aa/light-theme 'nord
