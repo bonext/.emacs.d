@@ -61,7 +61,11 @@
   (aa/with-leader
     :states 'normal
     :keymaps 'override
-    "a" '(org-agenda :which-key "org-agenda")))
+    "a" '(org-agenda :which-key "org-agenda")
+    "n" `((lambda ()
+            (interactive)
+            (find-file ,(concat org-directory "/all.org")))
+          :which-key "notes")))
 
 (use-package org-bullets
   :after org
