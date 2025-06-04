@@ -15,11 +15,13 @@
 ;; racket
 (use-package racket-mode)
 
-;; paredit
-(use-package paredit
+;; smartparens
+(use-package smartparens
+  :hook (emacs-lisp-mode
+         racket-mode
+         pollen-mode)
   :config
-  (add-hook 'lisp-mode-hook #'enable-paredit-mode)
-  (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode))
+  (require 'smartparens-config))
 
 ;; ElDoc support
 ;; (this shows fn arguments in echo)
