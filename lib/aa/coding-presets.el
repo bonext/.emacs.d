@@ -17,9 +17,7 @@
 
 ;; smartparens
 (use-package smartparens
-  :hook (emacs-lisp-mode
-         racket-mode
-         pollen-mode)
+  :hook ((lisp-mode emacs-lisp-mode racket-mode pollen-mode) . smartparens-strict-mode)
   :config
   (require 'smartparens-config))
 
