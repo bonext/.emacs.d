@@ -2,12 +2,23 @@
 (require 'aa/detect-host)
 (require 'aa/use-package-presets)
 
-;; hook to be called on theme reload
+(defvar aa/before-load-theme-hook nil
+  "Hooks to run before calling load-theme.")
+
+(advice-add
+ 'load-theme
+ :before
+ #'(lambda (&rest load-theme-args)
+     (run-hooks 'aa/before-load-theme-hook)))
+
 (defvar aa/after-load-theme-hook nil
-  "Hook run after a color theme is loaded with `load-theme`.")
-(defadvice load-theme (after aa/run-after-load-theme-hook activate)
-  "Run `aa/after-load-theme-hook`."
-  (run-hooks 'aa/after-load-theme-hook))
+  "Hooks run after calling load-theme.")
+
+(advice-add
+ 'load-theme
+ :after
+ #'(lambda (&rest load-theme-args)
+     (run-hooks 'aa/after-load-theme-hook)))
 
 (use-package ef-themes)
 (use-package nord-theme)
@@ -40,5 +51,9 @@
   (cond
    ((> (decoded-time-hour (decode-time)) 20) (load-theme aa/dark-theme t))
    (t (load-theme aa/light-theme t))))
+
+;; reset themes when switching
+(add-hook 'aa/before-load-theme-hook
+          #'(lambda nil (mapc #'disable-theme custom-enabled-themes)))
 
 (provide 'aa/ui-colors)
