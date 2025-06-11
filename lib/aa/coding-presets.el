@@ -17,9 +17,11 @@
 
 ;; smartparens
 (use-package smartparens
-  :hook ((lisp-mode emacs-lisp-mode racket-mode pollen-mode) . smartparens-strict-mode)
+  :hook ((lisp-data-mode racket-mode pollen-mode) . smartparens-strict-mode)
   :config
-  (require 'smartparens-config))
+  (require 'smartparens-config)
+  :custom
+  (sp-base-key-bindings 'sp "set smartparens bindings"))
 
 ;; ElDoc support
 ;; (this shows fn arguments in echo)
