@@ -21,6 +21,9 @@
   :init
   (marginalia-mode))
 
+;; ignore case for file name completions
+(setopt read-file-name-completion-ignore-case t)
+
 
                                         ; in-buffer
 
