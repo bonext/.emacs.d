@@ -34,6 +34,7 @@
 (setopt visible-bell t)
 
 ;; Make ESC quit prompts
+;; TODO: this does not really work because evil overloads this setting
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
 ;; line numbers
@@ -49,6 +50,8 @@
 
 ;; minibuffers inside minibuffers
 (setopt enable-recursive-minibuffers t)
+;; recommemded with the above set up
+(minibuffer-depth-indicate-mode)
 
 ;; hide commands in M-x that do not apply in current mode
 ;; if no completion-predicate is specified for command then
@@ -59,29 +62,41 @@
 
 ;; customize to file
 (setopt custom-file (concat user-emacs-directory "custom.el"))
-(when (file-exists-p custom-file)
-  (load-file custom-file))
+(load custom-file 'noerror 'nomessage)
 
 ;; backup files
 (setopt backup-by-copying t)
 (unless backup-directory-alist
   (setopt backup-directory-alist `(("." . ,(concat user-emacs-directory "backups")))))
 
+;; enable recent files list
+(recentf-mode 1)
+
+;; save cursor location on exit
+(save-place-mode 1)
+
+;; prompt y/n stuff in emacs rather than in dialogue boxes
+(setopt use-dialog-box nil)
+
+;; autorevert buffers for changed files
+(global-auto-revert-mode 1)
+(setopt global-auto-revert-non-file-buffers t)
+
                                         ; Dired
 (use-package dired
   :custom
+  ;; NOTE: these require GNU ls
   (dired-listing-switches "-agho --group-directories-first")
   :init
   (add-hook 'dired-mode-hook (lambda () (dired-omit-mode 1))))
 
 (with-eval-after-load 'dired
-  (require 'dired-x))
+  (require 'dired-x)
   ;; Set dired-x global variables here.  For example:
   ;; (setq dired-x-hands-off-my-keys nil)
-            
-;; dired cd with 'a' to reuse buffer
-;; NOTE: this kills existing dired buffer so current directory is lost in dired
-(put 'dired-find-alternate-file 'disabled nil)
+  ;; dired cd with 'a' to reuse buffer
+  ;; NOTE: this kills existing dired buffer so current directory is lost in dired
+  (put 'dired-find-alternate-file 'disabled nil))
 
                                         ; encryption
 (require 'epa-file)
@@ -167,3 +182,9 @@
 
 ;; load org-mode
 (with-temp-buffer (org-mode))
+
+;; recentf
+(aa/with-leader
+  :states 'normal
+  :keymaps 'override
+  "f" #'recentf-open-files)

@@ -62,6 +62,8 @@
   :mode "\\vifmrc\\'")
 
 (use-package pollen-mode)
+
+(use-package kdl-mode)
                                         ; tree-sitter
 
 ;; install grammars to ~/.emacs.d/tree-sitter

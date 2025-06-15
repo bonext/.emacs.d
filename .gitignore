@@ -24,3 +24,4 @@ local-settings.el
 ielm-history.eld
 projects
 racket-mode/
+recentf
