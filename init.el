@@ -110,9 +110,17 @@
   (ultra-scroll-mode 1))
 
 ;; highlight cursor
+(setq aa/pulsar-pulse-after
+      '(evil-goto-line
+        evil-window-left
+        evil-window-right
+        evil-window-up
+        evil-window-down))
 (use-package pulsar
   :config
   (pulsar-global-mode 1)
+  (dolist (f aa/pulsar-pulse-after)
+    (advice-add f :after #'(lambda (&rest args) (pulsar-pulse-line))))
   :general
   (aa/with-leader
     :states 'normal
