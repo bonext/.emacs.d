@@ -33,10 +33,6 @@
 (setopt ring-bell-function 'ignore)
 (setopt visible-bell t)
 
-;; Make ESC quit prompts
-;; TODO: this does not really work because evil overloads this setting
-(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
-
 ;; line numbers
 (column-number-mode)
 (global-display-line-numbers-mode t)
@@ -82,21 +78,6 @@
 (global-auto-revert-mode 1)
 (setopt global-auto-revert-non-file-buffers t)
 
-                                        ; Dired
-(use-package dired
-  :custom
-  ;; NOTE: these require GNU ls
-  (dired-listing-switches "-agho --group-directories-first")
-  :init
-  (add-hook 'dired-mode-hook (lambda () (dired-omit-mode 1))))
-
-(with-eval-after-load 'dired
-  (require 'dired-x)
-  ;; Set dired-x global variables here.  For example:
-  ;; (setq dired-x-hands-off-my-keys nil)
-  ;; dired cd with 'a' to reuse buffer
-  ;; NOTE: this kills existing dired buffer so current directory is lost in dired
-  (put 'dired-find-alternate-file 'disabled nil))
 
                                         ; encryption
 (require 'epa-file)
@@ -110,10 +91,25 @@
                                         ; PACKAGES
 (require 'aa/use-package-presets)
 
-;; keybindings
+;; vim keybindings
 (require 'aa/evil-presets)
-(require 'aa/leader)
-(require 'aa/wk-presets)
+
+;; dired
+(use-package dired
+  :commands (dired dired-jump)
+  :config
+  (add-hook 'dired-mode-hook (lambda () (dired-omit-mode 1)))
+  :custom
+  ;; NOTE: these require GNU ls
+  (dired-listing-switches "-agho --group-directories-first"))
+
+(with-eval-after-load 'dired
+  (require 'dired-x)
+  ;; Set dired-x global variables here.  For example:
+  ;; (setq dired-x-hands-off-my-keys nil)
+  ;; dired cd with 'a' to reuse buffer
+  ;; NOTE: this kills existing dired buffer so current directory is lost in dired
+  (put 'dired-find-alternate-file 'disabled nil))
 
 ;; ui tweaks
 (use-package ultra-scroll
@@ -131,23 +127,15 @@
         evil-window-right
         evil-window-up
         evil-window-down))
+
 (use-package pulsar
+  ;; load after evil due to advice-add
+  :after evil
+  :commands pulsar-pulse-line
   :config
   (pulsar-global-mode 1)
   (dolist (f aa/pulsar-pulse-after)
-    (advice-add f :after #'(lambda (&rest args) (pulsar-pulse-line))))
-  ;; :general
-  ;; (aa/with-leader
-  ;;   :states 'normal
-  ;;   :keymaps 'override
-  ;;   "SPC" #'pulsar-pulse-line)
-  )
-
-
-;; (aa/with-leader
-;;   :states 'normal
-;;   :keymaps 'override
-;;   "e" #'eglot)
+    (advice-add f :after #'(lambda (&rest args) (pulsar-pulse-line)))))
 
 ;; show current key in the modeline
 (use-package keycast
@@ -172,20 +160,11 @@
 
 (require 'aa/term-presets)
 
-(require 'aa/shortcuts-unsorted)
-
-;; TODO: research hydra
-;; tldr: transient keybindings
-;; https://github.com/daviwil/emacs-from-scratch/blob/master/show-notes/Emacs-03.org#hydra
-
 ;; TODO: consider beam for extra project support
 ;; https://github.com/rpav/beam.el
 
-;; load org-mode
+;; preload org-mode
 (with-temp-buffer (org-mode))
 
-;; ;; recentf
-;; (aa/with-leader
-;;   :states 'normal
-;;   :keymaps 'override
-;;   "f" #'recentf-open-files)
+;; setup all keymaps in one place
+(require 'aa/keymaps)

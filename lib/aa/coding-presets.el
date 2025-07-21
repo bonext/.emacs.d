@@ -1,6 +1,5 @@
 ;; -*- lexical-binding: t; -*-
 (require 'aa/use-package-presets)
-(require 'aa/leader)
 
 ;; rainbow delims
 (use-package rainbow-delimiters
@@ -79,7 +78,9 @@
 
 ;; the following assumes that language-servers are in $PATH
 ;; eglot is opt-in (M-x eglot or whatever)
-(with-eval-after-load 'eglot
+(use-package eglot
+  :commands eglot
+  :config
   (dolist (mode '((nix-mode . ("nixd"))
                   (zig-mode . ("zls"))))
     (add-to-list 'eglot-server-programs mode))
@@ -89,10 +90,5 @@
                     eglot-ignored-server-capabilites)))
 ;; let project.el recognize python project roots
 (add-to-list 'project-vc-extra-root-markers "pyproject.toml")
-
-;; (aa/with-leader
-;;   :states 'normal
-;;   :keymaps 'override
-;;   "e" #'eglot)
 
 (provide 'aa/coding-presets)

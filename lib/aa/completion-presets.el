@@ -1,6 +1,5 @@
 ;; -*- lexical-binding: t; -*-
 (require 'aa/use-package-presets)
-(require 'aa/leader)
 
                                         ; emacs built-in
 
@@ -44,10 +43,7 @@
 ;; cape (completion-at-point extensions)
 ;; use prefix map for now
 (use-package cape
-  ;; :general
-  ;; (aa/with-insert-leader
-  ;;   :states 'insert
-  ;;   "p" #'cape-prefix-map)
+  :commands cape-prefix-map
   :init
   (add-hook 'completion-at-point-functions #'cape-dabbrev)
   (add-hook 'completion-at-point-functions #'cape-file))
@@ -56,18 +52,12 @@
                                         ; completing-read
 
 (use-package consult
-  :bind
-  ;; TODO: convert this to general as well
-  ([remap switch-to-buffer] . consult-buffer)
-  ;; :general
-  ;; (aa/with-leader
-  ;;   :states 'normal
-  ;;   :keymaps 'override
-  ;;   "/" #'consult-line
-  ;;   "f" #'consult-ripgrep
-  ;;   "o" #'consult-outline
-  ;;   "b" #'consult-buffer)
-  )
+  :commands (consult-line
+             consult-ripgrep
+             consult-outline
+             consult-buffer)
+  :config
+  ([remap switch-to-buffer] . consult-buffer))
 
                                         ; completion styling
 

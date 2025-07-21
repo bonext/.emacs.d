@@ -1,7 +1,5 @@
 ;; -*- lexical-binding: t; -*-
 (require 'aa/use-package-presets)
-(require 'aa/leader)
-(require 'aa/wk-presets)
 
 ;; colors
 (use-package eterm-256color
@@ -11,6 +9,7 @@
 
 ;; vterm
 (use-package vterm
+  :commands vterm
   :config
   (cond
    ;; osx-specific setup
@@ -18,11 +17,5 @@
   (setq vterm-max-scrollback 10000
         vterm-kill-buffer-on-exit t
         vterm-buffer-name-string "T %s"))
-
-;; (aa/with-leader
-;;   :states 'normal
-;;   :keymaps 'override
-;;   "t" '(:ignore t :which-key "terminal")
-;;   "tt" #'vterm)
 
 (provide 'aa/term-presets)
