@@ -136,17 +136,18 @@
   (pulsar-global-mode 1)
   (dolist (f aa/pulsar-pulse-after)
     (advice-add f :after #'(lambda (&rest args) (pulsar-pulse-line))))
-  :general
-  (aa/with-leader
-    :states 'normal
-    :keymaps 'override
-    "SPC" #'pulsar-pulse-line))
+  ;; :general
+  ;; (aa/with-leader
+  ;;   :states 'normal
+  ;;   :keymaps 'override
+  ;;   "SPC" #'pulsar-pulse-line)
+  )
 
 
-(aa/with-leader
-  :states 'normal
-  :keymaps 'override
-  "e" #'eglot)
+;; (aa/with-leader
+;;   :states 'normal
+;;   :keymaps 'override
+;;   "e" #'eglot)
 
 ;; show current key in the modeline
 (use-package keycast
@@ -183,8 +184,8 @@
 ;; load org-mode
 (with-temp-buffer (org-mode))
 
-;; recentf
-(aa/with-leader
-  :states 'normal
-  :keymaps 'override
-  "f" #'recentf-open-files)
+;; ;; recentf
+;; (aa/with-leader
+;;   :states 'normal
+;;   :keymaps 'override
+;;   "f" #'recentf-open-files)

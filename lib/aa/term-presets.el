@@ -19,10 +19,10 @@
         vterm-kill-buffer-on-exit t
         vterm-buffer-name-string "T %s"))
 
-(aa/with-leader
-  :states 'normal
-  :keymaps 'override
-  "t" '(:ignore t :which-key "terminal")
-  "tt" #'vterm)
+;; (aa/with-leader
+;;   :states 'normal
+;;   :keymaps 'override
+;;   "t" '(:ignore t :which-key "terminal")
+;;   "tt" #'vterm)
 
 (provide 'aa/term-presets)

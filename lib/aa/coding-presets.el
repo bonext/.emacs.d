@@ -90,9 +90,9 @@
 ;; let project.el recognize python project roots
 (add-to-list 'project-vc-extra-root-markers "pyproject.toml")
 
-(aa/with-leader
-  :states 'normal
-  :keymaps 'override
-  "e" #'eglot)
+;; (aa/with-leader
+;;   :states 'normal
+;;   :keymaps 'override
+;;   "e" #'eglot)
 
 (provide 'aa/coding-presets)

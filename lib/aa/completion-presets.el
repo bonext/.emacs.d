@@ -44,10 +44,10 @@
 ;; cape (completion-at-point extensions)
 ;; use prefix map for now
 (use-package cape
-  :general
-  (aa/with-insert-leader
-    :states 'insert
-    "p" #'cape-prefix-map)
+  ;; :general
+  ;; (aa/with-insert-leader
+  ;;   :states 'insert
+  ;;   "p" #'cape-prefix-map)
   :init
   (add-hook 'completion-at-point-functions #'cape-dabbrev)
   (add-hook 'completion-at-point-functions #'cape-file))
@@ -59,14 +59,15 @@
   :bind
   ;; TODO: convert this to general as well
   ([remap switch-to-buffer] . consult-buffer)
-  :general
-  (aa/with-leader
-    :states 'normal
-    :keymaps 'override
-    "/" #'consult-line
-    "f" #'consult-ripgrep
-    "o" #'consult-outline
-    "b" #'consult-buffer))
+  ;; :general
+  ;; (aa/with-leader
+  ;;   :states 'normal
+  ;;   :keymaps 'override
+  ;;   "/" #'consult-line
+  ;;   "f" #'consult-ripgrep
+  ;;   "o" #'consult-outline
+  ;;   "b" #'consult-buffer)
+  )
 
                                         ; completion styling
 
