@@ -96,6 +96,7 @@
 
 ;; dired
 (use-package dired
+  :ensure nil
   :commands (dired dired-jump)
   :config
   (add-hook 'dired-mode-hook (lambda () (dired-omit-mode 1)))

@@ -55,9 +55,7 @@
   :commands (consult-line
              consult-ripgrep
              consult-outline
-             consult-buffer)
-  :config
-  ([remap switch-to-buffer] . consult-buffer))
+             consult-buffer))
 
                                         ; completion styling
 
