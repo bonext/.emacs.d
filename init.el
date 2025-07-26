@@ -162,6 +162,8 @@
 (require 'aa/term-presets)
 
 (use-package 0x0)
+
+(use-package eev)
 ;; TODO: consider beam for extra project support
 ;; https://github.com/rpav/beam.el
 
