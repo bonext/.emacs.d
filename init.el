@@ -97,7 +97,7 @@
 (require 'aa/use-package-presets)
 
 ;; vim keybindings
-(require 'aa/evil-presets)
+;; (require 'aa/evil-presets)
 
 ;; dired
 (use-package dired
@@ -128,16 +128,12 @@
 
 ;; highlight cursor
 (setq aa/pulsar-pulse-after
-      '(evil-goto-line
-        evil-window-left
-        evil-window-right
-        evil-window-up
-        evil-window-down))
+      '(other-window
+        next-multiframe-window))
 
-(use-package pulsar
+ (use-package pulsar
   ;; load after evil due to advice-add
-  :after evil
-  :commands pulsar-pulse-line
+   :commands pulsar-pulse-line
   :config
   (pulsar-global-mode 1)
   (dolist (f aa/pulsar-pulse-after)
