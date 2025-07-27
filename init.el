@@ -83,6 +83,9 @@
 (global-auto-revert-mode 1)
 (setopt global-auto-revert-non-file-buffers t)
 
+;; vertical bar cursor in active frame/window/(mini)buffer
+(setopt cursor-type 'bar)
+(setopt cursor-in-non-selected-windows 'hollow)
 
                                         ; encryption
 (require 'epa-file)
@@ -97,7 +100,7 @@
 (require 'aa/use-package-presets)
 
 ;; vim keybindings
-(require 'aa/evil-presets)
+;; (require 'aa/evil-presets)
 
 ;; dired
 (use-package dired
@@ -128,17 +131,11 @@
 
 ;; highlight cursor
 (setq aa/pulsar-pulse-after
-      '(evil-goto-line
-        evil-window-left
-        evil-window-right
-        evil-window-up
-        evil-window-down
-        other-window
+      '(other-window
         next-multiframe-window))
 
 (use-package pulsar
   ;; load after evil due to advice-add
-  :after evil
   :commands pulsar-pulse-line
   :config
   (pulsar-global-mode 1)

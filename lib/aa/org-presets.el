@@ -9,7 +9,9 @@
   (visual-line-mode 1))
 
 (use-package org
-  :commands org-agenda
+  :commands (org-agenda
+             org-capture
+             org-store-link)
   :hook (org-mode . aa/org-common-hooks)
   :config
   (setq org-directory "~/Documents/Notes")

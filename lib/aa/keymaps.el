@@ -8,40 +8,44 @@
 ;; TODO: this does not really work because evil overloads this setting
 ;; (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
-;; bind "SPC" in normal mode to activate leader map
-(evil-define-key 'normal 'global (kbd "SPC") aa/leader-map)
+;; bind C-SPC to activate leader map (note: this overrides mark set)
+(keymap-global-set "C-c SPC" aa/leader-map)
 
                                         ; dired
 
 (defvar aa/leader-map-dired (make-sparse-keymap) "SPC d: Dired")
-(define-key aa/leader-map (kbd "d") aa/leader-map-dired)
+(keymap-global-set "C-c d" aa/leader-map-dired)
 (define-key aa/leader-map-dired (kbd "d") #'dired)
 (define-key aa/leader-map-dired (kbd "j") #'dired-jump)
 (which-key-add-key-based-replacements
-  "SPC d" "dired")
+  "C-c d" "dired")
 (which-key-add-key-based-replacements
-  "SPC d j" "dired-jump"
-  "SPC d d" "open dired")
+  "C-c d j" "dired-jump"
+  "C-c d d" "open dired")
 
                                         ; pulsar
 
-(define-key aa/leader-map (kbd "SPC") #'pulsar-pulse-line)
+(keymap-global-set "C-c C-c" #'pulsar-pulse-line)
 
                                         ; org
 
-(define-key aa/leader-map (kbd "a") #'org-agenda)
-(define-key aa/leader-map (kbd "n") `(lambda ()
-                                       (interactive)
-                                       (find-file ,(concat org-directory "/all.org"))))
+(keymap-global-set "C-c a" #'org-agenda)
+(keymap-global-set "C-c c" #'org-capture)
+(keymap-global-set "C-c l" #'org-store-link)
+(keymap-global-set "C-c n" `(lambda ()
+                              (interactive)
+                              (find-file ,(concat org-directory "/all.org"))))
 (which-key-add-key-based-replacements
-  "SPC a" "org-agenda"
-  "SPC n" "notes")
+  "C-c a" "org-agenda"
+  "C-c c" "org-capture"
+  "C-c l" "org-store-link"
+  "C-c n" "open notes")
 
                                         ; org-journal
 
-(define-key aa/leader-map (kbd "j") #'org-journal-new-entry)
+(keymap-global-set "C-c j" #'org-journal-new-entry)
 (which-key-add-key-based-replacements
-  "SPC j" "journal")
+  "C-c j" "journal")
 
                                         ; org-roam (work only)
 
@@ -60,7 +64,7 @@
       (define-key aa/leader-map-org-roam-dailies (kbd "t") #'org-roam-dailies-goto-today)
       (define-key aa/leader-map-org-roam-dailies (kbd "p") #'org-roam-dailies-goto-previous-note)
       (define-key aa/leader-map-org-roam-dailies (kbd "n") #'org-roam-dailies-goto-next-note)
-      (evil-define-key 'insert 'org-mode-map (kbd "C-c i") #'org-roam-node-insert)
+      (keymap-set org-mode-map (kbd "C-c i") #'org-roam-node-insert)
       (which-key-add-key-based-replacements
         "SPC r" "org-roam"
         "SPC r f" "find node"
@@ -76,19 +80,19 @@
 
                                         ; consult
 
-(define-key aa/leader-map (kbd "/") #'consult-line)
-(define-key aa/leader-map (kbd "f") #'consult-ripgrep)
-(define-key aa/leader-map (kbd "o") #'consult-outline)
-(define-key aa/leader-map (kbd "b") #'consult-buffer)
+(keymap-global-set "C-c f" #'consult-line)
+(keymap-global-set "C-c g" #'consult-ripgrep)
+(keymap-global-set "C-c o" #'consult-outline)
+(keymap-global-set "C-c b" #'consult-buffer)
 (which-key-add-key-based-replacements
-  "SPC /" "search line"
-  "SPC f" "ripgrep"
-  "SPC o" "search outline"
-  "SPC b" "select buffer")
+  "C-c f" "search line"
+  "C-c g" "ripgrep"
+  "C-c o" "search outline"
+  "C-c b" "select buffer")
 
                                         ; cape
 
-(evil-define-key 'insert 'global (kbd "C-c p") #'cape-prefix-map)
+(keymap-global-set "C-c p" #'cape-prefix-map)
 
                                         ; package management
 
@@ -97,46 +101,28 @@
   (message "recompiling elpa/ contents")
   (native-compile-async (file-name-concat user-emacs-directory "elpa") t))
 
-(defvar aa/leader-map-packages (make-sparse-keymap) "SPC p: package management")
-(define-key aa/leader-map (kbd "p") aa/leader-map-packages)
-(define-key aa/leader-map-packages (kbd "l") #'list-packages)
-(define-key aa/leader-map-packages (kbd "r") #'aa/recompile-all-packages)
-(which-key-add-key-based-replacements
-  "SPC p" "package management")
-(which-key-add-key-based-replacements
-  "SPC p l" "list packages")
-(which-key-add-key-based-replacements
-  "SPC p r" "recompile packages")
-
                                         ; window management
 
 (defvar aa/leader-map-windows (make-sparse-keymap) "SPC w: window management")
-(define-key aa/leader-map (kbd "w") aa/leader-map-windows)
+(keymap-global-set "C-c w" aa/leader-map-windows)
 (which-key-add-key-based-replacements
-  "SPC w" "window management")
-
+  "C-c w" "window management")
 ;; switch to other window even in a different frame
-(define-key aa/leader-map-windows (kbd "o") #'next-multiframe-window)
+(keymap-set aa/leader-map-windows "o" #'next-multiframe-window)
 (which-key-add-key-based-replacements
-  "SPC w o" "next window")
+  "C-c w o" "next window")
 
                                         ; recentf
 
-(define-key aa/leader-map (kbd "c") #'recentf-open-files)
+(keymap-global-set "C-c r" #'recentf-open-files)
 (which-key-add-key-based-replacements
-  "SPC c" "recent files")
+  "C-c r" "recent files")
 
-                                        ; eglot
+                                        ; terminal
 
-(define-key aa/leader-map (kbd "e") #'eglot)
+(keymap-global-set "C-c s" #'eshell)
 (which-key-add-key-based-replacements
-  "SPC e" "eglot")
-
-                                        ; vterm
-
-(define-key aa/leader-map (kbd "t") #'vterm)
-(which-key-add-key-based-replacements
-  "SPC t" "terminal")
+  "C-c s" "eshell")
 
 (provide 'aa/keymaps)
 
