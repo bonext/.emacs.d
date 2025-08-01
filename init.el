@@ -17,10 +17,15 @@
 (set-fringe-mode 10)
 ;; TODO: research
 (tooltip-mode -1)
-;; default font
-(cond
- ;; osx-specific setup
- (t (set-face-attribute 'default nil :font "Cascadia Code NF" :height 100)))
+;; default fonts
+(defun aa/set-default-fonts ()
+  (cond
+   ;; osx-specific setup
+   (t (set-face-attribute 'default nil :font "Cascadia Code NF" :height 100))))
+(if (daemonp)
+    (add-hook 'after-make-frame-functions
+              (lambda (f) (with-selected-frame f (aa/set-default-fonts))))
+  (aa/set-default-fonts))
 
 ;; remove window titlebar
 (if (aa/home-p)
