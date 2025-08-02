@@ -168,7 +168,10 @@
 
 (use-package 0x0)
 
-(use-package eev)
+(use-package eev
+  :init
+  (require 'eev-load)
+  (eev-mode 1))
 ;; TODO: consider beam for extra project support
 ;; https://github.com/rpav/beam.el
 
