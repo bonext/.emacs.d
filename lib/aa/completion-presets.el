@@ -8,7 +8,7 @@
 
                                         ; minibuffer
 
-;; vertico (frontend)
+;; vertico (frontend / UI)
 ;; changes default completion buffer to vertical scrollable thing
 (use-package vertico
   :init
@@ -26,7 +26,8 @@
 
                                         ; in-buffer
 
-;; corfu (frontend)
+;; corfu (frontend / UI)
+;; completion-at-point (e.g. when writing code)
 (use-package corfu
   :custom
   ;; enable auto completion
@@ -40,7 +41,8 @@
   :init
   (global-corfu-mode))
 
-;; cape (completion-at-point extensions)
+;; cape
+;; suite of completion-at-point functions
 ;; use prefix map for now
 (use-package cape
   :commands cape-prefix-map
@@ -48,18 +50,8 @@
   (add-hook 'completion-at-point-functions #'cape-dabbrev)
   (add-hook 'completion-at-point-functions #'cape-file))
 
-
-                                        ; completing-read
-
-(use-package consult
-  :commands (consult-line
-             consult-ripgrep
-             consult-outline
-             consult-buffer))
-
-                                        ; completion styling
-
-;; orderless
+;; orderless (style)
+;; decides how to match completion candidates
 (use-package orderless
   :custom
   (completion-styles '(orderless basic))

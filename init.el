@@ -132,7 +132,9 @@
         evil-window-left
         evil-window-right
         evil-window-up
-        evil-window-down))
+        evil-window-down
+        other-window
+        next-multiframe-window))
 
 (use-package pulsar
   ;; load after evil due to advice-add
@@ -150,6 +152,13 @@
 (require 'aa/ui-colors)
 
 (require 'aa/completion-presets)
+
+;; completing-read
+(use-package consult
+  :commands (consult-line
+             consult-ripgrep
+             consult-outline
+             consult-buffer))
 
 ;; richer help
 (use-package helpful
@@ -172,6 +181,7 @@
   :init
   (require 'eev-load)
   (eev-mode 1))
+
 ;; TODO: consider beam for extra project support
 ;; https://github.com/rpav/beam.el
 
