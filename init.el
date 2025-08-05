@@ -185,5 +185,8 @@
 ;; preload org-mode
 (with-temp-buffer (org-mode))
 
+;; display-buffer setup
+(require 'aa/display-buffer-settings)
+
 ;; setup all keymaps in one place
 (require 'aa/keymaps)
