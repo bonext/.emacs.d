@@ -87,6 +87,10 @@
 (setopt cursor-type 'bar)
 (setopt cursor-in-non-selected-windows 'hollow)
 
+;; (info "(emacs)Killing by Lines")
+;; C-k acts as vim dd and kills newline too
+(setopt kill-whole-line t)
+
                                         ; encryption
 (require 'epa-file)
 (setopt epg-pinentry-mode 'loopback)
@@ -181,6 +185,11 @@
 
 ;; TODO: consider beam for extra project support
 ;; https://github.com/rpav/beam.el
+
+(use-package ace-window
+  :commands ace-window
+  :custom
+  (aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
 
 ;; preload org-mode
 (with-temp-buffer (org-mode))

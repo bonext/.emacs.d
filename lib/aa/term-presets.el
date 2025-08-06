@@ -15,7 +15,6 @@
    ;; osx-specific setup
    (t (setq vterm-shell "bash")))
   (setq vterm-max-scrollback 10000
-        vterm-kill-buffer-on-exit t
-        vterm-buffer-name-string "T %s"))
+        vterm-kill-buffer-on-exit t))
 
 (provide 'aa/term-presets)
