@@ -57,9 +57,8 @@
 ;; hide commands in M-x that do not apply in current mode
 ;; if no completion-predicate is specified for command then
 ;; predicate is true when command is applicable to major or any of minor modes
-;; setopt is code way to set customized variables
 ;; cf. https://www.gnu.org/software/emacs/manual/html_node/elisp/Setting-Variables.html#index-setopt
-(setopt read-extended-command-predicate #'command-completion-default-include-p)
+;; (setopt read-extended-command-predicate #'command-completion-default-include-p)
 
 ;; customize to file
 (setopt custom-file (concat user-emacs-directory "custom.el"))
@@ -91,6 +90,8 @@
 ;; C-k acts as vim dd and kills newline too
 (setopt kill-whole-line t)
 
+;;
+(repeat-mode 1)
                                         ; encryption
 (require 'epa-file)
 (setopt epg-pinentry-mode 'loopback)
