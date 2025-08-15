@@ -84,14 +84,14 @@
 (setopt read-extended-command-predicate #'command-completion-default-include-p)
 
 ;; ignore custom
-(setopt custom-file (expand-file-name "ignored-custom.el" user-emacs-directory))
+(setopt custom-file (file-name-concat user-emacs-directory "ignored-custom.el"))
 
 ;; add final newline on save
 (setopt require-final-newline t)
 
 ;; backup files
 (unless backup-directory-alist
-  (setopt backup-directory-alist `(("." . ,(concat user-emacs-directory "backups")))))
+  (setopt backup-directory-alist `(("." . ,(file-name-concat user-emacs-directory "backups")))))
 (setopt backup-by-copying t)
 
 ;; enable recent files list
@@ -182,6 +182,7 @@
   :commands pulsar-pulse-line
   :config
   (pulsar-global-mode 1)
+
   (dolist (f aa/pulsar-pulse-after)
     (advice-add f :after #'(lambda (&rest args) (pulsar-pulse-line)))))
 
@@ -460,16 +461,16 @@
   ;; show full paths for refiling
   (setq org-refile-use-outline-path t)
   ;; capture setup
-  (setq org-default-notes-file (concat org-directory "/captured.org"))
-  (setq aa/capture-templates-dir (concat user-emacs-directory "org-capture-templates"))
+  (setq org-default-notes-file (file-name-concat org-directory "captured.org"))
+  (setq aa/capture-templates-dir (file-name-concat user-emacs-directory "org-capture-templates"))
   (setq org-capture-templates
         `(("b" "book" entry
-           (file ,(concat org-directory "/finished-books.org"))
-           (file ,(concat aa/capture-templates-dir "/book"))
+           (file ,(file-name-concat org-directory "finished-books.org"))
+           (file ,(file-name-concat aa/capture-templates-dir "book"))
            :kill-buffer t)
           ("d" "mind dump" entry
-           (file ,(concat org-directory "/mind-dumps.org"))
-           (file ,(concat aa/capture-templates-dir "/dump"))
+           (file ,(file-name-concat org-directory "mind-dumps.org"))
+           (file ,(file-name-concat aa/capture-templates-dir "dump"))
            :prepend t :kill-buffer t)))
   (aa/org-setup-fonts))
 
@@ -697,7 +698,7 @@
 (keymap-global-set "C-c l" #'org-store-link)
 (keymap-global-set "C-c n" `(lambda ()
                               (interactive)
-                              (find-file ,(concat org-directory "/all.org"))))
+                              (find-file ,(file-name-concat org-directory "all.org"))))
 (which-key-add-key-based-replacements
   "C-c a" "org-agenda"
   "C-c c" "org-capture"
