@@ -1,6 +1,8 @@
 ;; -*- lexical-binding: t; -*-
 
-;; detect host system
+;;; COMMON SETUP
+
+;;;; host detection
 (let ((aa/host (cond
                 ((and (eq system-type 'gnu/linux)
                       (string-match "-[Mm]icrosoft" operating-system-release))
@@ -14,9 +16,44 @@
   (defun aa/wsl-p ()
     (eq aa/host 'wsl)))
 
-                                        ;
-                                        ; UI
-                                        ;
+;;;; use-package
+(with-eval-after-load 'package
+  (progn
+    (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+    (package-initialize)))
+
+(require 'use-package)
+(setq use-package-always-ensure t)
+
+;;;; theme reload helpers
+(defvar aa/before-load-theme-hook nil
+  "Hooks to run before calling load-theme.")
+(defvar aa/after-load-theme-hook nil
+  "Hooks run after calling load-theme.")
+
+(advice-add
+ 'load-theme
+ :before
+ #'(lambda (&rest load-theme-args)
+     (run-hooks 'aa/before-load-theme-hook)))
+
+(advice-add
+ 'load-theme
+ :after
+ #'(lambda (&rest load-theme-args)
+     (run-hooks 'aa/after-load-theme-hook)))
+
+;; unload theme before switching
+(add-hook 'aa/before-load-theme-hook
+          #'(lambda () (mapc #'disable-theme custom-enabled-themes)))
+
+;;;; recompile packages
+(defun aa/recompile-all-packages nil
+  (interactive)
+  (message "recompiling elpa/ contents")
+  (native-compile-async (file-name-concat user-emacs-directory "elpa") t))
+
+;;; USER INTERFACE
 
 (when (fboundp 'tool-bar-mode)
   (tool-bar-mode -1))
@@ -43,7 +80,6 @@
 ;; default fonts
 (defun aa/set-default-faces ()
   (cond
-   ;; osx-specific setup
    (t (set-face-attribute 'default nil :font "Cascadia Code NF" :height 100))))
 
 (if (daemonp)
@@ -51,17 +87,12 @@
               (lambda (f) (with-selected-frame f (aa/set-default-faces))))
   (aa/set-default-faces))
 
-;; only spaces
-(setq-default indent-tabs-mode nil)
-
 ;; beep -> visual bell
 (setopt ring-bell-function nil)
-(setopt visible-bell t)
+(setopt visible-bell nil)
 
 ;; name buffers with same files with / paths
 (setopt uniquify-buffer-name-style 'forward)
-
-
 
 ;; show line and column numbers in prog-mode
 (add-hook 'prog-mode-hook #'column-number-mode)
@@ -74,37 +105,23 @@
 (setopt default-input-method "russian-computer")
 
 ;; minibuffers inside minibuffers
-(setopt enable-recursive-minibuffers t)
+;; (setopt enable-recursive-minibuffers t)
 ;; recommemded with the above set up
-(minibuffer-depth-indicate-mode)
+;; (minibuffer-depth-indicate-mode)
 
 ;; hide commands in M-x that do not apply in current mode
 ;; if no completion-predicate is specified for command then
 ;; predicate is true when command is applicable to major or any of minor modes
 (setopt read-extended-command-predicate #'command-completion-default-include-p)
 
-;; ignore custom
-(setopt custom-file (file-name-concat user-emacs-directory "ignored-custom.el"))
-
-;; add final newline on save
-(setopt require-final-newline t)
-
-;; backup files
-(unless backup-directory-alist
-  (setopt backup-directory-alist `(("." . ,(file-name-concat user-emacs-directory "backups")))))
-(setopt backup-by-copying t)
-
-;; enable recent files list
-(recentf-mode)
-
-;; save cursor location on exit
-(save-place-mode)
-
-;; save minibuffer history
-(savehist-mode)
-
 ;; prompt y/n stuff in emacs rather than in dialogue boxes
 (setopt use-dialog-box nil)
+
+;; enter gpg password in echo area
+(setopt epg-pinentry-mode 'loopback)
+;; workaround for gpg getting stuck
+;; this may have side-effects. If so, downgrading to GnuPG 2.4.0 should help
+(fset 'epg-wait-for-status 'ignore)
 
 ;; autorevert buffers for changed files
 (global-auto-revert-mode)
@@ -115,55 +132,7 @@
 (setopt cursor-type 'bar)
 (setopt cursor-in-non-selected-windows 'hollow)
 
-;; (info "(emacs)Killing by Lines")
-;; C-k acts as vim dd and kills newline too
-(setopt kill-whole-line t)
-
-;; repeat actions without modifiers for some commands
-(repeat-mode)
-
-;; undo/redo window configuration changes with C-c left/right
-(winner-mode)
-
-                                        ; encryption
-(require 'epa-file)
-(setopt epg-pinentry-mode 'loopback)
-(epa-file-enable)
-;; workaround for gpg getting stuck
-;; this may have side-effects. If so, downgrading to GnuPG 2.4.0 should help
-(fset 'epg-wait-for-status 'ignore)
-
-
-                                        ; PACKAGES
-(with-eval-after-load 'package
-  (progn
-    (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                             ("org" . "https://orgmode.org/elpa/")
-                             ("elpa" . "https://elpa.gnu.org/packages/")))
-    (package-initialize)))
-
-(require 'use-package)
-(setq use-package-always-ensure t)
-
-;; dired
-(use-package dired
-  :ensure nil
-  :commands (dired dired-jump)
-  :config
-  (add-hook 'dired-mode-hook (lambda () (dired-omit-mode 1)))
-  :custom
-  ;; NOTE: these require GNU ls
-  (dired-listing-switches "-agho --group-directories-first"))
-
-(with-eval-after-load 'dired
-  (require 'dired-x)
-  ;; Set dired-x global variables here.  For example:
-  ;; (setq dired-x-hands-off-my-keys nil)
-  ;; dired cd with 'a' to reuse buffer
-  ;; NOTE: this kills existing dired buffer so current directory is lost in dired
-  (put 'dired-find-alternate-file 'disabled nil))
-
-;; ui tweaks
+;; smoother scrolling
 (use-package ultra-scroll
   :vc (:url "https://github.com/jdtsmith/ultra-scroll")
   :init
@@ -173,42 +142,24 @@
   (ultra-scroll-mode 1))
 
 ;; highlight cursor
-(setq aa/pulsar-pulse-after
-      '(other-window
-        next-multiframe-window))
-
 (use-package pulsar
-  ;; load after evil due to advice-add
+  ;; load after ace-window to advice-add
+  :after ace-window
   :commands pulsar-pulse-line
   :config
   (pulsar-global-mode 1)
+  (let ((aa/pulsar-pulse-after
+         '(other-window
+           next-multiframe-window
+           ace-window)))
+    (dolist (f aa/pulsar-pulse-after)
+      (advice-add f :after #'(lambda (&rest args) (pulsar-pulse-line))))))
 
-  (dolist (f aa/pulsar-pulse-after)
-    (advice-add f :after #'(lambda (&rest args) (pulsar-pulse-line)))))
-
-;; show current key in the modeline
+;; show current key in the header
 (use-package keycast
   :init (keycast-header-line-mode))
 
-;; ui colors
-(defvar aa/before-load-theme-hook nil
-  "Hooks to run before calling load-theme.")
-
-(advice-add
- 'load-theme
- :before
- #'(lambda (&rest load-theme-args)
-     (run-hooks 'aa/before-load-theme-hook)))
-
-(defvar aa/after-load-theme-hook nil
-  "Hooks run after calling load-theme.")
-
-(advice-add
- 'load-theme
- :after
- #'(lambda (&rest load-theme-args)
-     (run-hooks 'aa/after-load-theme-hook)))
-
+;;;; color themes
 (use-package ef-themes)
 (use-package doric-themes)
 (use-package solarized-theme)
@@ -233,38 +184,91 @@
           default))
 
 (cond
- ((aa/work-p) (setq aa/light-theme 'doric-marble
-                    aa/dark-theme 'doric-marble))
  (t (setq aa/light-theme 'solarized-dark
-                           aa/dark-theme 'base16-tokyodark)))
+          aa/dark-theme 'base16-tokyodark)))
 
 ;; use https://git.sr.ht/~grtcdr/darkman.el
 ;; to integrate with https://darkman.whynothugo.nl/
+(use-package darkman
+  :if (and (aa/home-p) (file-exists-p "/usr/bin/darkman"))
+  :custom
+  (darkman-themes `(:light ,aa/light-theme :dark ,aa/dark-theme))
+  :config
+  (darkman-mode))
 
-(if (and (aa/home-p) (file-exists-p "/usr/bin/darkman"))
-    (use-package darkman
-      :config
-      (setq darkman-themes `(:light ,aa/light-theme :dark ,aa/dark-theme))
-      (darkman-mode))
-  ;; otherwise fallback to simpler solutions
-  (cond
-   ((> (decoded-time-hour (decode-time)) 20) (load-theme aa/dark-theme t))
-   (t (load-theme aa/light-theme t))))
+;;; invisible things
 
-;; reset themes when switching
-(add-hook 'aa/before-load-theme-hook
-          #'(lambda nil (mapc #'disable-theme custom-enabled-themes)))
+;; ignore custom
+(setopt custom-file (file-name-concat user-emacs-directory "ignored-custom.el"))
 
-                                        ;
-                                        ; C O M P L E T I O N S
-                                        ;
+;; only spaces
+(setq-default indent-tabs-mode nil)
+
+;; add final newline on save
+(setopt require-final-newline t)
+
+;; backup files
+(unless backup-directory-alist
+  (setopt backup-directory-alist `(("." . ,(file-name-concat user-emacs-directory "backups")))))
+(setopt backup-by-copying t)
+
+;; enable recent files list
+(recentf-mode)
+
+;; save cursor location on exit
+(save-place-mode)
+
+;; save minibuffer history
+(savehist-mode)
+
+;; (info "(emacs)Killing by Lines")
+;; C-k acts as vim dd and kills newline too
+(setopt kill-whole-line t)
+
+;; repeat actions without modifiers for some commands
+(repeat-mode)
+
+;; undo/redo window configuration changes with C-c left/right
+(winner-mode)
+
+(use-package ace-window
+  :commands ace-window
+  :custom
+  (aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
+
+;;; dired
+(use-package dired
+  :ensure nil
+  :commands (dired dired-jump)
+  :config
+  (add-hook 'dired-mode-hook (lambda () (dired-omit-mode 1)))
+  :custom
+  ;; NOTE: these require GNU ls
+  (dired-listing-switches "-agho --group-directories-first"))
+
+(with-eval-after-load 'dired
+  (require 'dired-x)
+  ;; Set dired-x global variables here.  For example:
+  ;; (setq dired-x-hands-off-my-keys nil)
+  ;; dired cd with 'a' to reuse buffer
+  ;; NOTE: this kills existing dired buffer so current directory is lost in dired
+  (put 'dired-find-alternate-file 'disabled nil))
+
+
+;;;; completions
 
 ;; ;; TODO: replace corfu
 ;; ;; enable completion preview in prog-mode
 ;; ;; cf. https://www.gnu.org/software/emacs/manual/html_node/emacs/Symbol-Completion.html#Symbol-Completion
 ;; (add-hook 'prog-mode-hook #'completion-preview-mode)
 
-                                        ; minibuffer
+;;;;; common settings
+(setopt read-file-name-completion-ignore-case t
+        read-buffer-completion-ignore-case t
+        ;; disable dictionary word completion in text modes
+        text-mode-ispell-word-completion nil)
+
+;;;;; minibuffer
 
 ;; vertico (frontend / UI)
 ;; changes default completion buffer to vertical scrollable thing
@@ -272,20 +276,15 @@
   :init
   (vertico-mode))
 
+;;;;; marginalia
+
 ;; marginalia provides marninalia info to completions in minibuffer
 ;; annotations are per-category
 (use-package marginalia
   :init
   (marginalia-mode))
 
-;; ignore case for file name completions
-(setopt read-file-name-completion-ignore-case t
-        read-buffer-completion-ignore-case t
-        ;; disable dictionary word completion in text modes
-        text-mode-ispell-word-completion nil)
-
-
-                                        ; in-buffer
+;;;;; in-buffer
 
 ;; corfu (frontend / UI)
 ;; completion-at-point (e.g. when writing code)
@@ -302,7 +301,7 @@
   :init
   (global-corfu-mode))
 
-;; cape
+;;;;; cape
 ;; suite of completion-at-point functions
 ;; use prefix map for now
 (use-package cape
@@ -310,7 +309,8 @@
   :init
   (add-hook 'completion-at-point-functions #'cape-file))
 
-;; orderless (style)
+;;;;; style
+;; orderless
 ;; decides how to match completion candidates
 (use-package orderless
   :custom
@@ -318,16 +318,15 @@
   (completion-category-overrides
    '((file (styles basic partial-completion)))))
 
-;;
-
-;; completing-read
+;;;;; completing-read
+;; consult
 (use-package consult
   :commands (consult-line
              consult-ripgrep
              consult-outline
              consult-buffer))
 
-;; richer help
+;;;; richer help
 (use-package helpful
   :bind
   ([remap describe-function] . helpful-callable)
@@ -335,9 +334,7 @@
   ([remap describe-variable] . helpful-variable)
   ([remap describe-key] . helpful-key))
 
-                                        ;
-                                        ; O R G
-                                        ;
+;;; O R G
 
 (cond
  ;; osx-specific stuff goes here
@@ -355,7 +352,7 @@
   ;; and https://zzamboni.org/post/beautifying-org-mode-in-emacs/
   (let* (
          ;;
-         (font-height aa/org-font-height)
+        (font-height aa/org-font-height)
          ;; variable-width font setup
          (variable-tuple
           (cond
@@ -529,10 +526,6 @@
                                         ; C O D I N G
                                         ;
 
-;; rainbow delims
-(use-package rainbow-delimiters
-  :hook (prog-mode . rainbow-delimiters-mode))
-
 ;; slime
 (if (file-exists-p "/usr/bin/sbcl")
     (use-package slime
@@ -549,10 +542,6 @@
   (require 'smartparens-config)
   :custom
   (sp-base-key-bindings 'sp "set smartparens bindings"))
-
-;; ElDoc support
-;; (this shows fn arguments in echo)
-(use-package eldoc)
 
 ;; dts-mode
 (use-package dts-mode
@@ -622,6 +611,8 @@
 ;; let project.el recognize python project roots
 (add-to-list 'project-vc-extra-root-markers "pyproject.toml")
 
+;; TODO: consider beam for extra project support
+;; https://github.com/rpav/beam.el
 
                                         ;
                                         ; T E R M
@@ -651,13 +642,6 @@
   (require 'eev-load)
   (eev-mode 1))
 
-;; TODO: consider beam for extra project support
-;; https://github.com/rpav/beam.el
-
-(use-package ace-window
-  :commands ace-window
-  :custom
-  (aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
 
 ;; preload org-mode
 (with-temp-buffer (org-mode))
@@ -665,13 +649,9 @@
                                         ;
                                         ; K E Y M A P S
                                         ;
+;;; KEYMAPS
 
-;; bind C-SPC to activate leader map (note: this overrides mark set)
-(defvar aa/leader-map (make-sparse-keymap) "Normal state leader map")
-(keymap-global-set "C-c SPC" aa/leader-map)
-
-                                        ; dired
-
+;;;; dired
 (defvar aa/leader-map-dired (make-sparse-keymap) "SPC d: Dired")
 (keymap-global-set "C-c d" aa/leader-map-dired)
 (define-key aa/leader-map-dired (kbd "d") #'dired)
@@ -682,12 +662,12 @@
   "C-c d j" "dired-jump"
   "C-c d d" "open dired")
 
-                                        ; pulsar
-
+;;;; pulsar
 (keymap-global-set "C-c SPC" #'pulsar-pulse-line)
+(which-key-add-key-based-replacements
+  "C-c SPC" "pulse current line")
 
-                                        ; org
-
+;;; org
 (keymap-global-set "C-c a" #'org-agenda)
 (keymap-global-set "C-c c" #'org-capture)
 (keymap-global-set "C-c l" #'org-store-link)
@@ -700,14 +680,12 @@
   "C-c l" "org-store-link"
   "C-c n" "open notes")
 
-                                        ; org-journal
-
+;;;; org-journal
 (keymap-global-set "C-c j" #'org-journal-new-entry)
 (which-key-add-key-based-replacements
   "C-c j" "journal")
 
-                                        ; org-roam (work only)
-
+;;;; org-roam (work)
 (if (aa/work-p)
     (progn
       (defvar aa/leader-map-org-roam (make-sparse-keymap) "SPC r: org-roam")
@@ -738,8 +716,7 @@
         "C-c r d p" "previous note"
         "C-c r d n" "next note")))
 
-                                        ; consult
-
+;;;; consult
 (keymap-global-set "C-c f" #'consult-line)
 (keymap-global-set "C-c g" #'consult-ripgrep)
 (keymap-global-set "C-c o" #'consult-outline)
@@ -750,19 +727,10 @@
   "C-c o" "search outline"
   "C-c b" "select buffer")
 
-                                        ; cape
-
+;;;; cape
 (keymap-global-set "C-c p" #'cape-prefix-map)
 
-                                        ; package management
-
-(defun aa/recompile-all-packages nil
-  (interactive)
-  (message "recompiling elpa/ contents")
-  (native-compile-async (file-name-concat user-emacs-directory "elpa") t))
-
-                                        ; window management
-
+;;;; window management
 (defvar aa/leader-map-windows (make-sparse-keymap) "SPC w: window management")
 (keymap-global-set "C-c w" aa/leader-map-windows)
 (which-key-add-key-based-replacements
@@ -772,21 +740,23 @@
 (which-key-add-key-based-replacements
   "C-c w o" "next window")
 ;; ace-window
-(keymap-global-set "C-x o" #'ace-window)
+(keymap-set aa/leader-map-windows "a" #'ace-window)
 (which-key-add-key-based-replacements
-  "C-x o" "ace-window")
+  "C-c w o" "ace-window")
 
-                                        ; terminal
-
+;;;; terminal
 (keymap-global-set "C-c s" #'eshell)
 (which-key-add-key-based-replacements
   "C-c s" "eshell")
+(keymap-global-set "C-c v" #'vterm)
+(which-key-add-key-based-replacements
+  "C-c v" "vterm")
 
-;; swap regex and standard search keymaps
+;;;; isearch regexp
 (keymap-global-set "C-s" #'isearch-forward-regexp)
 (keymap-global-set "C-r" #'isearch-backward-regexp)
 (keymap-global-set "C-M-s" #'isearch-forward)
 (keymap-global-set "C-M-r" #'isearch-backward)
 
-;; search for things that are customizable by C-h u
+;;;; apropos user options
 (keymap-global-set "C-h u" #'apropos-user-option)
