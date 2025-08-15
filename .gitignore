@@ -1,27 +1,63 @@
+# -*- mode: gitignore; -*-
 *~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
 *.elc
-places*
-auto-save-list/
-transient/
-bookmarks
-eln-cache/
-parinfer-rust/
-tree-sitter/
-url/
-ede-projects.el
-projectile-bookmarks.eld
-elpa
-custom.el
-eshell/
+auto-save-list
 tramp
-org-roam.db
-straight/
-!straight/versions/default.el
-3rdparty/
-backups/
-local-settings.el
+.\#*
+
+# Org-mode
 .org-id-locations
-ielm-history.eld
+*_archive
+
+# flymake-mode
+*_flymake.*
+
+# eshell files
+/eshell/history
+/eshell/lastdir
+
+# elpa packages
+/elpa/
+
+# reftex files
+*.rel
+
+# AUCTeX auto folder
+/auto/
+
+# cask packages
+.cask/
+dist/
+
+# Flycheck
+flycheck_*.el
+
+# server auth directory
+/server/
+
+# projectiles files
+.projectile
+
+# directory configuration
+.dir-locals.el
+
+# network security
+/network-security.data
+
+# undo-tree
+*.~undo-tree~
+
+## END OF EXTERNAL IGNORE
+
+eln-cache/
+history
+ignored-custom.el
+org-roam.db
+places
 projects
-racket-mode/
 recentf
+transient/
+tree-sitter/

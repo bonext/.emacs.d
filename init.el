@@ -13,48 +13,62 @@
     (eq aa/host 'work))
   (defun aa/wsl-p ()
     (eq aa/host 'wsl)))
+
+                                        ;
                                         ; UI
+                                        ;
 
-;; start to scratch
-(setopt inhibit-startup-message t)
-;; disable tool bar (it causes glitches on wayland)
-(tool-bar-mode -1)
-;; disable menu
-(menu-bar-mode -1)
-;; disable scroll bars
-(scroll-bar-mode -1)
-;; TODO: research
-(set-fringe-mode 10)
-;; TODO: research
-(tooltip-mode -1)
-;; default fonts
-(defun aa/set-default-fonts ()
-  (cond
-   ;; osx-specific setup
-   (t (set-face-attribute 'default nil :font "Cascadia Code NF" :height 100))))
-(if (daemonp)
-    (add-hook 'after-make-frame-functions
-              (lambda (f) (with-selected-frame f (aa/set-default-fonts))))
-  (aa/set-default-fonts))
-
+(when (fboundp 'tool-bar-mode)
+  (tool-bar-mode -1))
+(when (fboundp 'menu-bar-mode)
+  (menu-bar-mode -1))
+(when (fboundp 'scroll-bar-mode)
+  (scroll-bar-mode -1))
 ;; remove window titlebar
 (if (aa/home-p)
     (add-to-list 'default-frame-alist '(undecorated . t)))
+;; allow more space around the sides
+(when (fboundp 'set-fringe-mode)
+   (set-fringe-mode 10))
+;; move tooltips to echo area
+(when (fboundp 'tooltip-mode)
+  (tooltip-mode -1))
+
+;; show keybindings info
+(which-key-mode)
+
+;; start to scratch
+(setopt inhibit-startup-message t)
+
+;; default fonts
+(defun aa/set-default-faces ()
+  (cond
+   ;; osx-specific setup
+   (t (set-face-attribute 'default nil :font "Cascadia Code NF" :height 100))))
+
+(if (daemonp)
+    (add-hook 'after-make-frame-functions
+              (lambda (f) (with-selected-frame f (aa/set-default-faces))))
+  (aa/set-default-faces))
 
 ;; only spaces
 (setq-default indent-tabs-mode nil)
 
 ;; beep -> visual bell
-(setopt ring-bell-function 'ignore)
+(setopt ring-bell-function nil)
 (setopt visible-bell t)
 
-;; line numbers
-(column-number-mode)
-(global-display-line-numbers-mode t)
-;; disable line numbers for certain modes
-(dolist (mode '(eshell-mode-hook
-                org-mode-hook))
-  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+;; name buffers with same files with / paths
+(setopt uniquify-buffer-name-style 'forward)
+
+
+
+;; show line and column numbers in prog-mode
+(add-hook 'prog-mode-hook #'column-number-mode)
+(add-hook 'prog-mode-hook #'display-line-numbers-mode)
+
+;; highlight matching parens
+(add-hook 'prog-mode-hook #'show-paren-mode)
 
 ;; add russian as C-\ bind
 (setopt default-input-method "russian-computer")
@@ -67,29 +81,34 @@
 ;; hide commands in M-x that do not apply in current mode
 ;; if no completion-predicate is specified for command then
 ;; predicate is true when command is applicable to major or any of minor modes
-;; cf. https://www.gnu.org/software/emacs/manual/html_node/elisp/Setting-Variables.html#index-setopt
-;; (setopt read-extended-command-predicate #'command-completion-default-include-p)
+(setopt read-extended-command-predicate #'command-completion-default-include-p)
 
-;; customize to file
-(setopt custom-file (concat user-emacs-directory "custom.el"))
-(load custom-file 'noerror 'nomessage)
+;; ignore custom
+(setopt custom-file (expand-file-name "ignored-custom.el" user-emacs-directory))
+
+;; add final newline on save
+(setopt require-final-newline t)
 
 ;; backup files
-(setopt backup-by-copying t)
 (unless backup-directory-alist
   (setopt backup-directory-alist `(("." . ,(concat user-emacs-directory "backups")))))
+(setopt backup-by-copying t)
 
 ;; enable recent files list
-(recentf-mode 1)
+(recentf-mode)
 
 ;; save cursor location on exit
-(save-place-mode 1)
+(save-place-mode)
+
+;; save minibuffer history
+(savehist-mode)
 
 ;; prompt y/n stuff in emacs rather than in dialogue boxes
 (setopt use-dialog-box nil)
 
 ;; autorevert buffers for changed files
-(global-auto-revert-mode 1)
+(global-auto-revert-mode)
+;; auto-refresh dired too
 (setopt global-auto-revert-non-file-buffers t)
 
 ;; vertical bar cursor in active frame/window/(mini)buffer
@@ -100,8 +119,12 @@
 ;; C-k acts as vim dd and kills newline too
 (setopt kill-whole-line t)
 
-;;
-(repeat-mode 1)
+;; repeat actions without modifiers for some commands
+(repeat-mode)
+
+;; undo/redo window configuration changes with C-c left/right
+(winner-mode)
+
                                         ; encryption
 (require 'epa-file)
 (setopt epg-pinentry-mode 'loopback)
@@ -121,10 +144,6 @@
 
 (require 'use-package)
 (setq use-package-always-ensure t)
-
-;; diminish hides modes from modeline
-;; requires for `:diminish` keyword in use-package
-(use-package diminish) 
 
 ;; dired
 (use-package dired
@@ -219,11 +238,14 @@
 (add-hook 'aa/before-load-theme-hook
           #'(lambda nil (mapc #'disable-theme custom-enabled-themes)))
 
-;; completions
-                                        ; emacs built-in
+                                        ;
+                                        ; C O M P L E T I O N S
+                                        ;
 
-;; disable ispell completion
-(setopt text-mode-ispell-word-completion nil)
+;; ;; TODO: replace corfu
+;; ;; enable completion preview in prog-mode
+;; ;; cf. https://www.gnu.org/software/emacs/manual/html_node/emacs/Symbol-Completion.html#Symbol-Completion
+;; (add-hook 'prog-mode-hook #'completion-preview-mode)
 
                                         ; minibuffer
 
@@ -240,7 +262,10 @@
   (marginalia-mode))
 
 ;; ignore case for file name completions
-(setopt read-file-name-completion-ignore-case t)
+(setopt read-file-name-completion-ignore-case t
+        read-buffer-completion-ignore-case t
+        ;; disable dictionary word completion in text modes
+        text-mode-ispell-word-completion nil)
 
 
                                         ; in-buffer
@@ -287,7 +312,6 @@
 
 ;; richer help
 (use-package helpful
-  :diminish
   :bind
   ([remap describe-function] . helpful-callable)
   ([remap describe-command] . helpful-command)
@@ -630,16 +654,6 @@
                                         ; K E Y M A P S
                                         ;
 
-;; show help on key prefix after `which-key-idle-delay` seconds
-(use-package which-key
-  :init (which-key-mode)
-  :diminish which-key-mode
-  :config
-  (setq which-key-idle-delay 0.3))
-
-;; Make ESC quit prompts
-;; (keymap-global-set "<escape>" #'keyboard-escape-quit)
-
 ;; bind C-SPC to activate leader map (note: this overrides mark set)
 (defvar aa/leader-map (make-sparse-keymap) "Normal state leader map")
 (keymap-global-set "C-c SPC" aa/leader-map)
@@ -755,3 +769,12 @@
 (keymap-global-set "C-c s" #'eshell)
 (which-key-add-key-based-replacements
   "C-c s" "eshell")
+
+;; swap regex and standard search keymaps
+(keymap-global-set "C-s" #'isearch-forward-regexp)
+(keymap-global-set "C-r" #'isearch-backward-regexp)
+(keymap-global-set "C-M-s" #'isearch-forward)
+(keymap-global-set "C-M-r" #'isearch-backward)
+
+;; search for things that are customizable by C-h u
+(keymap-global-set "C-h u" #'apropos-user-option)
