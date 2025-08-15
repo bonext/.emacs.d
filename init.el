@@ -359,17 +359,12 @@
          ;; variable-width font setup
          (variable-tuple
           (cond
-           ((x-list-fonts "PT Sans") `(:family "PT Sans" :height ,font-height))
-           ((x-list-fonts "Source Sans Pro") `(:family "Source Sans Pro" :height ,font-height))
-           ((x-list-fonts "IBM Plex Sans") `(:family "IBM Plex Sans" :height ,font-height))))
+           ((x-list-fonts "PT Sans") `(:family "PT Sans" :height ,font-height))))
          ;; fixed-width font setup
          (fixed-tuple
           (cond
-           ((x-list-fonts "Cascadia Code NF") '(:family "Cascadia Code NF"))
-           ((x-list-fonts "Fira Code Retina") '(:family "Fira Code Retina"))
-           ((x-list-fonts "Adobe Source Pro") '(:family "Adobe Source Pro"))
-           ((x-list-fonts "IBM Plex Mono") '(:family "IBM Plex Mono"))
-           ((x-list-fonts "PT Mono") '(:family "PT Mono"))))
+           ((x-list-fonts "PT Mono") '(:family "PT Mono"))
+           ((x-list-fonts "Cascadia Code NF") '(:family "Cascadia Code NF"))))
          ;; store default font color to reset headlines
          (base-font-color (face-foreground 'default nil 'default))
          ;; store some settings for headlines
