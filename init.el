@@ -1,22 +1,39 @@
 ;; -*- lexical-binding: t; -*-
 
-;;; COMMON SETUP
+;;; configurable variables
 
-;;;; host detection
-(let ((aa/host (cond
-                ((and (eq system-type 'gnu/linux)
-                      (string-match "-[Mm]icrosoft" operating-system-release))
-                 'wsl)
-                ((eq system-type 'darwin) 'work)
-                (t 'home))))
-  (defun aa/home-p ()
-    (eq aa/host 'home))
-  (defun aa/work-p ()
-    (eq aa/host 'work))
-  (defun aa/wsl-p ()
-    (eq aa/host 'wsl)))
+(defvar aa-face-default-name "Cascadia Code NF")
+(defvar aa-face-default-height 100)
+(defvar aa-dark-theme 'base16-tokyodark)
+(defvar aa-light-theme 'solarized-dark)
 
-;;;; use-package
+(defvar aa-face-org-height 140)
+(defvar aa-org-directory "~/Documents/Notes")
+(defvar aa-org-journal-directory "~/Documents/journal")
+(defvar aa-org-roam-directory "~/Documents/RoamNotes")
+
+;;; exposed hooks
+
+(defvar aa-before-load-theme-hook nil
+  "Hooks to run before calling load-theme.")
+(defvar aa-after-load-theme-hook nil
+  "Hooks run after calling load-theme.")
+
+;;; implementation
+
+(let ((aa-host
+       (cond ((and (eq system-type 'gnu/linux)
+                   (string-match "-[Mm]icrosoft" operating-system-release))
+              'wsl)
+             ((eq system-type 'darwin) 'work)
+             (t 'home))))
+  (defun aa-home-p ()
+    (eq aa-host 'home))
+  (defun aa-work-p ()
+    (eq aa-host 'work))
+  (defun aa-wsl-p ()
+    (eq aa-host 'wsl)))
+
 (with-eval-after-load 'package
   (progn
     (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
@@ -25,35 +42,26 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
-;;;; theme reload helpers
-(defvar aa/before-load-theme-hook nil
-  "Hooks to run before calling load-theme.")
-(defvar aa/after-load-theme-hook nil
-  "Hooks run after calling load-theme.")
-
 (advice-add
  'load-theme
  :before
  #'(lambda (&rest load-theme-args)
-     (run-hooks 'aa/before-load-theme-hook)))
+     (run-hooks 'aa-before-load-theme-hook)))
 
 (advice-add
  'load-theme
  :after
  #'(lambda (&rest load-theme-args)
-     (run-hooks 'aa/after-load-theme-hook)))
+     (run-hooks 'aa-after-load-theme-hook)))
 
 ;; unload theme before switching
-(add-hook 'aa/before-load-theme-hook
+(add-hook 'aa-before-load-theme-hook
           #'(lambda () (mapc #'disable-theme custom-enabled-themes)))
 
-;;;; recompile packages
-(defun aa/recompile-all-packages nil
+(defun aa-recompile-all-packages nil
   (interactive)
   (message "recompiling elpa/ contents")
   (native-compile-async (file-name-concat user-emacs-directory "elpa") t))
-
-;;; USER INTERFACE
 
 (when (fboundp 'tool-bar-mode)
   (tool-bar-mode -1))
@@ -62,11 +70,11 @@
 (when (fboundp 'scroll-bar-mode)
   (scroll-bar-mode -1))
 ;; remove window titlebar
-(if (aa/home-p)
+(if (aa-home-p)
     (add-to-list 'default-frame-alist '(undecorated . t)))
 ;; allow more space around the sides
 (when (fboundp 'set-fringe-mode)
-   (set-fringe-mode 10))
+  (set-fringe-mode 10))
 ;; move tooltips to echo area
 (when (fboundp 'tooltip-mode)
   (tooltip-mode -1))
@@ -78,14 +86,13 @@
 (setopt inhibit-startup-message t)
 
 ;; default fonts
-(defun aa/set-default-faces ()
-  (cond
-   (t (set-face-attribute 'default nil :font "Cascadia Code NF" :height 100))))
+(defun aa-set-default-faces ()
+  (set-face-attribute 'default nil :font aa-face-default-name :height aa-face-default-height))
 
 (if (daemonp)
     (add-hook 'after-make-frame-functions
-              (lambda (f) (with-selected-frame f (aa/set-default-faces))))
-  (aa/set-default-faces))
+              (lambda (f) (with-selected-frame f (aa-set-default-faces))))
+  (aa-set-default-faces))
 
 ;; beep -> visual bell
 (setopt ring-bell-function nil)
@@ -148,18 +155,17 @@
   :commands pulsar-pulse-line
   :config
   (pulsar-global-mode 1)
-  (let ((aa/pulsar-pulse-after
+  (let ((aa-pulsar-pulse-after
          '(other-window
            next-multiframe-window
            ace-window)))
-    (dolist (f aa/pulsar-pulse-after)
+    (dolist (f aa-pulsar-pulse-after)
       (advice-add f :after #'(lambda (&rest args) (pulsar-pulse-line))))))
 
 ;; show current key in the header
 (use-package keycast
   :init (keycast-header-line-mode))
 
-;;;; color themes
 (use-package ef-themes)
 (use-package doric-themes)
 (use-package solarized-theme)
@@ -183,22 +189,15 @@
           "a40703f9d1adb7ee1500d3c33ac4d62144675505ae7fe98b18a5d9ff325ee369"
           default))
 
-(cond
- (t (setq aa/light-theme 'solarized-dark
-          aa/dark-theme 'base16-tokyodark)))
-
 ;; use https://git.sr.ht/~grtcdr/darkman.el
 ;; to integrate with https://darkman.whynothugo.nl/
 (use-package darkman
-  :if (and (aa/home-p) (file-exists-p "/usr/bin/darkman"))
-  :custom
-  (darkman-themes `(:light ,aa/light-theme :dark ,aa/dark-theme))
+  :if (and (aa-home-p) (file-exists-p "/usr/bin/darkman"))
   :config
+  (setopt darkman-themes `(:light ,aa-light-theme :dark ,aa-dark-theme))
   (darkman-mode))
 
-;;; invisible things
-
-;; ignore custom
+;; Ignore custom
 (setopt custom-file (file-name-concat user-emacs-directory "ignored-custom.el"))
 
 ;; only spaces
@@ -236,7 +235,6 @@
   :custom
   (aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
 
-;;; dired
 (use-package dired
   :ensure nil
   :commands (dired dired-jump)
@@ -255,20 +253,16 @@
   (put 'dired-find-alternate-file 'disabled nil))
 
 
-;;;; completions
-
 ;; ;; TODO: replace corfu
 ;; ;; enable completion preview in prog-mode
 ;; ;; cf. https://www.gnu.org/software/emacs/manual/html_node/emacs/Symbol-Completion.html#Symbol-Completion
 ;; (add-hook 'prog-mode-hook #'completion-preview-mode)
 
-;;;;; common settings
 (setopt read-file-name-completion-ignore-case t
         read-buffer-completion-ignore-case t
         ;; disable dictionary word completion in text modes
         text-mode-ispell-word-completion nil)
 
-;;;;; minibuffer
 
 ;; vertico (frontend / UI)
 ;; changes default completion buffer to vertical scrollable thing
@@ -276,7 +270,6 @@
   :init
   (vertico-mode))
 
-;;;;; marginalia
 
 ;; marginalia provides marninalia info to completions in minibuffer
 ;; annotations are per-category
@@ -284,7 +277,6 @@
   :init
   (marginalia-mode))
 
-;;;;; in-buffer
 
 ;; corfu (frontend / UI)
 ;; completion-at-point (e.g. when writing code)
@@ -301,7 +293,6 @@
   :init
   (global-corfu-mode))
 
-;;;;; cape
 ;; suite of completion-at-point functions
 ;; use prefix map for now
 (use-package cape
@@ -309,7 +300,6 @@
   :init
   (add-hook 'completion-at-point-functions #'cape-file))
 
-;;;;; style
 ;; orderless
 ;; decides how to match completion candidates
 (use-package orderless
@@ -318,7 +308,6 @@
   (completion-category-overrides
    '((file (styles basic partial-completion)))))
 
-;;;;; completing-read
 ;; consult
 (use-package consult
   :commands (consult-line
@@ -326,21 +315,13 @@
              consult-outline
              consult-buffer))
 
-;;;; richer help
 (use-package helpful
-  :bind
-  ([remap describe-function] . helpful-callable)
-  ([remap describe-command] . helpful-command)
-  ([remap describe-variable] . helpful-variable)
-  ([remap describe-key] . helpful-key))
+  :commands (helpful-callable
+             helpful-command
+             helpful-variable
+             helpful-key))
 
-;;; O R G
-
-(cond
- ;; osx-specific stuff goes here
- (t (setq aa/org-font-height 140)))
-
-(defun aa/org-setup-fonts ()
+(defun aa-org-setup-fonts ()
   ;; Replace list hyphen with dot
   (font-lock-add-keywords
    'org-mode
@@ -352,7 +333,7 @@
   ;; and https://zzamboni.org/post/beautifying-org-mode-in-emacs/
   (let* (
          ;;
-        (font-height aa/org-font-height)
+         (font-height aa-face-org-height)
          ;; variable-width font setup
          (variable-tuple
           (cond
@@ -409,9 +390,9 @@
   (message "fonts reset DONE"))
 
 ;; hook this function to load-theme to avoid reloading emacs on theme switch
-(add-hook 'aa/after-load-theme-hook #'aa/org-setup-fonts)
+(add-hook 'aa-after-load-theme-hook #'aa-org-setup-fonts)
 
-(defun aa/org-common-hooks ()
+(defun aa-org-common-hooks ()
   (org-indent-mode)
   (variable-pitch-mode 1)
   (visual-line-mode 1))
@@ -420,7 +401,7 @@
   :commands (org-agenda
              org-capture
              org-store-link)
-  :hook (org-mode . aa/org-common-hooks)
+  :hook (org-mode . aa-org-common-hooks)
   :config
   (setq org-directory "~/Documents/Notes")
   (setq org-agenda-files `(,org-directory))
@@ -454,17 +435,17 @@
   (setq org-refile-use-outline-path t)
   ;; capture setup
   (setq org-default-notes-file (file-name-concat org-directory "captured.org"))
-  (setq aa/capture-templates-dir (file-name-concat user-emacs-directory "org-capture-templates"))
+  (setq aa-capture-templates-dir (file-name-concat user-emacs-directory "org-capture-templates"))
   (setq org-capture-templates
         `(("b" "book" entry
            (file ,(file-name-concat org-directory "finished-books.org"))
-           (file ,(file-name-concat aa/capture-templates-dir "book"))
+           (file ,(file-name-concat aa-capture-templates-dir "book"))
            :kill-buffer t)
           ("d" "mind dump" entry
            (file ,(file-name-concat org-directory "mind-dumps.org"))
-           (file ,(file-name-concat aa/capture-templates-dir "dump"))
+           (file ,(file-name-concat aa-capture-templates-dir "dump"))
            :prepend t :kill-buffer t)))
-  (aa/org-setup-fonts))
+  (aa-org-setup-fonts))
 
 (use-package org-bullets
   :after org
@@ -472,16 +453,16 @@
   :custom
   (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
 
-(defun aa/org-mode-visual-fill ()
+(defun aa-org-mode-visual-fill ()
   (setq visual-fill-column-width 100
-       visual-fill-column-center-text t)
- (visual-fill-column-mode 1))
+        visual-fill-column-center-text t)
+  (visual-fill-column-mode 1))
 
 (use-package visual-fill-column
-  :hook (org-mode . aa/org-mode-visual-fill))
+  :hook (org-mode . aa-org-mode-visual-fill))
 
 ;; org-journal
-(defun aa/org-journal-setup ()
+(defun aa-org-journal-setup ()
   ;; common steps
   (setq org-journal-dir "~/Documents/journal")
   ;; "2024-05-13, Monday"
@@ -494,19 +475,19 @@
    (t (progn
         (setq org-journal-file-type 'daily)
         (setq org-journal-encrypt-journal t)))))
-  
+
 (use-package org-journal
   :commands org-journal-new-entry
   :after org
   :init
-  (aa/org-journal-setup))
+  (aa-org-journal-setup))
 
 ;; TODO: research
 ;; support for image paste
 ;; https://github.com/abo-abo/org-download
 
 (use-package org-roam
-  :if (aa/work-p)
+  :if (aa-work-p)
   :commands (org-roam-node-find
              org-roam-capture
              org-roam-buffer-toggle
@@ -607,7 +588,7 @@
   ;; https://github.com/joaotavora/eglot/discussions/1393
   (setq eglot-ignored-server-capabilites
         (cons :documentOnTypeFormattingProvider
-                    eglot-ignored-server-capabilites)))
+              eglot-ignored-server-capabilites)))
 ;; let project.el recognize python project roots
 (add-to-list 'project-vc-extra-root-markers "pyproject.toml")
 
@@ -646,16 +627,12 @@
 ;; preload org-mode
 (with-temp-buffer (org-mode))
 
-                                        ;
-                                        ; K E Y M A P S
-                                        ;
-;;; KEYMAPS
-
+;;; keybindings
 ;;;; dired
-(defvar aa/leader-map-dired (make-sparse-keymap) "SPC d: Dired")
-(keymap-global-set "C-c d" aa/leader-map-dired)
-(define-key aa/leader-map-dired (kbd "d") #'dired)
-(define-key aa/leader-map-dired (kbd "j") #'dired-jump)
+(defvar aa-leader-map-dired (make-sparse-keymap) "SPC d: Dired")
+(keymap-global-set "C-c d" aa-leader-map-dired)
+(define-key aa-leader-map-dired (kbd "d") #'dired)
+(define-key aa-leader-map-dired (kbd "j") #'dired-jump)
 (which-key-add-key-based-replacements
   "C-c d" "dired")
 (which-key-add-key-based-replacements
@@ -667,7 +644,7 @@
 (which-key-add-key-based-replacements
   "C-c SPC" "pulse current line")
 
-;;; org
+;;;; org
 (keymap-global-set "C-c a" #'org-agenda)
 (keymap-global-set "C-c c" #'org-capture)
 (keymap-global-set "C-c l" #'org-store-link)
@@ -685,23 +662,23 @@
 (which-key-add-key-based-replacements
   "C-c j" "journal")
 
-;;;; org-roam (work)
-(if (aa/work-p)
+;;;; org-roam
+(if (aa-work-p)
     (progn
-      (defvar aa/leader-map-org-roam (make-sparse-keymap) "SPC r: org-roam")
-      (keymap-global-set "C-c r" aa/leader-map-org-roam)
-      (define-key aa/leader-map-org-roam (kbd "f") #'org-roam-node-find)
-      (define-key aa/leader-map-org-roam (kbd "c") #'org-roam-capture)
-      (define-key aa/leader-map-org-roam (kbd "l") #'org-roam-buffer-toggle)
-      (define-key aa/leader-map-org-roam (kbd "a") #'org-roam-alias-add)
+      (defvar aa-leader-map-org-roam (make-sparse-keymap) "SPC r: org-roam")
+      (keymap-global-set "C-c r" aa-leader-map-org-roam)
+      (define-key aa-leader-map-org-roam (kbd "f") #'org-roam-node-find)
+      (define-key aa-leader-map-org-roam (kbd "c") #'org-roam-capture)
+      (define-key aa-leader-map-org-roam (kbd "l") #'org-roam-buffer-toggle)
+      (define-key aa-leader-map-org-roam (kbd "a") #'org-roam-alias-add)
       ;; org-roam-dailies
-      (defvar aa/leader-map-org-roam-dailies (make-sparse-keymap) "SPC r d: org-roam dailies")
-      (define-key aa/leader-map-org-roam (kbd "d") aa/leader-map-org-roam-dailies)
-      (define-key aa/leader-map-org-roam-dailies (kbd "c") #'org-roam-dailies-capture-today)
-      (define-key aa/leader-map-org-roam-dailies (kbd "d") #'org-roam-dailies-goto-date)
-      (define-key aa/leader-map-org-roam-dailies (kbd "t") #'org-roam-dailies-goto-today)
-      (define-key aa/leader-map-org-roam-dailies (kbd "p") #'org-roam-dailies-goto-previous-note)
-      (define-key aa/leader-map-org-roam-dailies (kbd "n") #'org-roam-dailies-goto-next-note)
+      (defvar aa-leader-map-org-roam-dailies (make-sparse-keymap) "SPC r d: org-roam dailies")
+      (define-key aa-leader-map-org-roam (kbd "d") aa-leader-map-org-roam-dailies)
+      (define-key aa-leader-map-org-roam-dailies (kbd "c") #'org-roam-dailies-capture-today)
+      (define-key aa-leader-map-org-roam-dailies (kbd "d") #'org-roam-dailies-goto-date)
+      (define-key aa-leader-map-org-roam-dailies (kbd "t") #'org-roam-dailies-goto-today)
+      (define-key aa-leader-map-org-roam-dailies (kbd "p") #'org-roam-dailies-goto-previous-note)
+      (define-key aa-leader-map-org-roam-dailies (kbd "n") #'org-roam-dailies-goto-next-note)
       (keymap-set org-mode-map "C-c i" #'org-roam-node-insert)
       (which-key-add-key-based-replacements
         "C-c r" "org-roam"
@@ -730,21 +707,28 @@
 ;;;; cape
 (keymap-global-set "C-c p" #'cape-prefix-map)
 
+;;;; helpful
+;; (info "(elisp)Remapping Commands")
+(keymap-global-set "<remap> <describe-function>" #'helpful-callable)
+(keymap-global-set "<remap> <describe-command>" #'helpful-command)
+(keymap-global-set "<remap> <describe-variable>" #'helpful-variable)
+(keymap-global-set "<remap> <describe-key>" #'helpful-key)
+
 ;;;; window management
-(defvar aa/leader-map-windows (make-sparse-keymap) "SPC w: window management")
-(keymap-global-set "C-c w" aa/leader-map-windows)
+(defvar aa-leader-map-windows (make-sparse-keymap) "SPC w: window management")
+(keymap-global-set "C-c w" aa-leader-map-windows)
 (which-key-add-key-based-replacements
   "C-c w" "window management")
 ;; switch to other window even in a different frame
-(keymap-set aa/leader-map-windows "o" #'next-multiframe-window)
+(keymap-set aa-leader-map-windows "o" #'next-multiframe-window)
 (which-key-add-key-based-replacements
   "C-c w o" "next window")
 ;; ace-window
-(keymap-set aa/leader-map-windows "a" #'ace-window)
+(keymap-set aa-leader-map-windows "a" #'ace-window)
 (which-key-add-key-based-replacements
-  "C-c w o" "ace-window")
+  "C-c w a" "ace-window")
 
-;;;; terminal
+;;;; terminals
 (keymap-global-set "C-c s" #'eshell)
 (which-key-add-key-based-replacements
   "C-c s" "eshell")
@@ -752,11 +736,13 @@
 (which-key-add-key-based-replacements
   "C-c v" "vterm")
 
-;;;; isearch regexp
+;;;; isearch remaps
 (keymap-global-set "C-s" #'isearch-forward-regexp)
 (keymap-global-set "C-r" #'isearch-backward-regexp)
 (keymap-global-set "C-M-s" #'isearch-forward)
 (keymap-global-set "C-M-r" #'isearch-backward)
 
-;;;; apropos user options
+;;;; apropos
 (keymap-global-set "C-h u" #'apropos-user-option)
+
+;;; init.el ends here
