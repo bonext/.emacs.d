@@ -421,7 +421,7 @@
   ;; TODO: do we need this?
   (setq org-startup-truncated nil)
   ;; show table of contents on load
-  (setq org-startup-folded 'content)
+  (setq org-startup-folded 'fold)
   ;; log time when todos are done
   ;; cf. https://orgmode.org/guide/Progress-Logging.html
   (setq org-log-into-drawer "LOGBOOK")
