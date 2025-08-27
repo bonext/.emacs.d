@@ -399,6 +399,7 @@
   (aa-org-setup-fonts))
 
 (use-package org
+  :ensure nil
   :commands (org-agenda
              org-capture
              org-store-link)
@@ -460,6 +461,10 @@
 
 (use-package visual-fill-column
   :hook (org-mode . aa-org-mode-visual-fill))
+
+(use-package org-expose-emphasis-markers
+  :after org
+  :hook (org-mode . (lambda () (org-expose-emphasis-markers-mode))))
 
 ;; org-journal
 (defun aa-org-journal-setup ()
@@ -640,9 +645,9 @@
   "C-c d d" "open dired")
 
 ;;;; pulsar
-(keymap-global-set "C-c SPC" #'pulsar-pulse-line)
+(keymap-global-set "C-." #'pulsar-pulse-line)
 (which-key-add-key-based-replacements
-  "C-c SPC" "pulse current line")
+  "C-." "pulse current line")
 
 ;;;; org
 (keymap-global-set "C-c a" #'org-agenda)
@@ -656,6 +661,8 @@
   "C-c c" "org-capture"
   "C-c l" "org-store-link"
   "C-c n" "open notes")
+
+(keymap-set org-mode-map "C-c m" #'org-toggle-link-display)
 
 ;;;; org-journal
 (keymap-global-set "C-c j" #'org-journal-new-entry)
