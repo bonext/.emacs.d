@@ -405,8 +405,7 @@
              org-store-link)
   :hook (org-mode . aa-org-common-hooks)
   :config
-  (setq org-directory "~/Documents/Notes")
-  (setq org-agenda-files `(,org-directory))
+  (setq org-directory aa-org-directory)
   ;; TODO: make the following part of fonts
   (setq org-ellipsis " ▾")
   (setq org-hide-emphasis-markers t)
@@ -446,7 +445,9 @@
           ("d" "mind dump" entry
            (file ,(file-name-concat org-directory "mind-dumps.org"))
            (file ,(file-name-concat aa-capture-templates-dir "dump"))
-           :prepend t :kill-buffer t))))
+           :prepend t :kill-buffer t)))
+  ;; update agenda
+  (add-to-list 'org-agenda-files org-directory))
 
 (use-package org-bullets
   :after org
@@ -487,12 +488,15 @@
   :init
   (aa-org-journal-setup))
 
+(use-package ox-gfm)
+
 ;; TODO: research
 ;; support for image paste
 ;; https://github.com/abo-abo/org-download
 
 (use-package org-roam
   :if (aa-work-p)
+  :after org
   :commands (org-roam-node-find
              org-roam-capture
              org-roam-buffer-toggle
@@ -502,11 +506,12 @@
              org-roam-dailies-goto-today
              org-roam-dailies-goto-previous-note
              org-roam-dailies-goto-next-note)
-  :custom
-  (org-roam-directory "~/Documents/RoamNotes")
-  (org-roam-dailies-directory "daily/")
   :config
-  (org-roam-setup))
+  (setopt org-roam-directory aa-org-roam-directory)
+  (setopt org-roam-dailies-directory "daily/")
+  (org-roam-setup)
+  (add-to-list 'org-agenda-files org-roam-directory)
+  (add-to-list 'org-agenda-files (file-name-concat aa-org-roam-directory org-roam-dailies-directory)))
 
                                         ;
                                         ; C O D I N G
