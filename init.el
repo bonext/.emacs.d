@@ -178,13 +178,13 @@
           ;; solarized-dark
           "7fea145741b3ca719ae45e6533ad1f49b2a43bf199d9afaee5b6135fd9e6f9b8"
           ;; doric-marble
-          "5dfbcedfeb1a3fab6d401677bf32bda4ef710ea16dfce285c7e87288a0694060"
+          "0735492e73c9ff5d4d11bb1a876b06e595fe39d642e7512111ba38c64c5105ee"
           ;; doric-obsidian
-          "bac67171cc8b7cf622cbe2f1ef494f27ff5fe530621201a1eea6e9457f17ab63"
+          "fc5093155fcec43534c5ed2c80e80fe626b28735732ffa1c6cc4d10ab0568f44"
           ;; doric-plum
-          "cbd1c15fcbd258a6882220f807d99e7a8967dd040e687347e5467f54677267ef"
+          "82453dac89416285dbd5e16869f165a87e629cfd1978a1ab22e814716ba5cbf7"
           ;; doric-water
-          "b23a8982253227aae8e18365ec4683f1d05a4aa6b662845252b8f1654f8794a3"
+          "d0c05a0b5a7619bca4c28d1bd2eeb15562afa634888a46c9e5b1d31b7d06ed36"
           ;; base16-tokyodark
           "a40703f9d1adb7ee1500d3c33ac4d62144675505ae7fe98b18a5d9ff325ee369"
           default))
@@ -660,7 +660,7 @@
 (keymap-global-set "C-c l" #'org-store-link)
 (keymap-global-set "C-c n" `(lambda ()
                               (interactive)
-                              (find-file ,(file-name-concat org-directory "all.org"))))
+                              (find-file-read-only ,(file-name-concat org-directory "all.org"))))
 (which-key-add-key-based-replacements
   "C-c a" "org-agenda"
   "C-c c" "org-capture"
