@@ -175,6 +175,8 @@
 
 (setopt custom-safe-themes
         '(
+          ;; doric-fire
+          "49f934cfd7e032ec74b27b7dd89a5573279b3306c597b5511e2b5afebf5696a2"
           ;; solarized-dark
           "7fea145741b3ca719ae45e6533ad1f49b2a43bf199d9afaee5b6135fd9e6f9b8"
           ;; doric-marble
