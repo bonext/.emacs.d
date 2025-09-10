@@ -598,9 +598,9 @@
                   (zig-mode . ("zls"))))
     (add-to-list 'eglot-server-programs mode))
   ;; https://github.com/joaotavora/eglot/discussions/1393
-  (setq eglot-ignored-server-capabilites
+  (setq eglot-ignored-server-capabilities
         (cons :documentOnTypeFormattingProvider
-              eglot-ignored-server-capabilites)))
+              eglot-ignored-server-capabilities)))
 ;; let project.el recognize python project roots
 (add-to-list 'project-vc-extra-root-markers "pyproject.toml")
 
