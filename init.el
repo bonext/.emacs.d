@@ -446,7 +446,12 @@
           ("d" "mind dump" entry
            (file ,(file-name-concat org-directory "mind-dumps.org"))
            (file ,(file-name-concat aa-capture-templates-dir "dump"))
-           :prepend t :kill-buffer t)))
+           :prepend t :kill-buffer t)
+          ("j" "journal" entry
+           (file ,(file-name-concat aa-org-journal-directory "journal.org"))
+           (file ,(file-name-concat aa-capture-templates-dir "journal"))
+           :prepend t
+           :kill-buffer t)))
   ;; update agenda
   (add-to-list 'org-agenda-files org-directory))
 
