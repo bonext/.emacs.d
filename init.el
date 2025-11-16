@@ -97,7 +97,6 @@
 ;; beep -> visual bell
 (setopt ring-bell-function nil)
 (setopt visible-bell nil)
-
 ;; name buffers with same files with / paths
 (setopt uniquify-buffer-name-style 'forward)
 
@@ -576,6 +575,8 @@
 
 (use-package lua-mode)
 (use-package fennel-mode)
+
+(use-package cmake-mode)
                                         ; tree-sitter
 
 ;; install grammars to ~/.emacs.d/tree-sitter
@@ -587,20 +588,22 @@
 (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
 (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
 
+(setopt c-ts-mode-indent-offset 4)
+
                                         ; eglot
 
 ;; the following assumes that language-servers are in $PATH
 ;; eglot is opt-in (M-x eglot or whatever)
 (use-package eglot
   :commands eglot
+  ;; :custom
+  ;; (eglot-ignored-server-capabilities
+  ;;  ;; https://github.com/joaotavora/eglot/discussions/1393
+  ;;  '(:documentOnTypeFormattingProvider))
   :config
   (dolist (mode '((nix-mode . ("nixd"))
                   (zig-mode . ("zls"))))
-    (add-to-list 'eglot-server-programs mode))
-  ;; https://github.com/joaotavora/eglot/discussions/1393
-  (setq eglot-ignored-server-capabilities
-        (cons :documentOnTypeFormattingProvider
-              eglot-ignored-server-capabilities)))
+    (add-to-list 'eglot-server-programs mode)))
 ;; let project.el recognize python project roots
 (add-to-list 'project-vc-extra-root-markers "pyproject.toml")
 
