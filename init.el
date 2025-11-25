@@ -4,8 +4,8 @@
 
 (defvar aa-face-default-name "Cascadia Code NF")
 (defvar aa-face-default-height 100)
-(defvar aa-dark-theme 'base16-tokyodark)
-(defvar aa-light-theme 'solarized-dark)
+(defvar aa-dark-theme 'modus-vivendi-tinted)
+(defvar aa-light-theme 'modus-operandi-tinted)
 
 (defvar aa-face-org-height 140)
 (defvar aa-org-directory "~/Documents/Notes")
@@ -165,7 +165,6 @@
 (use-package keycast
   :init (keycast-header-line-mode))
 
-(use-package ef-themes)
 (use-package doric-themes)
 (use-package modus-themes) ;; so that updates don't mess with the built-in
 (use-package solarized-theme)
