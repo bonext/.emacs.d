@@ -599,6 +599,7 @@
 (use-package fennel-mode)
 
 (use-package cmake-mode)
+
                                         ; tree-sitter
 
 ;; install grammars to ~/.emacs.d/tree-sitter
@@ -623,9 +624,14 @@
   ;;  ;; https://github.com/joaotavora/eglot/discussions/1393
   ;;  '(:documentOnTypeFormattingProvider))
   :config
-  (dolist (mode '((nix-mode . ("nixd"))
-                  (zig-mode . ("zls"))))
+  (dolist (mode `((nix-mode . ("nixd"))
+                  (zig-mode . ("zls"))
+                  ;; use uv run instead of venv
+                  ((python-mode python-ts-mode) .
+                   ,(eglot-alternatives
+                     '(("uv" "run" "ty" "server"))))))
     (add-to-list 'eglot-server-programs mode)))
+
 ;; let project.el recognize python project roots
 (add-to-list 'project-vc-extra-root-markers "pyproject.toml")
 
