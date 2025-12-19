@@ -600,6 +600,10 @@
 
 (use-package cmake-mode)
 
+;; TODO: setup docset prefixes
+;; https://github.com/jinzhu/zeal-at-point?tab=readme-ov-file#usage
+(use-package zeal-at-point)
+
                                         ; tree-sitter
 
 ;; install grammars to ~/.emacs.d/tree-sitter
