@@ -528,23 +528,25 @@
                                         ;
 
 ;; slime
-(if (file-exists-p "/usr/bin/sbcl")
-    (use-package slime
-      :config
-      (setq inferior-lisp-program "/usr/bin/sbcl")
-      ;; Local CL HyperSpec
-      ;;
-      (let ((local-hyperspec-directory
-             (expand-file-name "~/Documents/docs/Common Lisp HyperSpec/HyperSpec")))
-        (if (file-exists-p local-hyperspec-directory)
-            (progn
-              (add-to-list
-               'browse-url-handlers
-               '(
-                 "file://.*HyperSpec/.*\\.htm"
-                 . (lambda (url &rest args) (eww url))))
-              (setq common-lisp-hyperspec-root
-                    (concat "file://" local-hyperspec-directory)))))))
+(when (and
+       (file-exists-p "/usr/bin/sbcl")
+       (file-exists-p "~/src/3rdparty/slime"))
+  (add-to-list 'load-path "~/src/3rdparty/slime")
+  (require 'slime-autoloads)
+  (setq inferior-lisp-program "/usr/bin/sbcl")
+  ;; Local CL HyperSpec
+  ;;
+  (let ((local-hyperspec-directory
+         (expand-file-name "~/Documents/docs/Common Lisp HyperSpec/HyperSpec")))
+    (if (file-exists-p local-hyperspec-directory)
+        (progn
+          (add-to-list
+           'browse-url-handlers
+           '(
+             "file://.*HyperSpec/.*\\.htm"
+             . (lambda (url &rest args) (eww url))))
+          (setq common-lisp-hyperspec-root
+                (concat "file://" local-hyperspec-directory))))))
 
 ;; racket
 (use-package racket-mode)
