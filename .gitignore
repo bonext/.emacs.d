@@ -65,3 +65,6 @@ tree-sitter/
 bookmarks
 org-capture-templates/journal
 url/
+
+## parinfer-rust
+parinfer-rust/*.so
