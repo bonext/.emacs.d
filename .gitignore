@@ -64,3 +64,6 @@ ielm-history.eld
 tree-sitter/
 bookmarks
 url/
+
+## parinfer-rust
+parinfer-rust/*.so
