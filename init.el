@@ -710,7 +710,7 @@
 (keymap-global-set "C-c l" #'org-store-link)
 (keymap-global-set "C-c n" `(lambda ()
                               (interactive)
-                              (find-file-read-only ,(file-name-concat org-directory "all.org"))))
+                              (view-file ,(file-name-concat org-directory "all.org"))))
 (which-key-add-key-based-replacements
   "C-c a" "org-agenda"
   "C-c c" "org-capture"
