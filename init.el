@@ -194,13 +194,31 @@
           "a40703f9d1adb7ee1500d3c33ac4d62144675505ae7fe98b18a5d9ff325ee369"
           default))
 
+
+;; switch themes based on location and time of day
 ;; use https://git.sr.ht/~grtcdr/darkman.el
 ;; to integrate with https://darkman.whynothugo.nl/
+;; or circadian.el
+(defun aa-darkman-available-p ()
+  (and (aa-home-p) (file-exists-p "/usr/bin/darkman")))
+
 (use-package darkman
-  :if (and (aa-home-p) (file-exists-p "/usr/bin/darkman"))
+  :if (aa-darkman-available-p)
   :config
   (setopt darkman-themes `(:light ,aa-light-theme :dark ,aa-dark-theme))
-  (darkman-mode))
+  (darkman-mode)
+  (message "Using darkman"))
+
+(use-package circadian
+  :if (not (aa-darkman-available-p))
+  :config
+  (setq calendar-latitude 52.370216
+        calendar-longitude 4.895168
+        circadian-themes `((:sunrise . ,aa-light-theme)
+                           (:sunset . ,aa-dark-theme)))
+  (circadian-setup)
+  (message "Using circadian"))
+
 
 ;; Ignore custom
 (setopt custom-file (file-name-concat user-emacs-directory "ignored-custom.el"))
