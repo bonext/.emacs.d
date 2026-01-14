@@ -166,22 +166,14 @@
   :init (keycast-header-line-mode))
 
 (use-package doric-themes)
-(use-package modus-themes) ;; so that updates don't mess with the built-in
-(use-package solarized-theme)
 (use-package base16-theme
   :config
   (setq base16-theme-distinct-fringe-background nil))
 
 (setopt custom-safe-themes
         '(
-          ;; modus-operandi-tinted
-          "488b82a8d9ace0aea8a6825db144e3c65c4f1ef3e090b618bf311d9cdb513322"
-          ;; modus-vivendi-tinted
-          "fff0dc54ff5a194ba6593d1cce0fbb4fe8cf9da59fcef47f9e06dec6ef11b1fa"
           ;; doric-fire
           "49f934cfd7e032ec74b27b7dd89a5573279b3306c597b5511e2b5afebf5696a2"
-          ;; solarized-dark
-          "7fea145741b3ca719ae45e6533ad1f49b2a43bf199d9afaee5b6135fd9e6f9b8"
           ;; doric-marble
           "0735492e73c9ff5d4d11bb1a876b06e595fe39d642e7512111ba38c64c5105ee"
           ;; doric-obsidian
