@@ -340,12 +340,6 @@
 (defun aa-org-setup-fonts ()
   (if (display-graphic-p)
       (progn
-        ;; Replace list hyphen with dot
-        (font-lock-add-keywords
-         'org-mode
-         '(("^ *\\([-]\\) "
-            (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
-        
         ;; setup fonts
         ;; via https://yannesposito.com/posts/0020-cool-looking-org-mode/index.html
         ;; and https://zzamboni.org/post/beautifying-org-mode-in-emacs/
