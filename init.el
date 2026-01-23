@@ -313,8 +313,7 @@
 (use-package cape
   :commands cape-prefix-map
   :init
-  (add-hook 'completion-at-point-functions #'cape-file)
-  (add-hook 'completion-at-point-functions #'cape-dabbrev))
+  (add-hook 'completion-at-point-functions #'cape-file))
 
 ;; orderless
 ;; decides how to match completion candidates
