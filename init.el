@@ -138,6 +138,9 @@
 (setopt cursor-type 'bar)
 (setopt cursor-in-non-selected-windows 'hollow)
 
+;; search match counting
+(setopt isearch-lazy-count t)
+
 ;; smoother scrolling
 (use-package ultra-scroll
   :vc (:url "https://github.com/jdtsmith/ultra-scroll")
