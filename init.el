@@ -297,14 +297,8 @@
 ;; completion-at-point (e.g. when writing code)
 (use-package corfu
   :custom
-  ;; enable auto completion
-  (corfu-auto t)
   ;; close corfu buffer if no completion matches
   (corfu-quit-no-match t)
-  ;; delay in seconds before completion
-  (corfu-auto-delay 0.2)
-  ;; prefix for completion
-  (corfu-auto-prefix 3)
   :init
   (global-corfu-mode))
 
