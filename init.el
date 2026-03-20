@@ -141,6 +141,9 @@
 ;; search match counting
 (setopt isearch-lazy-count t)
 
+;; save a lot of time
+(setopt use-short-answers t)
+
 ;; smoother scrolling
 (use-package ultra-scroll
   :vc (:url "https://github.com/jdtsmith/ultra-scroll")
@@ -149,6 +152,7 @@
         scroll-margin 0)
   :config
   (ultra-scroll-mode 1))
+
 
 ;; highlight cursor
 (use-package pulsar
