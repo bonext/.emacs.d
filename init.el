@@ -144,6 +144,12 @@
 ;; save a lot of time
 (setopt use-short-answers t)
 
+;; kill ring setup
+;; save paste to kill ring (C-y M-y to get it after killing stuff)
+(setopt save-interprogram-paste-before-kill t)
+;; no dupes in kill ring
+(setopt kill-do-not-save-duplicates t)
+
 ;; smoother scrolling
 (use-package ultra-scroll
   :vc (:url "https://github.com/jdtsmith/ultra-scroll")
@@ -218,6 +224,15 @@
   (circadian-setup)
   (message "Using circadian"))
 
+;; highlight after typing is done
+;; setq because C
+(setq redisplay-skip-fontification-on-input t)
+
+;; disable right-to-left text tweaks
+;; setq because these are in C code
+(setq-default bidi-display-reordering 'left-to-right
+              bidi-paragraph-direction 'left-to-right)
+(setq bidi-inhibit-bpa t)
 
 ;; Ignore custom
 (setopt custom-file (file-name-concat user-emacs-directory "ignored-custom.el"))
@@ -248,9 +263,26 @@
 
 ;; repeat actions without modifiers for some commands
 (repeat-mode)
+;; first mark pop is C-u C-SPC, next C-SPC only
+(setopt set-mark-command-repeat-pop t)
+
+;; jump to help automatically
+(setopt help-window-select t)
 
 ;; undo/redo window configuration changes with C-c left/right
 (winner-mode)
+
+;; make C-x 1 reversible
+(defun aa-toggle-delete-other-windows ()
+  "Delete other windows in frame if any, or restore previous window config."
+  (interactive)
+  (if (and winner-mode
+           (equal (selected-window) (next-window)))
+      (winner-undo)
+    (delete-other-windows)))
+
+;; resize all windows in frame on split
+(setopt window-combination-resize t)
 
 (use-package ace-window
   :commands ace-window
@@ -637,6 +669,9 @@
 
                                         ; eglot
 
+;; reduce number of reads for large language server responses
+(setq read-process-output-max (* 4 1024 1024))
+
 ;; the following assumes that language-servers are in $PATH
 ;; eglot is opt-in (M-x eglot or whatever)
 (use-package eglot
@@ -794,6 +829,9 @@
 (keymap-set aa-leader-map-windows "a" #'ace-window)
 (which-key-add-key-based-replacements
   "C-c w a" "ace-window")
+
+;; enable reversible C-x 1 via winner-mode
+(keymap-global-set "C-x 1" #'aa-toggle-delete-other-windows)
 
 ;;;; terminals
 (keymap-global-set "C-c s" #'eshell)
