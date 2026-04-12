@@ -12,6 +12,43 @@
 (defvar aa-org-journal-directory "~/Documents/journal")
 (defvar aa-org-roam-directory "~/Documents/RoamNotes")
 
+;; vendored code
+(defvar aa-vendor-directory (file-name-concat user-emacs-directory "lib/3rdparty"))
+
+(defvar aa-vendor--autoloads-filename (file-name-concat aa-vendor-directory "autoloads.el"))
+
+(defun aa-vendor--find-elisp-dirs (root)
+  (let (out)
+    (dolist (item (directory-files-recursively root "\\.el\\'"))
+      (push (file-name-directory item) out))
+    (delete-dups out)))
+
+(defun aa-vendor-update-autoloads ()
+  (interactive)
+  (message "Using vendor autoloads file: %s" aa-vendor--autoloads-filename)
+  (when (file-exists-p aa-vendor--autoloads-filename)
+    (progn
+      (delete-file aa-vendor--autoloads-filename)
+      (message "Cleaned up stale autoloads at %s" aa-vendor--autoloads-filename)))
+  (loaddefs-generate (aa-vendor--find-elisp-dirs aa-vendor-directory) aa-vendor--autoloads-filename)
+  (message "Autoloads updated at %s" aa-vendor--autoloads-filename))
+
+;;; setup load-path for vendored code
+(when (file-exists-p aa-vendor-directory)
+  (add-to-list 'load-path aa-vendor-directory)
+  ;; (dolist (dir (directory-files aa-vendor-directory t "^[^.]" t))
+  ;;   (when (file-directory-p dir)
+  ;;     (add-to-list 'load-path dir)
+  ;;     (message "Added vendored code directory %s to load-path" dir)))
+  )
+
+;;; load vendored autoloads
+(when (file-exists-p aa-vendor--autoloads-filename)
+  (progn
+    (load aa-vendor--autoloads-filename)
+    (message "Loaded vendor autoloads from %s" aa-vendor--autoloads-filename)))
+
+
 ;;; exposed hooks
 
 (defvar aa-before-load-theme-hook nil
