@@ -12,6 +12,8 @@
 (defvar aa-org-journal-directory "~/Documents/journal")
 (defvar aa-org-roam-directory "~/Documents/RoamNotes")
 
+(load-theme aa-dark-theme t)
+
 ;; vendored code
 (defvar aa-vendor-directory (file-name-concat user-emacs-directory "lib/3rdparty"))
 
@@ -236,14 +238,14 @@
           "a40703f9d1adb7ee1500d3c33ac4d62144675505ae7fe98b18a5d9ff325ee369"
           default))
 
-(use-package circadian
-  :config
-  (setq calendar-latitude 52.370216
-        calendar-longitude 4.895168
-        circadian-themes `((:sunrise . ,aa-light-theme)
-                           (:sunset . ,aa-dark-theme)))
-  (circadian-setup)
-  (message "Using circadian"))
+;; (use-package circadian
+;;   :config
+;;   (setq calendar-latitude 52.370216
+;;         calendar-longitude 4.895168
+;;         circadian-themes `((:sunrise . ,aa-light-theme)
+;;                            (:sunset . ,aa-dark-theme)))
+;;   (circadian-setup)
+;;   (message "Using circadian"))
 
 ;; highlight after typing is done
 ;; setq because C
