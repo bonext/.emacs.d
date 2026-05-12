@@ -38,11 +38,10 @@
 ;;; setup load-path for vendored code
 (when (file-exists-p aa-vendor-directory)
   (add-to-list 'load-path aa-vendor-directory)
-  ;; (dolist (dir (directory-files aa-vendor-directory t "^[^.]" t))
-  ;;   (when (file-directory-p dir)
-  ;;     (add-to-list 'load-path dir)
-  ;;     (message "Added vendored code directory %s to load-path" dir)))
-  )
+  (dolist (dir (directory-files aa-vendor-directory t "^[^.]" t))
+    (when (file-directory-p dir)
+      (add-to-list 'load-path dir)
+      (message "Added vendored code directory %s to load-path" dir))))
 
 ;;; load vendored autoloads
 (when (file-exists-p aa-vendor--autoloads-filename)
@@ -73,13 +72,13 @@
   (defun aa-wsl-p ()
     (eq aa-host 'wsl)))
 
-(with-eval-after-load 'package
-  (progn
-    (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-    (package-initialize)))
+;; (with-eval-after-load 'package
+;;   (progn
+;;     (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+;;     (package-initialize)))
 
-(require 'use-package)
-(setq use-package-always-ensure t)
+;; (require 'use-package)
+;; (setq use-package-always-ensure t)
 
 (advice-add
  'load-theme
@@ -189,54 +188,54 @@
 ;; no dupes in kill ring
 (setopt kill-do-not-save-duplicates t)
 
-;; smoother scrolling
-(use-package ultra-scroll
-  :vc (:url "https://github.com/jdtsmith/ultra-scroll")
-  :init
-  (setq scroll-conservatively 3
-        scroll-margin 0)
-  :config
-  (ultra-scroll-mode 1))
+;; ;; smoother scrolling
+;; (use-package ultra-scroll
+;;   :vc (:url "https://github.com/jdtsmith/ultra-scroll")
+;;   :init
+;;   (setq scroll-conservatively 3
+;;         scroll-margin 0)
+;;   :config
+;;   (ultra-scroll-mode 1))
 
 
-;; highlight cursor
-(use-package pulsar
-  ;; load after ace-window to advice-add
-  :after ace-window
-  :commands pulsar-pulse-line
-  :config
-  (pulsar-global-mode 1)
-  (let ((aa-pulsar-pulse-after
-         '(other-window
-           next-multiframe-window
-           ace-window)))
-    (dolist (f aa-pulsar-pulse-after)
-      (advice-add f :after #'(lambda (&rest args) (pulsar-pulse-line))))))
+;; ;; highlight cursor
+;; (use-package pulsar
+;;   ;; load after ace-window to advice-add
+;;   :after ace-window
+;;   :commands pulsar-pulse-line
+;;   :config
+;;   (pulsar-global-mode 1)
+;;   (let ((aa-pulsar-pulse-after
+;;          '(other-window
+;;            next-multiframe-window
+;;            ace-window)))
+;;     (dolist (f aa-pulsar-pulse-after)
+;;       (advice-add f :after #'(lambda (&rest args) (pulsar-pulse-line))))))
 
-;; show current key in the header
-(use-package keycast
-  :init (keycast-header-line-mode))
+;; ;; show current key in the header
+;; (use-package keycast
+;;   :init (keycast-header-line-mode))
 
-(use-package doric-themes)
-(use-package base16-theme
-  :config
-  (setq base16-theme-distinct-fringe-background nil))
+;; (use-package doric-themes)
+;; (use-package base16-theme
+;;   :config
+;;   (setq base16-theme-distinct-fringe-background nil))
 
-(setopt custom-safe-themes
-        '(
-          ;; doric-fire
-          "49f934cfd7e032ec74b27b7dd89a5573279b3306c597b5511e2b5afebf5696a2"
-          ;; doric-marble
-          "0735492e73c9ff5d4d11bb1a876b06e595fe39d642e7512111ba38c64c5105ee"
-          ;; doric-obsidian
-          "fc5093155fcec43534c5ed2c80e80fe626b28735732ffa1c6cc4d10ab0568f44"
-          ;; doric-plum
-          "82453dac89416285dbd5e16869f165a87e629cfd1978a1ab22e814716ba5cbf7"
-          ;; doric-water
-          "d0c05a0b5a7619bca4c28d1bd2eeb15562afa634888a46c9e5b1d31b7d06ed36"
-          ;; base16-tokyodark
-          "a40703f9d1adb7ee1500d3c33ac4d62144675505ae7fe98b18a5d9ff325ee369"
-          default))
+;; (setopt custom-safe-themes
+;;         '(
+;;           ;; doric-fire
+;;           "49f934cfd7e032ec74b27b7dd89a5573279b3306c597b5511e2b5afebf5696a2"
+;;           ;; doric-marble
+;;           "0735492e73c9ff5d4d11bb1a876b06e595fe39d642e7512111ba38c64c5105ee"
+;;           ;; doric-obsidian
+;;           "fc5093155fcec43534c5ed2c80e80fe626b28735732ffa1c6cc4d10ab0568f44"
+;;           ;; doric-plum
+;;           "82453dac89416285dbd5e16869f165a87e629cfd1978a1ab22e814716ba5cbf7"
+;;           ;; doric-water
+;;           "d0c05a0b5a7619bca4c28d1bd2eeb15562afa634888a46c9e5b1d31b7d06ed36"
+;;           ;; base16-tokyodark
+;;           "a40703f9d1adb7ee1500d3c33ac4d62144675505ae7fe98b18a5d9ff325ee369"
+;;           default))
 
 ;; (use-package circadian
 ;;   :config
@@ -307,19 +306,19 @@
 ;; resize all windows in frame on split
 (setopt window-combination-resize t)
 
-(use-package ace-window
-  :commands ace-window
-  :custom
-  (aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
+;; (use-package ace-window
+;;   :commands ace-window
+;;   :custom
+;;   (aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
 
-(use-package dired
-  :ensure nil
-  :commands (dired dired-jump)
-  :config
-  (add-hook 'dired-mode-hook (lambda () (dired-omit-mode 1)))
-  :custom
-  ;; NOTE: these require GNU ls
-  (dired-listing-switches "-agho --group-directories-first"))
+;; (use-package dired
+;;   :ensure nil
+;;   :commands (dired dired-jump)
+;;   :config
+;;   (add-hook 'dired-mode-hook (lambda () (dired-omit-mode 1)))
+;;   :custom
+;;   ;; NOTE: these require GNU ls
+;;   (dired-listing-switches "-agho --group-directories-first"))
 
 (with-eval-after-load 'dired
   (require 'dired-x)
@@ -341,56 +340,56 @@
         text-mode-ispell-word-completion nil)
 
 
-;; vertico (frontend / UI)
-;; changes default completion buffer to vertical scrollable thing
-(use-package vertico
-  :init
-  (vertico-mode))
+;; ;; vertico (frontend / UI)
+;; ;; changes default completion buffer to vertical scrollable thing
+;; (use-package vertico
+;;   :init
+;;   (vertico-mode))
 
 
-;; marginalia provides marninalia info to completions in minibuffer
-;; annotations are per-category
-(use-package marginalia
-  :init
-  (marginalia-mode))
+;; ;; marginalia provides marninalia info to completions in minibuffer
+;; ;; annotations are per-category
+;; (use-package marginalia
+;;   :init
+;;   (marginalia-mode))
 
 
-;; corfu (frontend / UI)
-;; completion-at-point (e.g. when writing code)
-(use-package corfu
-  :custom
-  ;; close corfu buffer if no completion matches
-  (corfu-quit-no-match t)
-  :init
-  (global-corfu-mode))
+;; ;; corfu (frontend / UI)
+;; ;; completion-at-point (e.g. when writing code)
+;; (use-package corfu
+;;   :custom
+;;   ;; close corfu buffer if no completion matches
+;;   (corfu-quit-no-match t)
+;;   :init
+;;   (global-corfu-mode))
 
-;; suite of completion-at-point functions
-;; use prefix map for now
-(use-package cape
-  :commands cape-prefix-map
-  :init
-  (add-hook 'completion-at-point-functions #'cape-file))
+;; ;; suite of completion-at-point functions
+;; ;; use prefix map for now
+;; (use-package cape
+;;   :commands cape-prefix-map
+;;   :init
+;;   (add-hook 'completion-at-point-functions #'cape-file))
 
-;; orderless
-;; decides how to match completion candidates
-(use-package orderless
-  :custom
-  (completion-styles '(orderless basic))
-  (completion-category-overrides
-   '((file (styles basic partial-completion)))))
+;; ;; orderless
+;; ;; decides how to match completion candidates
+;; (use-package orderless
+;;   :custom
+;;   (completion-styles '(orderless basic))
+;;   (completion-category-overrides
+;;    '((file (styles basic partial-completion)))))
 
-;; consult
-(use-package consult
-  :commands (consult-line
-             consult-ripgrep
-             consult-outline
-             consult-buffer))
+;; ;; consult
+;; (use-package consult
+;;   :commands (consult-line
+;;              consult-ripgrep
+;;              consult-outline
+;;              consult-buffer))
 
-(use-package helpful
-  :commands (helpful-callable
-             helpful-command
-             helpful-variable
-             helpful-key))
+;; (use-package helpful
+;;   :commands (helpful-callable
+;;              helpful-command
+;;              helpful-variable
+;;              helpful-key))
 
 (defun aa-org-setup-fonts ()
   (if (display-graphic-p)
@@ -463,79 +462,79 @@
   (visual-line-mode 1)
   (aa-org-setup-fonts))
 
-(use-package org
-  :ensure nil
-  :commands (org-agenda
-             org-capture
-             org-store-link)
-  :hook (org-mode . aa-org-common-hooks)
-  :config
-  (setq org-directory aa-org-directory)
-  ;; TODO: make the following part of fonts
-  (setq org-ellipsis " ▾")
-  (setq org-hide-emphasis-markers t)
-  ;; enable scaling of inline images with attr_org width
-  (setq org-image-actual-width nil)
-  ;; show inline images by default
-  (setq org-startup-with-inline-images t)
-  ;; Make C-c a t reuse current window
-  (setq org-agenda-window-setup 'current-window)
-  ;; offer tags from all agenda files (not current buffer)
-  (setq org-complete-tags-always-offer-all-agenda-tags t)
-  ;; wrap text by default
-  ;; TODO: do we need this?
-  (setq org-startup-truncated nil)
-  ;; show table of contents on load
-  (setq org-startup-folded 'fold)
-  ;; log time when todos are done
-  ;; cf. https://orgmode.org/guide/Progress-Logging.html
-  (setq org-log-into-drawer "LOGBOOK")
-  (setq org-log-done 'time)
-  (setq org-todo-keywords
-        '((sequence "TODO(!)" "DONE(!)")))
-  (setq org-refile-targets
-        '((nil :maxlevel . 5)))
-  ;; refile in a single go
-  (setq org-outline-path-complete-in-steps nil)
-  ;; show full paths for refiling
-  (setq org-refile-use-outline-path t)
-  ;; capture setup
-  (setq org-default-notes-file (file-name-concat org-directory "captured.org"))
-  (setq aa-capture-templates-dir (file-name-concat user-emacs-directory "org-capture-templates"))
-  (setq org-capture-templates
-        `(("b" "book" entry
-           (file ,(file-name-concat org-directory "finished-books.org"))
-           (file ,(file-name-concat aa-capture-templates-dir "book"))
-           :kill-buffer t)
-          ("d" "mind dump" entry
-           (file ,(file-name-concat org-directory "mind-dumps.org"))
-           (file ,(file-name-concat aa-capture-templates-dir "dump"))
-           :prepend t :kill-buffer t)
-          ("j" "journal" entry
-           (file ,(file-name-concat aa-org-journal-directory "journal.org"))
-           (file ,(file-name-concat aa-capture-templates-dir "journal"))
-           :prepend t
-           :kill-buffer t)))
-  ;; update agenda
-  (add-to-list 'org-agenda-files org-directory))
+;; (use-package org
+;;   :ensure nil
+;;   :commands (org-agenda
+;;              org-capture
+;;              org-store-link)
+;;   :hook (org-mode . aa-org-common-hooks)
+;;   :config
+;;   (setq org-directory aa-org-directory)
+;;   ;; TODO: make the following part of fonts
+;;   (setq org-ellipsis " ▾")
+;;   (setq org-hide-emphasis-markers t)
+;;   ;; enable scaling of inline images with attr_org width
+;;   (setq org-image-actual-width nil)
+;;   ;; show inline images by default
+;;   (setq org-startup-with-inline-images t)
+;;   ;; Make C-c a t reuse current window
+;;   (setq org-agenda-window-setup 'current-window)
+;;   ;; offer tags from all agenda files (not current buffer)
+;;   (setq org-complete-tags-always-offer-all-agenda-tags t)
+;;   ;; wrap text by default
+;;   ;; TODO: do we need this?
+;;   (setq org-startup-truncated nil)
+;;   ;; show table of contents on load
+;;   (setq org-startup-folded 'fold)
+;;   ;; log time when todos are done
+;;   ;; cf. https://orgmode.org/guide/Progress-Logging.html
+;;   (setq org-log-into-drawer "LOGBOOK")
+;;   (setq org-log-done 'time)
+;;   (setq org-todo-keywords
+;;         '((sequence "TODO(!)" "DONE(!)")))
+;;   (setq org-refile-targets
+;;         '((nil :maxlevel . 5)))
+;;   ;; refile in a single go
+;;   (setq org-outline-path-complete-in-steps nil)
+;;   ;; show full paths for refiling
+;;   (setq org-refile-use-outline-path t)
+;;   ;; capture setup
+;;   (setq org-default-notes-file (file-name-concat org-directory "captured.org"))
+;;   (setq aa-capture-templates-dir (file-name-concat user-emacs-directory "org-capture-templates"))
+;;   (setq org-capture-templates
+;;         `(("b" "book" entry
+;;            (file ,(file-name-concat org-directory "finished-books.org"))
+;;            (file ,(file-name-concat aa-capture-templates-dir "book"))
+;;            :kill-buffer t)
+;;           ("d" "mind dump" entry
+;;            (file ,(file-name-concat org-directory "mind-dumps.org"))
+;;            (file ,(file-name-concat aa-capture-templates-dir "dump"))
+;;            :prepend t :kill-buffer t)
+;;           ("j" "journal" entry
+;;            (file ,(file-name-concat aa-org-journal-directory "journal.org"))
+;;            (file ,(file-name-concat aa-capture-templates-dir "journal"))
+;;            :prepend t
+;;            :kill-buffer t)))
+;;   ;; update agenda
+;;   (add-to-list 'org-agenda-files org-directory))
 
-(use-package org-bullets
-  :after org
-  :hook (org-mode . org-bullets-mode)
-  :custom
-  (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+;; (use-package org-bullets
+;;   :after org
+;;   :hook (org-mode . org-bullets-mode)
+;;   :custom
+;;   (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
 
 (defun aa-org-mode-visual-fill ()
   (setq visual-fill-column-width 100
         visual-fill-column-center-text t)
   (visual-fill-column-mode 1))
 
-(use-package visual-fill-column
-  :hook (org-mode . aa-org-mode-visual-fill))
+;; (use-package visual-fill-column
+;;   :hook (org-mode . aa-org-mode-visual-fill))
 
-(use-package org-expose-emphasis-markers
-  :after org
-  :hook (org-mode . (lambda () (org-expose-emphasis-markers-mode))))
+;; (use-package org-expose-emphasis-markers
+;;   :after org
+;;   :hook (org-mode . (lambda () (org-expose-emphasis-markers-mode))))
 
 ;; org-journal
 (defun aa-org-journal-setup ()
@@ -552,36 +551,36 @@
         (setq org-journal-file-type 'daily)
         (setq org-journal-encrypt-journal t)))))
 
-(use-package org-journal
-  :commands org-journal-new-entry
-  :after org
-  :init
-  (aa-org-journal-setup))
+;; (use-package org-journal
+;;   :commands org-journal-new-entry
+;;   :after org
+;;   :init
+;;   (aa-org-journal-setup))
 
-(use-package ox-gfm)
+;; (use-package ox-gfm)
 
 ;; TODO: research
 ;; support for image paste
 ;; https://github.com/abo-abo/org-download
 
-(use-package org-roam
-  :if (aa-work-p)
-  :after org
-  :commands (org-roam-node-find
-             org-roam-capture
-             org-roam-buffer-toggle
-             org-roam-alias-add
-             org-roam-dailies-capture-today
-             org-roam-dailies-goto-date
-             org-roam-dailies-goto-today
-             org-roam-dailies-goto-previous-note
-             org-roam-dailies-goto-next-note)
-  :config
-  (setopt org-roam-directory aa-org-roam-directory)
-  (setopt org-roam-dailies-directory "daily/")
-  (org-roam-setup)
-  (add-to-list 'org-agenda-files org-roam-directory)
-  (add-to-list 'org-agenda-files (file-name-concat aa-org-roam-directory org-roam-dailies-directory)))
+;; (use-package org-roam
+;;   :if (aa-work-p)
+;;   :after org
+;;   :commands (org-roam-node-find
+;;              org-roam-capture
+;;              org-roam-buffer-toggle
+;;              org-roam-alias-add
+;;              org-roam-dailies-capture-today
+;;              org-roam-dailies-goto-date
+;;              org-roam-dailies-goto-today
+;;              org-roam-dailies-goto-previous-note
+;;              org-roam-dailies-goto-next-note)
+;;   :config
+;;   (setopt org-roam-directory aa-org-roam-directory)
+;;   (setopt org-roam-dailies-directory "daily/")
+;;   (org-roam-setup)
+;;   (add-to-list 'org-agenda-files org-roam-directory)
+;;   (add-to-list 'org-agenda-files (file-name-concat aa-org-roam-directory org-roam-dailies-directory)))
 
                                         ;
                                         ; C O D I N G
@@ -594,22 +593,23 @@
   (add-to-list 'load-path "~/src/3rdparty/slime")
   (require 'slime-autoloads)
   (setq inferior-lisp-program "/usr/bin/sbcl")
-  ;; Local CL HyperSpec
-  ;;
-  (let ((local-hyperspec-directory
-         (expand-file-name "~/Documents/docs/Common Lisp HyperSpec/HyperSpec")))
-    (if (file-exists-p local-hyperspec-directory)
-        (progn
-          (add-to-list
-           'browse-url-handlers
-           '(
-             "file://.*HyperSpec/.*\\.htm"
-             . (lambda (url &rest args) (eww url))))
-          (setq common-lisp-hyperspec-root
-                (concat "file://" local-hyperspec-directory))))))
+  ;; ;; Local CL HyperSpec
+  ;; ;;
+  ;; (let ((local-hyperspec-directory
+  ;;        (expand-file-name "~/Documents/docs/Common Lisp HyperSpec/HyperSpec")))
+  ;;   (if (file-exists-p local-hyperspec-directory)
+  ;;       (progn
+  ;;         (add-to-list
+  ;;          'browse-url-handlers
+  ;;          '(
+  ;;            "file://.*HyperSpec/.*\\.htm"
+  ;;            . (lambda (url &rest args) (eww url))))
+  ;;         (setq common-lisp-hyperspec-root
+  ;;               (concat "file://" local-hyperspec-directory)))))
+  )
 
-;; racket
-(use-package racket-mode)
+;; ;; racket
+;; (use-package racket-mode)
 
 ;; smartparens
 ;; (use-package smartparens
@@ -619,63 +619,61 @@
 ;;   :custom
 ;;   (sp-base-key-bindings 'sp "set smartparens bindings"))
 
-(use-package parinfer-rust-mode
-  :init (setq parinfer-rust-auto-download t)
-  :hook (lisp-data-mode racket-mode pollen-mode)
-  :custom
-  (parinfer-rust-preferred-mode 'indent "start in indent mode")
-  (parinfer-rust-dim-parens nil "do not dim closing parens"))
+;; (use-package parinfer-rust-mode
+;;   :init (setq parinfer-rust-auto-download t)
+;;   :hook (lisp-data-mode racket-mode pollen-mode)
+;;   :custom
+;;   (parinfer-rust-preferred-mode 'indent "start in indent mode")
+;;   (parinfer-rust-dim-parens nil "do not dim closing parens"))
   
-  
-                        
-  
+;; ;; dts-mode
+;; (use-package dts-mode
+;;   ;; setup for zmk keymaps
+;;   :mode "\\.keymap\\'")
 
-;; dts-mode
-(use-package dts-mode
-  ;; setup for zmk keymaps
-  :mode "\\.keymap\\'")
+;; ;; nix
+;; ;; $PATH
+;; (setenv "PATH" (concat "~/.nix-profile/bin:/nix/var/nix/profiles/default/bin:" (getenv "PATH")))
+;; ;; nix-mode
+;; (use-package nix-mode
+;;   :mode "\\.nix\\'")
 
-;; nix
-;; $PATH
-(setenv "PATH" (concat "~/.nix-profile/bin:/nix/var/nix/profiles/default/bin:" (getenv "PATH")))
-;; nix-mode
-(use-package nix-mode
-  :mode "\\.nix\\'")
+;; ;; markdown-mode
+;; (use-package markdown-mode)
 
-;; markdown-mode
-(use-package markdown-mode)
+;; ;; zig-mode
+;; (use-package zig-mode
+;;   :mode "\\.zig\\'")
 
-;; zig-mode
-(use-package zig-mode
-  :mode "\\.zig\\'")
+;; ;; direnv-mode
+;; (use-package direnv
+;;   :config
+;;   (direnv-mode))
 
-;; direnv-mode
-(use-package direnv
-  :config
-  (direnv-mode))
+;; (use-package systemd)
 
-(use-package systemd)
+;; (use-package caddyfile-mode
+;;   :mode (("Caddyfile\\'" . caddyfile-mode)
+;;          ("caddy\\.conf\\'" . caddyfile-mode)))
 
-(use-package caddyfile-mode
-  :mode (("Caddyfile\\'" . caddyfile-mode)
-         ("caddy\\.conf\\'" . caddyfile-mode)))
-;; requires M-x treesit-install-language-grammar for `vim`
-;; taken from https://github.com/tree-sitter-grammars/tree-sitter-vim
-(use-package vimscript-ts-mode
-  :mode "\\vifmrc\\'")
+;; ;; requires M-x treesit-install-language-grammar for `vim`
+;; ;; taken from https://github.com/tree-sitter-grammars/tree-sitter-vim
+;; (use-package vimscript-ts-mode
+;;   :mode "\\vifmrc\\'")
 
-(use-package pollen-mode)
+;; (use-package pollen-mode)
 
-(use-package kdl-mode)
+;; (use-package kdl-mode)
 
-(use-package lua-mode)
-(use-package fennel-mode)
+;; (use-package lua-mode)
 
-(use-package cmake-mode)
+;; (use-package fennel-mode)
 
-;; TODO: setup docset prefixes
-;; https://github.com/jinzhu/zeal-at-point?tab=readme-ov-file#usage
-(use-package zeal-at-point)
+;; (use-package cmake-mode)
+
+;; ;; TODO: setup docset prefixes
+;; ;; https://github.com/jinzhu/zeal-at-point?tab=readme-ov-file#usage
+;; (use-package zeal-at-point)
 
                                         ; tree-sitter
 
@@ -695,25 +693,25 @@
 ;; reduce number of reads for large language server responses
 (setq read-process-output-max (* 4 1024 1024))
 
-;; the following assumes that language-servers are in $PATH
-;; eglot is opt-in (M-x eglot or whatever)
-(use-package eglot
-  :commands eglot
-  ;; :custom
-  ;; (eglot-ignored-server-capabilities
-  ;;  ;; https://github.com/joaotavora/eglot/discussions/1393
-  ;;  '(:documentOnTypeFormattingProvider))
-  :config
-  (dolist (mode `((nix-mode . ("nixd"))
-                  (zig-mode . ("zls"))
-                  ;; use uv run instead of venv
-                  ((python-mode python-ts-mode) .
-                   ,(eglot-alternatives
-                     '(("uv" "run" "ty" "server"))))))
-    (add-to-list 'eglot-server-programs mode)))
+;; ;; the following assumes that language-servers are in $PATH
+;; ;; eglot is opt-in (M-x eglot or whatever)
+;; (use-package eglot
+;;   :commands eglot
+;;   ;; :custom
+;;   ;; (eglot-ignored-server-capabilities
+;;   ;;  ;; https://github.com/joaotavora/eglot/discussions/1393
+;;   ;;  '(:documentOnTypeFormattingProvider))
+;;   :config
+;;   (dolist (mode `((nix-mode . ("nixd"))
+;;                   (zig-mode . ("zls"))
+;;                   ;; use uv run instead of venv
+;;                   ((python-mode python-ts-mode) .
+;;                    ,(eglot-alternatives
+;;                      '(("uv" "run" "ty" "server"))))))
+;;     (add-to-list 'eglot-server-programs mode)))
 
-;; let project.el recognize python project roots
-(add-to-list 'project-vc-extra-root-markers "pyproject.toml")
+;; ;; let project.el recognize python project roots
+;; (add-to-list 'project-vc-extra-root-markers "pyproject.toml")
 
 ;; TODO: consider beam for extra project support
 ;; https://github.com/rpav/beam.el
@@ -722,29 +720,29 @@
                                         ; T E R M
                                         ;
 
-;; colors
-(use-package eterm-256color
-  :hook
-  (term-mode-hook . eterm-256color-mode)
-  (vterm-mode-hook . eterm-256color-mode))
+;; ;; colors
+;; (use-package eterm-256color
+;;   :hook
+;;   (term-mode-hook . eterm-256color-mode)
+;;   (vterm-mode-hook . eterm-256color-mode))
 
-;; vterm
-(use-package vterm
-  :commands vterm
-  :config
-  (cond
-   ;; osx-specific setup
-   (t (setq vterm-shell "bash")))
-  (setq vterm-max-scrollback 10000
-        vterm-kill-buffer-on-exit t))
+;; ;; vterm
+;; (use-package vterm
+;;   :commands vterm
+;;   :config
+;;   (cond
+;;    ;; osx-specific setup
+;;    (t (setq vterm-shell "bash")))
+;;   (setq vterm-max-scrollback 10000
+;;         vterm-kill-buffer-on-exit t))
 
 
-(use-package 0x0)
+;; (use-package 0x0)
 
-(use-package eev
-  :init
-  (require 'eev-load)
-  (eev-mode 1))
+;; (use-package eev
+;;   :init
+;;   (require 'eev-load)
+;;   (eev-mode 1))
 
 
 ;; preload org-mode
