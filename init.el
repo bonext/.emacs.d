@@ -80,6 +80,11 @@
 ;; (require 'use-package)
 ;; (setq use-package-always-ensure t)
 
+;; custom themes
+
+(add-to-list 'custom-theme-load-path (file-name-concat aa-vendor-directory "doric-themes"))
+(add-to-list 'custom-theme-load-path (file-name-concat aa-vendor-directory "tokyo-night"))
+
 (advice-add
  'load-theme
  :before
@@ -95,6 +100,8 @@
 ;; unload theme before switching
 (add-hook 'aa-before-load-theme-hook
           #'(lambda () (mapc #'disable-theme custom-enabled-themes)))
+
+;; 
 
 (defun aa-recompile-all-packages nil
   (interactive)
@@ -188,63 +195,13 @@
 ;; no dupes in kill ring
 (setopt kill-do-not-save-duplicates t)
 
-;; ;; smoother scrolling
-;; (use-package ultra-scroll
-;;   :vc (:url "https://github.com/jdtsmith/ultra-scroll")
-;;   :init
-;;   (setq scroll-conservatively 3
-;;         scroll-margin 0)
-;;   :config
-;;   (ultra-scroll-mode 1))
+;; ultra-scroll: smoother scrolling
+(setopt scroll-conservatively 3)
+(setopt scroll-margin 0)
+(ultra-scroll-mode t)
 
-
-;; ;; highlight cursor
-;; (use-package pulsar
-;;   ;; load after ace-window to advice-add
-;;   :after ace-window
-;;   :commands pulsar-pulse-line
-;;   :config
-;;   (pulsar-global-mode 1)
-;;   (let ((aa-pulsar-pulse-after
-;;          '(other-window
-;;            next-multiframe-window
-;;            ace-window)))
-;;     (dolist (f aa-pulsar-pulse-after)
-;;       (advice-add f :after #'(lambda (&rest args) (pulsar-pulse-line))))))
-
-;; ;; show current key in the header
-;; (use-package keycast
-;;   :init (keycast-header-line-mode))
-
-;; (use-package doric-themes)
-;; (use-package base16-theme
-;;   :config
-;;   (setq base16-theme-distinct-fringe-background nil))
-
-;; (setopt custom-safe-themes
-;;         '(
-;;           ;; doric-fire
-;;           "49f934cfd7e032ec74b27b7dd89a5573279b3306c597b5511e2b5afebf5696a2"
-;;           ;; doric-marble
-;;           "0735492e73c9ff5d4d11bb1a876b06e595fe39d642e7512111ba38c64c5105ee"
-;;           ;; doric-obsidian
-;;           "fc5093155fcec43534c5ed2c80e80fe626b28735732ffa1c6cc4d10ab0568f44"
-;;           ;; doric-plum
-;;           "82453dac89416285dbd5e16869f165a87e629cfd1978a1ab22e814716ba5cbf7"
-;;           ;; doric-water
-;;           "d0c05a0b5a7619bca4c28d1bd2eeb15562afa634888a46c9e5b1d31b7d06ed36"
-;;           ;; base16-tokyodark
-;;           "a40703f9d1adb7ee1500d3c33ac4d62144675505ae7fe98b18a5d9ff325ee369"
-;;           default))
-
-;; (use-package circadian
-;;   :config
-;;   (setq calendar-latitude 52.370216
-;;         calendar-longitude 4.895168
-;;         circadian-themes `((:sunrise . ,aa-light-theme)
-;;                            (:sunset . ,aa-dark-theme)))
-;;   (circadian-setup)
-;;   (message "Using circadian"))
+;; pulsar: highlight cursor
+(pulsar-global-mode t)
 
 ;; highlight after typing is done
 ;; setq because C
@@ -306,11 +263,6 @@
 ;; resize all windows in frame on split
 (setopt window-combination-resize t)
 
-;; (use-package ace-window
-;;   :commands ace-window
-;;   :custom
-;;   (aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
-
 ;; (use-package dired
 ;;   :ensure nil
 ;;   :commands (dired dired-jump)
@@ -328,7 +280,6 @@
   ;; NOTE: this kills existing dired buffer so current directory is lost in dired
   (put 'dired-find-alternate-file 'disabled nil))
 
-
 ;; ;; TODO: replace corfu
 ;; ;; enable completion preview in prog-mode
 ;; ;; cf. https://www.gnu.org/software/emacs/manual/html_node/emacs/Symbol-Completion.html#Symbol-Completion
@@ -340,56 +291,28 @@
         text-mode-ispell-word-completion nil)
 
 
-;; ;; vertico (frontend / UI)
-;; ;; changes default completion buffer to vertical scrollable thing
-;; (use-package vertico
-;;   :init
-;;   (vertico-mode))
+;; vertico (frontend / UI)
+;; changes default completion buffer to vertical scrollable thing
+(add-to-list 'load-path (file-name-concat aa-vendor-directory "vertico" "extensions"))
+(vertico-mode)
 
+;; marginalia provides marninalia info to completions in minibuffer
+(marginalia-mode)
 
-;; ;; marginalia provides marninalia info to completions in minibuffer
-;; ;; annotations are per-category
-;; (use-package marginalia
-;;   :init
-;;   (marginalia-mode))
+;; corfu (frontend / UI)
+;; completion-at-point (e.g. when writing code)
+(setopt corfu-quit-no-match t)
+(global-corfu-mode)
 
+;; cape
+;; suite of completion-at-point functions
+(add-hook 'completion-at-point-functions #'cape-file)
 
-;; ;; corfu (frontend / UI)
-;; ;; completion-at-point (e.g. when writing code)
-;; (use-package corfu
-;;   :custom
-;;   ;; close corfu buffer if no completion matches
-;;   (corfu-quit-no-match t)
-;;   :init
-;;   (global-corfu-mode))
-
-;; ;; suite of completion-at-point functions
-;; ;; use prefix map for now
-;; (use-package cape
-;;   :commands cape-prefix-map
-;;   :init
-;;   (add-hook 'completion-at-point-functions #'cape-file))
-
-;; ;; orderless
-;; ;; decides how to match completion candidates
-;; (use-package orderless
-;;   :custom
-;;   (completion-styles '(orderless basic))
-;;   (completion-category-overrides
-;;    '((file (styles basic partial-completion)))))
-
-;; ;; consult
-;; (use-package consult
-;;   :commands (consult-line
-;;              consult-ripgrep
-;;              consult-outline
-;;              consult-buffer))
-
-;; (use-package helpful
-;;   :commands (helpful-callable
-;;              helpful-command
-;;              helpful-variable
-;;              helpful-key))
+;; orderless
+;; decides how to match completion candidates
+(setopt completion-styles '(orderless basic))
+(setopt completion-category-overrides
+        '((file (styles basic partial-completion))))
 
 (defun aa-org-setup-fonts ()
   (if (display-graphic-p)
