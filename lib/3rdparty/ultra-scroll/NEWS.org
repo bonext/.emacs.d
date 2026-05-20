@@ -1,0 +1,102 @@
+#+title: ultra-scroll - Changelog
+#+author: J.D. Smith
+#+language: en
+
+
+* v0.6.2 (2026-05-15)
+- Guard against a stuck-invisible cursor for modes which rapidly
+  change buffer in the window (even temporarily).
+
+* v0.6.1 (2026-05-01)
+
+- Use ~window-cursor-type~ where available during cursor hiding (instead
+  of the buffer-local equivalent), to target hiding only to the window
+  being scrolled.  This means the other window's cursor remains
+  visible if the buffer is visible in multiple windows.
+- Corrected variable name for ~ultra-scroll-restore-time~ and associated
+  docs.
+
+* v0.6.0 (2026-03-25)
+
+- By default, before scrolling outside the initial window bounds, a
+  mark is now pushed.  A series of scrolling operations without any
+  other commands in between do not push new marks (unless requested).
+  This allows scrolling away and quickly returning to the initial
+  position.
+- Introduce "leave functions" which include cursor hiding, column
+  restoration (now on by default), pushing a mark, and the hide
+  functions, each of which can be enabled independently. 
+- Breaking change: ~ultra-scroll-hide-cursor~ is now a boolean only.
+  The delay time after scrolling ends to restore columns, cursor
+  visibility, etc. is now configured with ~ultra-scroll-restore-time~.
+- Correctly handle forwarded events with no intact plist.
+- Ensure the correct scrolled window is prepared for scrolling.
+
+* v0.5.0 (2025-12-15)
+
+- Introduced ~ultra-scroll-preserve-column~.  If this option is enabled, ~ultra-scroll~ will try to preserve column position of point across scrolls.
+
+* v0.4.2 (2025-07-14)
+
+- Released on MELPA.
+
+* 0.4.1 (2025-06-09)
+
+- Work around redisplay bugs when the cursor is partially visible, which can lead to ~redisplay~ slowdowns of 150-500x.
+- Guard against ~posn-x-y~ returning ~nil~ on discovered position.
+
+* v0.4 (2025-05-05)
+
+- Support ~scroll-conservatively~ < 100, altering the value temporarily during scroll.  Note that ~scroll-margin~ = 0 is still required.
+- Do not rely on ~:phase~ information from the mouse events, since only certain hardware on mac provides it.
+
+* v0.3.5 (2025-04-17)
+
+- Fix freeze when scrolling down /very/ short windows like few-line child frame tooltips (#30).
+  
+* v0.3.4 (2025-04-02)
+
+- Correctly handle very large scroll-down deltas, which may occur for ultra-fast mice wheels with short windows.
+
+* v0.3.3 (2025-03-11)
+
+- Do not move point to ~point-min/max~ when scroll reaches buffer beginning/end, unless the cursor has been hidden.
+
+* v0.3.2 (2025-01-26)
+
+- Re-enable ~make-cursor-line-fully-visible~, which recent versions of ~pixel-scroll-precision-mode~ disable.
+
+* v0.3.1 (2025-01-18)
+
+- Add ~ultra-scroll-hide-functions~ hook, to support disabling/re-enabling arbitrary modes or calling other functions when scrolling starts/stops.
+- Doc improvements.
+
+* v0.3 (2025-01-12)
+
+- Hide cursor (and ~hl-line~) during scrolls by default.  See ~ultra-scroll-hide-cursor~.  Thanks to @minad; see #15.
+- Put custom variables in group ~scrolling~.
+- Improve ~ultra-scroll-check~:
+  + Correctly interrogate a group of wheel events to determine if they are "real" or fake.  Some Linux systems report ~PIXEL-DELTA~'s with fixed values (a line height), which effectively reverts ~ultra-scroll~ to line-by-line scrolling.
+  + Guard against up+down scrolling falsely indicating diverse scrolls pixel offsets.
+  + Report event timing (how fast /is/ your mouse)?
+- Check for ~--with-xinput2~ on Linux and warning if not found (needed for pixel scrolling; see #14).
+- Enable ~pixel-scroll-precision-mode~ directly, rather than just re-using its keymap.  This allows commands like ~vertico-mouse~ to turn off ~ultra-scroll~ indirectly by disabling ~pixel-scroll-precision-mode~.  
+
+* v0.2.1 (2025-01-09)
+
+- Introduce ~ultra-scroll-check~, to provide a means for users to check their wheel event stream to determine the character of their pixel delta scroll data.    
+
+* v0.2 (2025-01-08)
+
+- Support all (compatible) builds and hardware using the ~PIXEL-DELTA~ data in wheel events, continuing to support ~emacs-mac~ style wheel events too.
+- Rename to ~ultra-scroll~.
+- Update documentation.
+
+* v0.1 (2024-04-06)
+
+- Reduce garbage collection during scroll with new configuration options.
+- Many documentation improvements.
+
+* v0.0.1 (2023-11-28)
+
+- Introduced, supporting ~emacs-mac~ wheel events.

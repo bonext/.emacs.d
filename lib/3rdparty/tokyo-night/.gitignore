@@ -1,0 +1,5 @@
+.claude
+*.elc
+*-autoloads.el
+*-pkg.el
+dist/
