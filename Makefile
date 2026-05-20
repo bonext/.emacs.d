@@ -15,6 +15,7 @@ endef
 # URLs are expected to be .tar.gz files with an additional directory wrapping stuff
 # some dependencies:
 # helpful: dash s f elisp-refs
+# compat is widely used
 PACKAGES :=\
 	https://github.com/minad/marginalia/archive/refs/tags/2.11.tar.gz|marginalia \
 	https://github.com/minad/vertico/archive/refs/tags/2.9.tar.gz|vertico \
@@ -31,7 +32,8 @@ PACKAGES :=\
 	https://github.com/protesilaos/pulsar/archive/refs/tags/1.3.4.tar.gz|pulsar \
 	https://github.com/protesilaos/doric-themes/archive/refs/tags/1.1.0.tar.gz|doric-themes \
 	https://github.com/bbatsov/tokyo-night-emacs/archive/refs/tags/v1.0.0.tar.gz|tokyo-night \
-	https://github.com/bbatsov/guru-mode/archive/refs/tags/v1.0.tar.gz|guru-mode
+	https://github.com/bbatsov/guru-mode/archive/refs/tags/v1.0.tar.gz|guru-mode \
+	https://github.com/emacs-compat/compat/archive/refs/tags/31.0.0.1.tar.gz|compat
 
 $(CACHE_DIR): $(VENDOR_DIR)/.gitignore | $(VENDOR_DIR)
 	mkdir -p $(CACHE_DIR)

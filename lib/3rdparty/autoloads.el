@@ -244,6 +244,21 @@ If INTERACTIVE is nil the function acts like a capf.
 (register-definition-prefixes "cape/cape-keyword" '("cape-"))
 
 
+;;; Generated autoloads from compat/compat.el
+
+(register-definition-prefixes "compat/compat" '("compat-"))
+
+
+;;; Generated autoloads from compat/compat-macs.el
+
+(register-definition-prefixes "compat/compat-macs" '("compat-"))
+
+
+;;; Generated autoloads from compat/compat-tests.el
+
+(register-definition-prefixes "compat/compat-tests" '("compat-" "should-equal"))
+
+
 ;;; Generated autoloads from consult/consult.el
 
 (autoload 'consult-completion-in-region "consult/consult" "\
