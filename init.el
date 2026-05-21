@@ -4,15 +4,14 @@
 
 (defvar aa-face-default-name "Cascadia Code NF")
 (defvar aa-face-default-height 100)
-(defvar aa-dark-theme 'modus-vivendi-tinted)
-(defvar aa-light-theme 'modus-operandi-tinted)
+(defvar aa-dark-theme 'tokyo-night)
+(defvar aa-light-theme 'tokyo-night-moon)
 
 (defvar aa-face-org-height 140)
 (defvar aa-org-directory "~/Documents/Notes")
 (defvar aa-org-journal-directory "~/Documents/journal")
 (defvar aa-org-roam-directory "~/Documents/RoamNotes")
 
-(load-theme aa-dark-theme t)
 
 ;; vendored code
 (defvar aa-vendor-directory (file-name-concat user-emacs-directory "lib/3rdparty"))
@@ -49,6 +48,14 @@
     (load aa-vendor--autoloads-filename)
     (message "Loaded vendor autoloads from %s" aa-vendor--autoloads-filename)))
 
+;; other load-path tweaks
+
+;;; custom themes (to be able to M-x load-theme)
+(add-to-list 'custom-theme-load-path (file-name-concat aa-vendor-directory "doric-themes"))
+(add-to-list 'custom-theme-load-path (file-name-concat aa-vendor-directory "tokyo-night"))
+
+;;; vertico extensions
+(add-to-list 'load-path (file-name-concat aa-vendor-directory "vertico" "extensions"))
 
 ;;; exposed hooks
 
@@ -80,10 +87,6 @@
 ;; (require 'use-package)
 ;; (setq use-package-always-ensure t)
 
-;; custom themes
-
-(add-to-list 'custom-theme-load-path (file-name-concat aa-vendor-directory "doric-themes"))
-(add-to-list 'custom-theme-load-path (file-name-concat aa-vendor-directory "tokyo-night"))
 
 (advice-add
  'load-theme
@@ -107,6 +110,9 @@
   (interactive)
   (message "recompiling elpa/ contents")
   (native-compile-async (file-name-concat user-emacs-directory "elpa") t))
+
+;; colors
+(load-theme aa-dark-theme t)
 
 (when (fboundp 'tool-bar-mode)
   (tool-bar-mode -1))
@@ -293,7 +299,6 @@
 
 ;; vertico (frontend / UI)
 ;; changes default completion buffer to vertical scrollable thing
-(add-to-list 'load-path (file-name-concat aa-vendor-directory "vertico" "extensions"))
 (vertico-mode)
 
 ;; marginalia provides marninalia info to completions in minibuffer
