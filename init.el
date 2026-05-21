@@ -10,8 +10,6 @@
 (defvar aa-face-org-height 140)
 (defvar aa-org-directory "~/Documents/Notes")
 (defvar aa-org-journal-directory "~/Documents/journal")
-(defvar aa-org-roam-directory "~/Documents/RoamNotes")
-
 
 ;; vendored code
 (defvar aa-vendor-directory (file-name-concat user-emacs-directory "lib/3rdparty"))
@@ -319,196 +317,62 @@
 (setopt completion-category-overrides
         '((file (styles basic partial-completion))))
 
-(defun aa-org-setup-fonts ()
-  (if (display-graphic-p)
-      (progn
-        ;; setup fonts
-        ;; via https://yannesposito.com/posts/0020-cool-looking-org-mode/index.html
-        ;; and https://zzamboni.org/post/beautifying-org-mode-in-emacs/
-        (let* (
-               ;; variable-width font setup
-               (variable-tuple
-                (cond
-                 ((x-list-fonts "PT Sans") `(:family "PT Sans" :height ,aa-face-org-height))))
-               ;; fixed-width font setup
-               (fixed-tuple
-                (cond
-                 ((x-list-fonts "PT Mono") '(:family "PT Mono"))
-                 ((x-list-fonts "Cascadia Code NF") '(:family "Cascadia Code NF"))))
-               ;; store default font color to reset headlines
-               (base-font-color (face-foreground 'default nil 'default))
-               ;; store some settings for headlines
-               (headline `(:inherit default :weight bold :foreground ,base-font-color)))
-          
-          (custom-theme-set-faces
-           ;; 'user is "current user custom settings"
-           'user
-
-           ;; variable and fixed pitch fonts
-           `(variable-pitch     ((t ,@variable-tuple)))
-           `(fixed-pitch        ((t ,@fixed-tuple)))
-
-           ;; headings
-           `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.2))))
-           `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.1))))
-           `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.05))))
-           `(org-level-4 ((t (,@headline ,@variable-tuple))))
-           `(org-level-5 ((t (,@headline ,@variable-tuple))))
-           `(org-level-6 ((t (,@headline ,@variable-tuple))))
-           `(org-level-7 ((t (,@headline ,@variable-tuple))))
-           `(org-level-8 ((t (,@headline ,@variable-tuple))))
-           `(org-document-title ((t (,@headline ,@variable-tuple :height 1.5 :underline nil))))
-
-           ;; things that should be fixed-pitch
-           '(org-ellipsis ((t (:inherit fixed-pitch :foreground "gray60" :underline nil))))
-           '(org-block            ((t (:inherit fixed-pitch))))
-           '(org-block-begin-line ((t (:inherit fixed-pitch))))
-           '(org-block-end-line   ((t (:inherit fixed-pitch))))
-           '(org-src              ((t (:inherit fixed-pitch))))
-           '(org-properties       ((t (:inherit fixed-pitch))))
-           '(org-code             ((t (:inherit (shadow fixed-pitch)))))
-           '(org-date             ((t (:inherit (shadow fixed-pitch)))))
-           '(org-document-info    ((t (:inherit (shadow fixed-pitch)))))
-           '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
-           '(org-drawer           ((t (:inherit (shadow fixed-pitch)))))
-           '(org-indent           ((t (:inherit (org-hide fixed-pitch)))))
-           `(org-link             ((t (:inherit fixed-pitch :foreground ,base-font-color :underline t))))
-           '(org-meta-line        ((t (:inherit (font-lock-comment-face fixed-pitch)))))
-           '(org-property-value   ((t (:inherit fixed-pitch))) t)
-           '(org-special-keyword  ((t (:inherit (font-lock-comment-face fixed-pitch)))))
-           '(org-table            ((t (:inherit fixed-pitch))))
-           '(org-tag              ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
-           '(org-verbatim         ((t (:inherit (shadow fixed-pitch)))))))
-        (message "fonts reset DONE"))))
-
-;; hook this function to load-theme to avoid reloading emacs on theme switch
-(add-hook 'aa-after-load-theme-hook #'aa-org-setup-fonts)
+;;
+;; ORG-MODE
+;;
+(setopt org-directory aa-org-directory)
+(setopt org-hide-emphasis-markers t)
+(setopt org-hide-leading-stars t)
+(setopt org-ellipsis " ▾")
+(setopt org-startup-truncated t)
+(setopt org-startup-folded 'fold)
+(setopt org-complete-tags-always-offer-all-agenda-tags t)
+;; log time when todos are done
+;; cf. https://orgmode.org/guide/Progress-Logging.html
+(setopt org-log-into-drawer "LOGBOOK")
+(setopt org-log-done 'time)
+(setopt org-todo-keywords
+      '((sequence "TODO(!)" "DONE(!)")))
+;; capture setup
+(setopt org-default-notes-file (file-name-concat org-directory "captured.org"))
+(setopt aa-capture-templates-dir (file-name-concat user-emacs-directory "org-capture-templates"))
+(setopt org-capture-templates
+      `(("b" "book" entry
+         (file ,(file-name-concat org-directory "finished-books.org"))
+         (file ,(file-name-concat aa-capture-templates-dir "book"))
+         :kill-buffer t)
+        ("d" "mind dump" entry
+         (file ,(file-name-concat org-directory "mind-dumps.org"))
+         (file ,(file-name-concat aa-capture-templates-dir "dump"))
+         :prepend t :kill-buffer t)
+        ("j" "journal" entry
+         (file ,(file-name-concat aa-org-journal-directory "journal.org"))
+         (file ,(file-name-concat aa-capture-templates-dir "journal"))
+         :prepend t
+         :kill-buffer t)))
+;; agenda uses everything under org-directory
+(setopt org-agenda-files (list org-directory))
+;; (add-to-list 'org-agenda-files org-directory)
 
 (defun aa-org-common-hooks ()
-  (org-indent-mode)
-  (variable-pitch-mode 1)
-  (visual-line-mode 1)
-  (aa-org-setup-fonts))
+  (custom-theme-set-faces
+   'user
+   '(org-document-title ((t . (:height 2.0))))
+   '(org-level-1 ((t . (:height 1.7))))
+   '(org-level-2 ((t . (:height 1.5))))
+   '(org-level-3 ((t . (:height 1.3))))
+   '(org-level-4 ((t . (:height 1.2))))
+   '(org-level-5 ((t . (:height 1.1))))
+   ))
 
-;; (use-package org
-;;   :ensure nil
-;;   :commands (org-agenda
-;;              org-capture
-;;              org-store-link)
-;;   :hook (org-mode . aa-org-common-hooks)
-;;   :config
-;;   (setq org-directory aa-org-directory)
-;;   ;; TODO: make the following part of fonts
-;;   (setq org-ellipsis " ▾")
-;;   (setq org-hide-emphasis-markers t)
-;;   ;; enable scaling of inline images with attr_org width
-;;   (setq org-image-actual-width nil)
-;;   ;; show inline images by default
-;;   (setq org-startup-with-inline-images t)
-;;   ;; Make C-c a t reuse current window
-;;   (setq org-agenda-window-setup 'current-window)
-;;   ;; offer tags from all agenda files (not current buffer)
-;;   (setq org-complete-tags-always-offer-all-agenda-tags t)
-;;   ;; wrap text by default
-;;   ;; TODO: do we need this?
-;;   (setq org-startup-truncated nil)
-;;   ;; show table of contents on load
-;;   (setq org-startup-folded 'fold)
-;;   ;; log time when todos are done
-;;   ;; cf. https://orgmode.org/guide/Progress-Logging.html
-;;   (setq org-log-into-drawer "LOGBOOK")
-;;   (setq org-log-done 'time)
-;;   (setq org-todo-keywords
-;;         '((sequence "TODO(!)" "DONE(!)")))
-;;   (setq org-refile-targets
-;;         '((nil :maxlevel . 5)))
-;;   ;; refile in a single go
-;;   (setq org-outline-path-complete-in-steps nil)
-;;   ;; show full paths for refiling
-;;   (setq org-refile-use-outline-path t)
-;;   ;; capture setup
-;;   (setq org-default-notes-file (file-name-concat org-directory "captured.org"))
-;;   (setq aa-capture-templates-dir (file-name-concat user-emacs-directory "org-capture-templates"))
-;;   (setq org-capture-templates
-;;         `(("b" "book" entry
-;;            (file ,(file-name-concat org-directory "finished-books.org"))
-;;            (file ,(file-name-concat aa-capture-templates-dir "book"))
-;;            :kill-buffer t)
-;;           ("d" "mind dump" entry
-;;            (file ,(file-name-concat org-directory "mind-dumps.org"))
-;;            (file ,(file-name-concat aa-capture-templates-dir "dump"))
-;;            :prepend t :kill-buffer t)
-;;           ("j" "journal" entry
-;;            (file ,(file-name-concat aa-org-journal-directory "journal.org"))
-;;            (file ,(file-name-concat aa-capture-templates-dir "journal"))
-;;            :prepend t
-;;            :kill-buffer t)))
-;;   ;; update agenda
-;;   (add-to-list 'org-agenda-files org-directory))
+(add-hook 'org-mode-hook #'aa-org-common-hooks)
 
-;; (use-package org-bullets
-;;   :after org
-;;   :hook (org-mode . org-bullets-mode)
-;;   :custom
-;;   (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
-
-(defun aa-org-mode-visual-fill ()
-  (setq visual-fill-column-width 100
-        visual-fill-column-center-text t)
-  (visual-fill-column-mode 1))
-
-;; (use-package visual-fill-column
-;;   :hook (org-mode . aa-org-mode-visual-fill))
-
-;; (use-package org-expose-emphasis-markers
-;;   :after org
-;;   :hook (org-mode . (lambda () (org-expose-emphasis-markers-mode))))
-
-;; org-journal
-(defun aa-org-journal-setup ()
-  ;; common steps
-  (setq org-journal-dir "~/Documents/journal")
-  ;; "2024-05-13, Monday"
-  (setq org-journal-date-format "%Y-%m-%d, %A")
-  ;; 2024-05-13.org
-  (setq org-journal-file-format "%F.org")
-  ;; system-specific
-  (cond
-   ;; osx-specific stuff
-   (t (progn
-        (setq org-journal-file-type 'daily)
-        (setq org-journal-encrypt-journal t)))))
-
-;; (use-package org-journal
-;;   :commands org-journal-new-entry
-;;   :after org
-;;   :init
-;;   (aa-org-journal-setup))
-
+;; org export: Github-Flavoured Markdown
 ;; (use-package ox-gfm)
 
 ;; TODO: research
 ;; support for image paste
 ;; https://github.com/abo-abo/org-download
-
-;; (use-package org-roam
-;;   :if (aa-work-p)
-;;   :after org
-;;   :commands (org-roam-node-find
-;;              org-roam-capture
-;;              org-roam-buffer-toggle
-;;              org-roam-alias-add
-;;              org-roam-dailies-capture-today
-;;              org-roam-dailies-goto-date
-;;              org-roam-dailies-goto-today
-;;              org-roam-dailies-goto-previous-note
-;;              org-roam-dailies-goto-next-note)
-;;   :config
-;;   (setopt org-roam-directory aa-org-roam-directory)
-;;   (setopt org-roam-dailies-directory "daily/")
-;;   (org-roam-setup)
-;;   (add-to-list 'org-agenda-files org-roam-directory)
-;;   (add-to-list 'org-agenda-files (file-name-concat aa-org-roam-directory org-roam-dailies-directory)))
 
                                         ;
                                         ; C O D I N G
@@ -673,9 +537,6 @@
 ;;   (eev-mode 1))
 
 
-;; preload org-mode
-(with-temp-buffer (org-mode))
-
 ;;; keybindings
 ;;;; dired
 (defvar aa-leader-map-dired (make-sparse-keymap) "SPC d: Dired")
@@ -706,43 +567,7 @@
   "C-c l" "org-store-link"
   "C-c n" "open notes")
 
-(keymap-set org-mode-map "C-c m" #'org-toggle-link-display)
-
-;;;; org-journal
-(keymap-global-set "C-c j" #'org-journal-new-entry)
-(which-key-add-key-based-replacements
-  "C-c j" "journal")
-
-;;;; org-roam
-(if (aa-work-p)
-    (progn
-      (defvar aa-leader-map-org-roam (make-sparse-keymap) "SPC r: org-roam")
-      (keymap-global-set "C-c r" aa-leader-map-org-roam)
-      (define-key aa-leader-map-org-roam (kbd "f") #'org-roam-node-find)
-      (define-key aa-leader-map-org-roam (kbd "c") #'org-roam-capture)
-      (define-key aa-leader-map-org-roam (kbd "l") #'org-roam-buffer-toggle)
-      (define-key aa-leader-map-org-roam (kbd "a") #'org-roam-alias-add)
-      ;; org-roam-dailies
-      (defvar aa-leader-map-org-roam-dailies (make-sparse-keymap) "SPC r d: org-roam dailies")
-      (define-key aa-leader-map-org-roam (kbd "d") aa-leader-map-org-roam-dailies)
-      (define-key aa-leader-map-org-roam-dailies (kbd "c") #'org-roam-dailies-capture-today)
-      (define-key aa-leader-map-org-roam-dailies (kbd "d") #'org-roam-dailies-goto-date)
-      (define-key aa-leader-map-org-roam-dailies (kbd "t") #'org-roam-dailies-goto-today)
-      (define-key aa-leader-map-org-roam-dailies (kbd "p") #'org-roam-dailies-goto-previous-note)
-      (define-key aa-leader-map-org-roam-dailies (kbd "n") #'org-roam-dailies-goto-next-note)
-      (keymap-set org-mode-map "C-c i" #'org-roam-node-insert)
-      (which-key-add-key-based-replacements
-        "C-c r" "org-roam"
-        "C-c r f" "find node"
-        "C-c r c" "capture"
-        "C-c r l" "toggle backlinks"
-        "C-c r a" "add node alias"
-        "C-c r d" "dailies"
-        "C-c r d c" "capture today"
-        "C-c r d d" "date"
-        "C-c r d t" "today"
-        "C-c r d p" "previous note"
-        "C-c r d n" "next note")))
+;; (keymap-set org-mode-map "C-c m" #'org-toggle-link-display)
 
 ;;;; consult
 (keymap-global-set "C-c f" #'consult-line)
