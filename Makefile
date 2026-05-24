@@ -7,6 +7,7 @@ CACHE_DIR := $(VENDOR_DIR)/.cache
 define GITIGNORE_CONTENTS
 .cache/
 **/*.png
+**/*.gif
 **/.github/
 endef
 
@@ -33,7 +34,8 @@ PACKAGES :=\
 	https://github.com/protesilaos/doric-themes/archive/refs/tags/1.1.0.tar.gz|doric-themes \
 	https://github.com/bbatsov/tokyo-night-emacs/archive/refs/tags/v1.0.0.tar.gz|tokyo-night \
 	https://github.com/bbatsov/guru-mode/archive/refs/tags/v1.0.tar.gz|guru-mode \
-	https://github.com/emacs-compat/compat/archive/refs/tags/31.0.0.1.tar.gz|compat
+	https://github.com/emacs-compat/compat/archive/refs/tags/31.0.0.1.tar.gz|compat \
+	https://github.com/Fuco1/smartparens/archive/refs/tags/1.11.0.tar.gz|smartparens
 
 $(CACHE_DIR): $(VENDOR_DIR)/.gitignore | $(VENDOR_DIR)
 	mkdir -p $(CACHE_DIR)

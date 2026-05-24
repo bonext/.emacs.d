@@ -723,6 +723,8 @@ evaluate the variable `corfu-mode'.
 The mode's hook is called both when the mode is enabled and when it is
 disabled.
 
+\\{corfu-mode-map}
+
 (fn &optional ARG)" t)
 (put 'global-corfu-mode 'globalized-minor-mode t)
 (defvar global-corfu-mode nil "\
@@ -1427,9 +1429,402 @@ See `pulsar-mode' for more information on Pulsar mode.
 (register-definition-prefixes "s/s" '("s-"))
 
 
+;;; Generated autoloads from smartparens/smartparens.el
+
+(autoload 'sp-cheat-sheet "smartparens/smartparens" "\
+Generate a cheat sheet of all the smartparens interactive functions.
+
+Without a prefix argument, print only the short documentation and examples.
+
+With non-nil prefix argument ARG, show the full documentation for each function.
+
+You can follow the links to the function or variable help page.
+To get back to the full list, use \\[help-go-back].
+
+You can use `beginning-of-defun' and `end-of-defun' to jump to
+the previous/next entry.
+
+Examples are fontified using the `font-lock-string-face' for
+better orientation.
+
+(fn &optional ARG)" t)
+(defvar smartparens-mode-map (make-sparse-keymap) "\
+Keymap used for `smartparens-mode'.")
+(autoload 'sp-use-paredit-bindings "smartparens/smartparens" "\
+Initiate `smartparens-mode-map' with `sp-paredit-bindings'." t)
+(autoload 'sp-use-smartparens-bindings "smartparens/smartparens" "\
+Initiate `smartparens-mode-map' with `sp-smartparens-bindings'." t)
+(autoload 'smartparens-mode "smartparens/smartparens" "\
+Toggle smartparens mode.
+
+You can enable pre-set bindings by customizing
+`sp-base-key-bindings' variable.  The current content of
+`smartparens-mode-map' is:
+
+ \\{smartparens-mode-map}
+
+This is a minor mode.  If called interactively, toggle the `Smartparens
+mode' mode.  If the prefix argument is positive, enable the mode, and if
+it is zero or negative, disable the mode.
+
+If called from Lisp, toggle the mode if ARG is `toggle'.  Enable the
+mode if ARG is nil, omitted, or is a positive number.  Disable the mode
+if ARG is a negative number.
+
+To check whether the minor mode is enabled in the current buffer,
+evaluate the variable `smartparens-mode'.
+
+The mode's hook is called both when the mode is enabled and when it is
+disabled.
+
+(fn &optional ARG)" t)
+(autoload 'smartparens-strict-mode "smartparens/smartparens" "\
+Toggle the strict smartparens mode.
+
+When strict mode is active, `delete-char', `kill-word' and their
+backward variants will skip over the pair delimiters in order to
+keep the structure always valid (the same way as `paredit-mode'
+does).  This is accomplished by remapping them to
+`sp-delete-char' and `sp-kill-word'.  There is also function
+`sp-kill-symbol' that deletes symbols instead of words, otherwise
+working exactly the same (it is not bound to any key by default).
+
+When strict mode is active, this is indicated with \"/s\"
+after the smartparens indicator in the mode list.
+
+This is a minor mode.  If called interactively, toggle the
+`Smartparens-Strict mode' mode.  If the prefix argument is positive,
+enable the mode, and if it is zero or negative, disable the mode.
+
+If called from Lisp, toggle the mode if ARG is `toggle'.  Enable the
+mode if ARG is nil, omitted, or is a positive number.  Disable the mode
+if ARG is a negative number.
+
+To check whether the minor mode is enabled in the current buffer,
+evaluate the variable `smartparens-strict-mode'.
+
+The mode's hook is called both when the mode is enabled and when it is
+disabled.
+
+\\{smartparens-strict-mode-map}
+
+(fn &optional ARG)" t)
+(put 'smartparens-global-strict-mode 'globalized-minor-mode t)
+(defvar smartparens-global-strict-mode nil "\
+Non-nil if Smartparens-Global-Strict mode is enabled.
+See the `smartparens-global-strict-mode' command
+for a description of this minor mode.
+Setting this variable directly does not take effect;
+either customize it (see the info node `Easy Customization')
+or call the function `smartparens-global-strict-mode'.")
+(custom-autoload 'smartparens-global-strict-mode "smartparens/smartparens" nil)
+(autoload 'smartparens-global-strict-mode "smartparens/smartparens" "\
+Toggle Smartparens-Strict mode in all buffers.
+With prefix ARG, enable Smartparens-Global-Strict mode if ARG is
+positive; otherwise, disable it.
+
+If called from Lisp, toggle the mode if ARG is `toggle'.
+Enable the mode if ARG is nil, omitted, or is a positive number.
+Disable the mode if ARG is a negative number.
+
+Smartparens-Strict mode is enabled in all buffers where
+`turn-on-smartparens-strict-mode' would do it.
+
+See `smartparens-strict-mode' for more information on
+Smartparens-Strict mode.
+
+(fn &optional ARG)" t)
+(autoload 'turn-on-smartparens-strict-mode "smartparens/smartparens" "\
+Turn on `smartparens-strict-mode'." t)
+(autoload 'turn-off-smartparens-strict-mode "smartparens/smartparens" "\
+Turn off `smartparens-strict-mode'." t)
+(put 'smartparens-global-mode 'globalized-minor-mode t)
+(defvar smartparens-global-mode nil "\
+Non-nil if Smartparens-Global mode is enabled.
+See the `smartparens-global-mode' command
+for a description of this minor mode.
+Setting this variable directly does not take effect;
+either customize it (see the info node `Easy Customization')
+or call the function `smartparens-global-mode'.")
+(custom-autoload 'smartparens-global-mode "smartparens/smartparens" nil)
+(autoload 'smartparens-global-mode "smartparens/smartparens" "\
+Toggle Smartparens mode in all buffers.
+With prefix ARG, enable Smartparens-Global mode if ARG is positive;
+otherwise, disable it.
+
+If called from Lisp, toggle the mode if ARG is `toggle'.
+Enable the mode if ARG is nil, omitted, or is a positive number.
+Disable the mode if ARG is a negative number.
+
+Smartparens mode is enabled in all buffers where
+`turn-on-smartparens-mode' would do it.
+
+See `smartparens-mode' for more information on Smartparens mode.
+
+(fn &optional ARG)" t)
+(autoload 'turn-on-smartparens-mode "smartparens/smartparens" "\
+Turn on `smartparens-mode'.
+
+This function is used to turn on `smartparens-global-mode'.
+
+By default `smartparens-global-mode' ignores buffers with
+`mode-class' set to special, but only if they are also not comint
+buffers.
+
+Additionally, buffers on `sp-ignore-modes-list' are ignored.
+
+You can still turn on smartparens in these mode manually (or
+in mode's startup-hook etc.) by calling `smartparens-mode'." t)
+(autoload 'turn-off-smartparens-mode "smartparens/smartparens" "\
+Turn off `smartparens-mode'." t)
+(autoload 'show-smartparens-mode "smartparens/smartparens" "\
+Toggle visualization of matching pairs.  When enabled, any
+
+matching pair is highlighted after `sp-show-pair-delay' seconds
+of Emacs idle time if the point is immediately in front or after
+a pair.  This mode works similarly to `show-paren-mode', but
+support custom pairs.
+
+This is a minor mode.  If called interactively, toggle the
+`Show-Smartparens mode' mode.  If the prefix argument is positive,
+enable the mode, and if it is zero or negative, disable the mode.
+
+If called from Lisp, toggle the mode if ARG is `toggle'.  Enable the
+mode if ARG is nil, omitted, or is a positive number.  Disable the mode
+if ARG is a negative number.
+
+To check whether the minor mode is enabled in the current buffer,
+evaluate the variable `show-smartparens-mode'.
+
+The mode's hook is called both when the mode is enabled and when it is
+disabled.
+
+(fn &optional ARG)" t)
+(put 'show-smartparens-global-mode 'globalized-minor-mode t)
+(defvar show-smartparens-global-mode nil "\
+Non-nil if Show-Smartparens-Global mode is enabled.
+See the `show-smartparens-global-mode' command
+for a description of this minor mode.
+Setting this variable directly does not take effect;
+either customize it (see the info node `Easy Customization')
+or call the function `show-smartparens-global-mode'.")
+(custom-autoload 'show-smartparens-global-mode "smartparens/smartparens" nil)
+(autoload 'show-smartparens-global-mode "smartparens/smartparens" "\
+Toggle Show-Smartparens mode in all buffers.
+With prefix ARG, enable Show-Smartparens-Global mode if ARG is
+positive; otherwise, disable it.
+
+If called from Lisp, toggle the mode if ARG is `toggle'.
+Enable the mode if ARG is nil, omitted, or is a positive number.
+Disable the mode if ARG is a negative number.
+
+Show-Smartparens mode is enabled in all buffers where
+`turn-on-show-smartparens-mode' would do it.
+
+See `show-smartparens-mode' for more information on Show-Smartparens
+mode.
+
+(fn &optional ARG)" t)
+(autoload 'turn-on-show-smartparens-mode "smartparens/smartparens" "\
+Turn on `show-smartparens-mode'." t)
+(autoload 'turn-off-show-smartparens-mode "smartparens/smartparens" "\
+Turn off `show-smartparens-mode'." t)
+(register-definition-prefixes "smartparens/smartparens" '("smartparens-" "sp-"))
+
+
+;;; Generated autoloads from smartparens/smartparens-clojure.el
+
+(register-definition-prefixes "smartparens/smartparens-clojure" '("sp-clojure-prefix"))
+
+
+;;; Generated autoloads from smartparens/test/smartparens-commands-test.el
+
+(register-definition-prefixes "smartparens/test/smartparens-commands-test" '("sp-"))
+
+
+;;; Generated autoloads from smartparens/smartparens-config.el
+
+(register-definition-prefixes "smartparens/smartparens-config" '("sp-lisp-invalid-hyperlink-p"))
+
+
+;;; Generated autoloads from smartparens/test/smartparens-config-test.el
+
+(register-definition-prefixes "smartparens/test/smartparens-config-test" '("sp-test-config--"))
+
+
+;;; Generated autoloads from smartparens/test/smartparens-cua-selection-test.el
+
+(register-definition-prefixes "smartparens/test/smartparens-cua-selection-test" '("sp-test-cuasel"))
+
+
+;;; Generated autoloads from smartparens/test/smartparens-delete-selection-test.el
+
+(register-definition-prefixes "smartparens/test/smartparens-delete-selection-test" '("sp-test-delsel"))
+
+
+;;; Generated autoloads from smartparens/smartparens-elixir.el
+
+(register-definition-prefixes "smartparens/smartparens-elixir" '("sp-elixir-"))
+
+
+;;; Generated autoloads from smartparens/test/smartparens-elixir-test.el
+
+(register-definition-prefixes "smartparens/test/smartparens-elixir-test" '("sp-test-"))
+
+
+;;; Generated autoloads from smartparens/smartparens-ess.el
+
+(register-definition-prefixes "smartparens/smartparens-ess" '("sp-ess-"))
+
+
+;;; Generated autoloads from smartparens/test/smartparens-ess-test.el
+
+(register-definition-prefixes "smartparens/test/smartparens-ess-test" '("sp-"))
+
+
+;;; Generated autoloads from smartparens/test/smartparens-get-expression-test.el
+
+(register-definition-prefixes "smartparens/test/smartparens-get-expression-test" '("sp-test--get-expression-skip-before-arrow"))
+
+
+;;; Generated autoloads from smartparens/test/smartparens-get-paired-expression-c-test.el
+
+(register-definition-prefixes "smartparens/test/smartparens-get-paired-expression-c-test" '("sp-test--paired-expression-parse-in-c"))
+
+
+;;; Generated autoloads from smartparens/test/smartparens-get-paired-expression-elisp-test.el
+
+(register-definition-prefixes "smartparens/test/smartparens-get-paired-expression-elisp-test" '("sp-test--paired-expression-parse-in-elisp"))
+
+
+;;; Generated autoloads from smartparens/test/smartparens-get-paired-expression-latex-test.el
+
+(register-definition-prefixes "smartparens/test/smartparens-get-paired-expression-latex-test" '("sp-test--paired-expression-parse-in-latex"))
+
+
+;;; Generated autoloads from smartparens/test/smartparens-get-paired-expression-ruby-test.el
+
+(register-definition-prefixes "smartparens/test/smartparens-get-paired-expression-ruby-test" '("sp-test--paired-expression-parse-in-ruby"))
+
+
+;;; Generated autoloads from smartparens/test/smartparens-get-stringlike-expression-elisp-test.el
+
+(register-definition-prefixes "smartparens/test/smartparens-get-stringlike-expression-elisp-test" '("sp-test--stringlike-expression-parse-in-elisp"))
+
+
+;;; Generated autoloads from smartparens/test/smartparens-get-stringlike-expression-python-test.el
+
+(register-definition-prefixes "smartparens/test/smartparens-get-stringlike-expression-python-test" '("sp-test-with-temp-python-buffer"))
+
+
+;;; Generated autoloads from smartparens/test/smartparens-get-stringlike-expression-test.el
+
+(register-definition-prefixes "smartparens/test/smartparens-get-stringlike-expression-test" '("sp-test-"))
+
+
+;;; Generated autoloads from smartparens/test/smartparens-get-thing-test.el
+
+(register-definition-prefixes "smartparens/test/smartparens-get-thing-test" '("sp-test-"))
+
+
+;;; Generated autoloads from smartparens/smartparens-haskell.el
+
+(register-definition-prefixes "smartparens/smartparens-haskell" '("sp-"))
+
+
+;;; Generated autoloads from smartparens/smartparens-html.el
+
+(register-definition-prefixes "smartparens/smartparens-html" '("sp-html-"))
+
+
+;;; Generated autoloads from smartparens/test/smartparens-insertion-test.el
+
+(register-definition-prefixes "smartparens/test/smartparens-insertion-test" '("sp-test-"))
+
+
+;;; Generated autoloads from smartparens/test/smartparens-javascript-test.el
+
+(register-definition-prefixes "smartparens/test/smartparens-javascript-test" '("sp-test--javascript-mode"))
+
+
+;;; Generated autoloads from smartparens/smartparens-latex.el
+
+(register-definition-prefixes "smartparens/smartparens-latex" '("sp-latex-"))
+
+
+;;; Generated autoloads from smartparens/smartparens-lua.el
+
+(register-definition-prefixes "smartparens/smartparens-lua" '("sp-lua-post-keyword-insert"))
+
+
+;;; Generated autoloads from smartparens/smartparens-markdown.el
+
+(register-definition-prefixes "smartparens/smartparens-markdown" '("sp-"))
+
+
+;;; Generated autoloads from smartparens/test/smartparens-ocaml-test.el
+
+(register-definition-prefixes "smartparens/test/smartparens-ocaml-test" '("sp-test--ocaml-mode"))
+
+
+;;; Generated autoloads from smartparens/smartparens-org.el
+
+(register-definition-prefixes "smartparens/smartparens-org" '("sp--org-skip-asterisk"))
+
+
+;;; Generated autoloads from smartparens/smartparens-python.el
+
+(register-definition-prefixes "smartparens/smartparens-python" '("sp-python-fix-tripple-quotes"))
+
+
+;;; Generated autoloads from smartparens/test/smartparens-python-test.el
+
+(register-definition-prefixes "smartparens/test/smartparens-python-test" '("sp-test-"))
+
+
+;;; Generated autoloads from smartparens/test/smartparens-region-ok-test.el
+
+(register-definition-prefixes "smartparens/test/smartparens-region-ok-test" '("sp-test--string-valid-p"))
+
+
+;;; Generated autoloads from smartparens/smartparens-ruby.el
+
+(register-definition-prefixes "smartparens/smartparens-ruby" '("sp-"))
+
+
+;;; Generated autoloads from smartparens/test/smartparens-ruby-mode-test.el
+
+(register-definition-prefixes "smartparens/test/smartparens-ruby-mode-test" '("sp-ruby-"))
+
+
+;;; Generated autoloads from smartparens/smartparens-rust.el
+
+(register-definition-prefixes "smartparens/smartparens-rust" '("sp-"))
+
+
+;;; Generated autoloads from smartparens/smartparens-scala.el
+
+(register-definition-prefixes "smartparens/smartparens-scala" '("sp-scala-wrap-with-indented-newlines"))
+
+
+;;; Generated autoloads from smartparens/smartparens-text.el
+
+(register-definition-prefixes "smartparens/smartparens-text" '("sp-text-mode-"))
+
+
+;;; Generated autoloads from smartparens/test/smartparens-wrapping-test.el
+
+(register-definition-prefixes "smartparens/test/smartparens-wrapping-test" '("sp-test-wrap"))
+
+
 ;;; Generated autoloads from f/test/test-helper.el
 
 (register-definition-prefixes "f/test/test-helper" '("chmod" "f-test/" "should-" "with-"))
+
+
+;;; Generated autoloads from smartparens/test/test-helper.el
+
+(register-definition-prefixes "smartparens/test/test-helper" '("sp-"))
 
 
 ;;; Generated autoloads from tokyo-night/tokyo-night.el

@@ -404,20 +404,10 @@
 ;; (use-package racket-mode)
 
 ;; smartparens
-;; (use-package smartparens
-;;   :hook ((lisp-data-mode racket-mode pollen-mode) . smartparens-strict-mode)
-;;   :config
-;;   (require 'smartparens-config)
-;;   :custom
-;;   (sp-base-key-bindings 'sp "set smartparens bindings"))
+(require 'smartparens-config)
+(setopt sp-base-key-bindings 'paredit)
+(add-hook 'lisp-data-mode-hook #'smartparens-strict-mode)
 
-;; (use-package parinfer-rust-mode
-;;   :init (setq parinfer-rust-auto-download t)
-;;   :hook (lisp-data-mode racket-mode pollen-mode)
-;;   :custom
-;;   (parinfer-rust-preferred-mode 'indent "start in indent mode")
-;;   (parinfer-rust-dim-parens nil "do not dim closing parens"))
-  
 ;; ;; dts-mode
 ;; (use-package dts-mode
 ;;   ;; setup for zmk keymaps
