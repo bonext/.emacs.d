@@ -1,6 +1,6 @@
 ;; -*- lexical-binding: t; -*-
 
-;;; configurable variables
+;; configurable variables
 
 (defvar aa-face-default-name "Cascadia Code NF")
 (defvar aa-face-default-height 100)
@@ -32,7 +32,7 @@
   (loaddefs-generate (aa-vendor--find-elisp-dirs aa-vendor-directory) aa-vendor--autoloads-filename)
   (message "Autoloads updated at %s" aa-vendor--autoloads-filename))
 
-;;; setup load-path for vendored code
+;; setup load-path for vendored code
 (when (file-exists-p aa-vendor-directory)
   (add-to-list 'load-path aa-vendor-directory)
   (dolist (dir (directory-files aa-vendor-directory t "^[^.]" t))
@@ -40,7 +40,7 @@
       (add-to-list 'load-path dir)
       (message "Added vendored code directory %s to load-path" dir))))
 
-;;; load vendored autoloads
+;; load vendored autoloads
 (when (file-exists-p aa-vendor--autoloads-filename)
   (progn
     (load aa-vendor--autoloads-filename)
@@ -48,21 +48,19 @@
 
 ;; other load-path tweaks
 
-;;; custom themes (to be able to M-x load-theme)
+;; custom themes (to be able to M-x load-theme)
 (add-to-list 'custom-theme-load-path (file-name-concat aa-vendor-directory "doric-themes"))
 (add-to-list 'custom-theme-load-path (file-name-concat aa-vendor-directory "tokyo-night"))
 
-;;; vertico extensions
+;; vertico extensions
 (add-to-list 'load-path (file-name-concat aa-vendor-directory "vertico" "extensions"))
 
-;;; exposed hooks
+;; exposed hooks
 
 (defvar aa-before-load-theme-hook nil
   "Hooks to run before calling load-theme.")
 (defvar aa-after-load-theme-hook nil
   "Hooks run after calling load-theme.")
-
-;;; implementation
 
 (let ((aa-host
        (cond ((and (eq system-type 'gnu/linux)
@@ -76,15 +74,6 @@
     (eq aa-host 'work))
   (defun aa-wsl-p ()
     (eq aa-host 'wsl)))
-
-;; (with-eval-after-load 'package
-;;   (progn
-;;     (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-;;     (package-initialize)))
-
-;; (require 'use-package)
-;; (setq use-package-always-ensure t)
-
 
 (advice-add
  'load-theme
@@ -106,8 +95,8 @@
 
 (defun aa-recompile-all-packages nil
   (interactive)
-  (message "recompiling elpa/ contents")
-  (native-compile-async (file-name-concat user-emacs-directory "elpa") t))
+  (message "recompiling lib/3rdparty/ contents")
+  (native-compile-async (file-name-concat user-emacs-directory "lib" "3rdparty") t))
 
 ;; colors
 (load-theme aa-dark-theme t)
@@ -284,16 +273,10 @@
   ;; NOTE: this kills existing dired buffer so current directory is lost in dired
   (put 'dired-find-alternate-file 'disabled nil))
 
-;; ;; TODO: replace corfu
-;; ;; enable completion preview in prog-mode
-;; ;; cf. https://www.gnu.org/software/emacs/manual/html_node/emacs/Symbol-Completion.html#Symbol-Completion
-;; (add-hook 'prog-mode-hook #'completion-preview-mode)
-
 (setopt read-file-name-completion-ignore-case t
         read-buffer-completion-ignore-case t
         ;; disable dictionary word completion in text modes
         text-mode-ispell-word-completion nil)
-
 
 ;; vertico (frontend / UI)
 ;; changes default completion buffer to vertical scrollable thing
@@ -367,13 +350,6 @@
 
 (add-hook 'org-mode-hook #'aa-org-common-hooks)
 
-;; org export: Github-Flavoured Markdown
-;; (use-package ox-gfm)
-
-;; TODO: research
-;; support for image paste
-;; https://github.com/abo-abo/org-download
-
                                         ;
                                         ; C O D I N G
                                         ;
@@ -400,78 +376,12 @@
   ;;               (concat "file://" local-hyperspec-directory)))))
   )
 
-;; ;; racket
-;; (use-package racket-mode)
-
 ;; smartparens
 (require 'smartparens-config)
 (setopt sp-base-key-bindings 'paredit)
 (add-hook 'lisp-data-mode-hook #'smartparens-strict-mode)
 
-;; ;; dts-mode
-;; (use-package dts-mode
-;;   ;; setup for zmk keymaps
-;;   :mode "\\.keymap\\'")
-
-;; ;; nix
-;; ;; $PATH
-;; (setenv "PATH" (concat "~/.nix-profile/bin:/nix/var/nix/profiles/default/bin:" (getenv "PATH")))
-;; ;; nix-mode
-;; (use-package nix-mode
-;;   :mode "\\.nix\\'")
-
-;; ;; markdown-mode
-;; (use-package markdown-mode)
-
-;; ;; zig-mode
-;; (use-package zig-mode
-;;   :mode "\\.zig\\'")
-
-;; ;; direnv-mode
-;; (use-package direnv
-;;   :config
-;;   (direnv-mode))
-
-;; (use-package systemd)
-
-;; (use-package caddyfile-mode
-;;   :mode (("Caddyfile\\'" . caddyfile-mode)
-;;          ("caddy\\.conf\\'" . caddyfile-mode)))
-
-;; ;; requires M-x treesit-install-language-grammar for `vim`
-;; ;; taken from https://github.com/tree-sitter-grammars/tree-sitter-vim
-;; (use-package vimscript-ts-mode
-;;   :mode "\\vifmrc\\'")
-
-;; (use-package pollen-mode)
-
-;; (use-package kdl-mode)
-
-;; (use-package lua-mode)
-
-;; (use-package fennel-mode)
-
-;; (use-package cmake-mode)
-
-;; ;; TODO: setup docset prefixes
-;; ;; https://github.com/jinzhu/zeal-at-point?tab=readme-ov-file#usage
-;; (use-package zeal-at-point)
-
-                                        ; tree-sitter
-
-;; install grammars to ~/.emacs.d/tree-sitter
-;; install with `M-x treesit-install-language-grammar`
-(setq treesit-language-source-alist
-      '((python "https://github.com/tree-sitter/tree-sitter-python")))
-
-;; TODO: when is this needed?
-(add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
-(add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
-
-(setopt c-ts-mode-indent-offset 4)
-
-                                        ; eglot
-
+;; EGLOT
 ;; reduce number of reads for large language server responses
 (setq read-process-output-max (* 4 1024 1024))
 
@@ -495,40 +405,12 @@
 ;; ;; let project.el recognize python project roots
 ;; (add-to-list 'project-vc-extra-root-markers "pyproject.toml")
 
-;; TODO: consider beam for extra project support
-;; https://github.com/rpav/beam.el
-
                                         ;
                                         ; T E R M
                                         ;
 
-;; ;; colors
-;; (use-package eterm-256color
-;;   :hook
-;;   (term-mode-hook . eterm-256color-mode)
-;;   (vterm-mode-hook . eterm-256color-mode))
-
-;; ;; vterm
-;; (use-package vterm
-;;   :commands vterm
-;;   :config
-;;   (cond
-;;    ;; osx-specific setup
-;;    (t (setq vterm-shell "bash")))
-;;   (setq vterm-max-scrollback 10000
-;;         vterm-kill-buffer-on-exit t))
-
-
-;; (use-package 0x0)
-
-;; (use-package eev
-;;   :init
-;;   (require 'eev-load)
-;;   (eev-mode 1))
-
-
-;;; keybindings
-;;;; dired
+;; keybindings
+;; dired
 (defvar aa-leader-map-dired (make-sparse-keymap) "SPC d: Dired")
 (keymap-global-set "C-c d" aa-leader-map-dired)
 (define-key aa-leader-map-dired (kbd "d") #'dired)
@@ -539,12 +421,12 @@
   "C-c d j" "dired-jump"
   "C-c d d" "open dired")
 
-;;;; pulsar
+;; pulsar
 (keymap-global-set "C-." #'pulsar-pulse-line)
 (which-key-add-key-based-replacements
   "C-." "pulse current line")
 
-;;;; org
+;; org
 (keymap-global-set "C-c a" #'org-agenda)
 (keymap-global-set "C-c c" #'org-capture)
 (keymap-global-set "C-c l" #'org-store-link)
@@ -557,9 +439,7 @@
   "C-c l" "org-store-link"
   "C-c n" "open notes")
 
-;; (keymap-set org-mode-map "C-c m" #'org-toggle-link-display)
-
-;;;; consult
+;; consult
 (keymap-global-set "C-c f" #'consult-line)
 (keymap-global-set "C-c g" #'consult-ripgrep)
 (keymap-global-set "C-c o" #'consult-outline)
@@ -570,17 +450,17 @@
   "C-c o" "search outline"
   "C-c b" "select buffer")
 
-;;;; cape
+;; cape
 (keymap-global-set "C-c p" #'cape-prefix-map)
 
-;;;; helpful
+;; helpful
 ;; (info "(elisp)Remapping Commands")
 (keymap-global-set "<remap> <describe-function>" #'helpful-callable)
 (keymap-global-set "<remap> <describe-command>" #'helpful-command)
 (keymap-global-set "<remap> <describe-variable>" #'helpful-variable)
 (keymap-global-set "<remap> <describe-key>" #'helpful-key)
 
-;;;; window management
+;; window management
 (defvar aa-leader-map-windows (make-sparse-keymap) "SPC w: window management")
 (keymap-global-set "C-c w" aa-leader-map-windows)
 (which-key-add-key-based-replacements
@@ -589,29 +469,23 @@
 (keymap-set aa-leader-map-windows "o" #'next-multiframe-window)
 (which-key-add-key-based-replacements
   "C-c w o" "next window")
-;; ace-window
-(keymap-set aa-leader-map-windows "a" #'ace-window)
-(which-key-add-key-based-replacements
-  "C-c w a" "ace-window")
 
 ;; enable reversible C-x 1 via winner-mode
 (keymap-global-set "C-x 1" #'aa-toggle-delete-other-windows)
 
-;;;; terminals
+;; terminals
 (keymap-global-set "C-c s" #'eshell)
 (which-key-add-key-based-replacements
   "C-c s" "eshell")
-(keymap-global-set "C-c v" #'vterm)
-(which-key-add-key-based-replacements
-  "C-c v" "vterm")
 
-;;;; isearch remaps
+;; isearch remaps
 (keymap-global-set "C-s" #'isearch-forward-regexp)
 (keymap-global-set "C-r" #'isearch-backward-regexp)
 (keymap-global-set "C-M-s" #'isearch-forward)
 (keymap-global-set "C-M-r" #'isearch-backward)
 
-;;;; apropos
+;; apropos
 (keymap-global-set "C-h u" #'apropos-user-option)
 
-;;; init.el ends here
+;; recondiser configuration if this exceeds 500 lines
+;; -- init.el ends here --
