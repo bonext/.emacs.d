@@ -310,6 +310,8 @@
 (setopt org-startup-truncated t)
 (setopt org-startup-folded 'fold)
 (setopt org-complete-tags-always-offer-all-agenda-tags t)
+;; generate IDs to link to nodes linked interactively (via C-c l)
+(setopt org-id-link-to-org-use-id 'create-if-interactive)
 ;; log time when todos are done
 ;; cf. https://orgmode.org/guide/Progress-Logging.html
 (setopt org-log-into-drawer "LOGBOOK")
