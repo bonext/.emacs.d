@@ -1,4 +1,4 @@
-;; -*- lexical-binding: t; -*-
+;; -*- lexical-binding: t; eval: (outline-minor-mode 1) -*-
 
 ;; configurable variables
 
