@@ -12,6 +12,7 @@
 (defvar aa-org-journal-directory "~/Documents/journal")
 
 ;; vendored code
+
 (defvar aa-vendor-directory (file-name-concat user-emacs-directory "lib/3rdparty"))
 
 (defvar aa-vendor--autoloads-filename (file-name-concat aa-vendor-directory "autoloads.el"))
@@ -326,7 +327,7 @@
          (file ,(file-name-concat org-directory "finished-books.org"))
          (file ,(file-name-concat aa-capture-templates-dir "book"))
          :kill-buffer t)
-        ("d" "mind dump" entry
+        ("m" "mind dump" entry
          (file ,(file-name-concat org-directory "mind-dumps.org"))
          (file ,(file-name-concat aa-capture-templates-dir "dump"))
          :prepend t :kill-buffer t)
