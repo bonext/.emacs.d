@@ -257,6 +257,9 @@
 ;; resize all windows in frame on split
 (setopt window-combination-resize t)
 
+;; learn proper keybindings
+(guru-global-mode 1)
+
 ;; (use-package dired
 ;;   :ensure nil
 ;;   :commands (dired dired-jump)

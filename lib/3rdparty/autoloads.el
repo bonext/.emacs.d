@@ -1199,6 +1199,8 @@ evaluate the variable `guru-mode'.
 The mode's hook is called both when the mode is enabled and when it is
 disabled.
 
+\\{guru-mode-map}
+
 (fn &optional ARG)" t)
 (put 'guru-global-mode 'globalized-minor-mode t)
 (defvar guru-global-mode nil "\
