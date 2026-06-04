@@ -356,6 +356,18 @@
 
 (add-hook 'org-mode-hook #'aa-org-common-hooks)
 
+(defun aa-org-toggle-markup ()
+  "Toggle org-hide-emphasis-markers and refontify the buffer"
+  (interactive)
+  (setopt org-hide-emphasis-markers (not org-hide-emphasis-markers))
+  (font-lock-fontify-buffer))
+
+(defun aa-org-toggle-wrap ()
+  "Disable line truncation and enable word wrap"
+  (interactive)
+  (toggle-truncate-lines (not truncate-lines))
+  (toggle-word-wrap (not word-wrap)))
+
                                         ;
                                         ; C O D I N G
                                         ;
@@ -440,6 +452,18 @@
   "C-c a" "org-agenda"
   "C-c c" "org-capture"
   "C-c l" "org-store-link")
+
+(with-eval-after-load 'org
+  (defvar aa-org-toggle-map (make-sparse-keymap) "C-c t: org toggles")
+  (define-key org-mode-map (kbd "C-c t") aa-org-toggle-map)
+  (define-key aa-org-toggle-map (kbd "l") #'org-toggle-link-display)
+  (define-key aa-org-toggle-map (kbd "m") #'aa-org-toggle-markup)
+  (define-key aa-org-toggle-map (kbd "w") #'aa-org-toggle-wrap)
+  (which-key-add-key-based-replacements
+    "C-c t" "org toggles"
+    "C-c t l" "toggle link display"
+    "C-c t m" "toggle markup display"
+    "C-c t w" "toggle word line wrap"))
 
 ;; notes
 (defvar aa-leader-map-notes (make-sparse-keymap) "C-c n: Notes")
