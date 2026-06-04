@@ -436,14 +436,23 @@
 (keymap-global-set "C-c a" #'org-agenda)
 (keymap-global-set "C-c c" #'org-capture)
 (keymap-global-set "C-c l" #'org-store-link)
-(keymap-global-set "C-c n" `(lambda ()
-                              (interactive)
-                              (view-file ,(file-name-concat org-directory "all.org"))))
 (which-key-add-key-based-replacements
   "C-c a" "org-agenda"
   "C-c c" "org-capture"
-  "C-c l" "org-store-link"
-  "C-c n" "open notes")
+  "C-c l" "org-store-link")
+
+;; notes
+(defvar aa-leader-map-notes (make-sparse-keymap) "C-c n: Notes")
+(keymap-global-set "C-c n" aa-leader-map-notes)
+(define-key aa-leader-map-notes
+            (kbd "a")
+            `(lambda ()
+               (interactive)
+               (view-file ,(file-name-concat org-directory "all.org"))))
+(which-key-add-key-based-replacements
+  "C-c n a" "read all notes")
+
+
 
 ;; consult
 (keymap-global-set "C-c f" #'consult-line)
