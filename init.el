@@ -396,7 +396,7 @@
 
 ;; smartparens
 (require 'smartparens-config)
-(setopt sp-base-key-bindings 'paredit)
+(setopt sp-base-key-bindings 'sp)
 (add-hook 'lisp-data-mode-hook #'smartparens-strict-mode)
 
 ;; EGLOT
