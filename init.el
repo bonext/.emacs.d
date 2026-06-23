@@ -539,5 +539,6 @@
 ;; apropos
 (keymap-global-set "C-h u" #'apropos-user-option)
 
+(server-start)
 ;; recondiser configuration if this exceeds 500 lines
 ;; -- init.el ends here --
