@@ -539,6 +539,13 @@
 ;; apropos
 (keymap-global-set "C-h u" #'apropos-user-option)
 
+;; TODO: remap defaults to better defaults
+;; via https://www.matem.unam.mx/~omar/apropos-emacs.html#underappreciated-emacs-built-ins
+(keymap-global-set "<remap> <forward-word>" #'forward-to-word)
+;; backward-word -> backward-to-word
+;; up-list: love this command: it puts point after the current s-expression
+(keymap-global-set "<remap> <delete-char>" #'delete-forward-char)
+
 (server-start)
 ;; recondiser configuration if this exceeds 500 lines
 ;; -- init.el ends here --
