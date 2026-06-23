@@ -35,7 +35,8 @@ PACKAGES :=\
 	https://github.com/bbatsov/tokyo-night-emacs/archive/refs/tags/v1.0.0.tar.gz|tokyo-night \
 	https://github.com/bbatsov/guru-mode/archive/refs/tags/v1.0.tar.gz|guru-mode \
 	https://github.com/emacs-compat/compat/archive/refs/tags/31.0.0.1.tar.gz|compat \
-	https://github.com/Fuco1/smartparens/archive/refs/tags/1.11.0.tar.gz|smartparens
+	https://github.com/Fuco1/smartparens/archive/refs/tags/1.11.0.tar.gz|smartparens \
+	https://codeberg.org/akib/emacs-eat/archive/v0.9.4.tar.gz|eat
 
 $(CACHE_DIR): $(VENDOR_DIR)/.gitignore | $(VENDOR_DIR)
 	mkdir -p $(CACHE_DIR)
@@ -52,7 +53,7 @@ clean:
 define process_spec_template
 $(let PKG_URL PKG_NAME, $(subst |, ,$(1)),$$(VENDOR_DIR)/$(PKG_NAME): $$(CACHE_DIR)/$(PKG_NAME).tar.gz | $$(VENDOR_DIR)
 	TMPDIR=$$(shell mktemp -d -p $$(CACHE_DIR)) \
-	&& tar -C $$$$TMPDIR -xzvf $$(CACHE_DIR)/$(PKG_NAME).tar.gz --strip-components=1 \
+	&& tar -C $$$$TMPDIR -xvf $$(CACHE_DIR)/$(PKG_NAME).tar.gz --strip-components=1 \
 	&& mv -v $$$$TMPDIR $$(VENDOR_DIR)/$(PKG_NAME)
 $$(CACHE_DIR)/$(PKG_NAME).tar.gz: | $$(CACHE_DIR)
 	curl -L $(PKG_URL) -o $$(CACHE_DIR)/$(PKG_NAME).tar.gz.partial --remove-on-error \
