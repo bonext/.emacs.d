@@ -12,7 +12,6 @@
 (defvar aa-org-journal-directory "~/Documents/journal")
 
 ;; vendored code
-
 (defvar aa-vendor-directory (file-name-concat user-emacs-directory "lib/3rdparty"))
 
 (defvar aa-vendor--autoloads-filename (file-name-concat aa-vendor-directory "autoloads.el"))
@@ -289,13 +288,23 @@
 ;; marginalia provides marninalia info to completions in minibuffer
 (marginalia-mode)
 
-;; corfu (frontend / UI)
-;; completion-at-point (e.g. when writing code)
+;; in-buffer completion (completion-at-point)
+;; dual wield completion-preview (ghost text) + corfu
+;; ghost text works immediately by default
+;; <TAB> completes ghost text
+;; otherwise C-M-i cycles ghost text if there are <= 3 matches
+;; otherwise a corfu popup is shown
+(setopt tab-always-indent 'complete)
+(setopt completion-preview-minimum-symbol-length 4)
+(setopt completion-preview-exact-match-only nil)
+(setopt completion-cycle-threshold 3)
+(global-completion-preview-mode t)
 (setopt corfu-quit-no-match t)
 (global-corfu-mode)
 
 ;; cape
 ;; suite of completion-at-point functions
+(add-hook 'completion-at-point-functions #'cape-dabbrev)
 (add-hook 'completion-at-point-functions #'cape-file)
 
 ;; orderless
@@ -428,6 +437,10 @@
                                         ;
 
 ;; keybindings
+;; completions
+(define-key completion-preview-active-mode-map (kbd "M-n") #'completion-preview-next-candidate)
+(define-key completion-preview-active-mode-map (kbd "M-p") #'completion-preview-prev-candidate)
+
 ;; dired
 (defvar aa-leader-map-dired (make-sparse-keymap) "SPC d: Dired")
 (keymap-global-set "C-c d" aa-leader-map-dired)
