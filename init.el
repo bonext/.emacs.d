@@ -193,9 +193,6 @@
 (setopt scroll-margin 0)
 (ultra-scroll-mode t)
 
-;; pulsar: highlight cursor
-(pulsar-global-mode t)
-
 ;; highlight after typing is done
 ;; setq because C
 (setq redisplay-skip-fontification-on-input t)
@@ -452,11 +449,6 @@
   "C-c d j" "dired-jump"
   "C-c d d" "open dired")
 
-;; pulsar
-(keymap-global-set "C-." #'pulsar-pulse-line)
-(which-key-add-key-based-replacements
-  "C-." "pulse current line")
-
 ;; org
 (keymap-global-set "C-c a" #'org-agenda)
 (keymap-global-set "C-c c" #'org-capture)
@@ -504,13 +496,6 @@
 
 ;; cape
 (keymap-global-set "C-c p" #'cape-prefix-map)
-
-;; helpful
-;; (info "(elisp)Remapping Commands")
-(keymap-global-set "<remap> <describe-function>" #'helpful-callable)
-(keymap-global-set "<remap> <describe-command>" #'helpful-command)
-(keymap-global-set "<remap> <describe-variable>" #'helpful-variable)
-(keymap-global-set "<remap> <describe-key>" #'helpful-key)
 
 ;; window management
 (defvar aa-leader-map-windows (make-sparse-keymap) "SPC w: window management")

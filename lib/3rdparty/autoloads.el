@@ -723,8 +723,6 @@ evaluate the variable `corfu-mode'.
 The mode's hook is called both when the mode is enabled and when it is
 disabled.
 
-\\{corfu-mode-map}
-
 (fn &optional ARG)" t)
 (put 'global-corfu-mode 'globalized-minor-mode t)
 (defvar global-corfu-mode nil "\
@@ -1175,62 +1173,6 @@ that number, or create it if it doesn't already exist.
 (register-definition-prefixes "eat/eat-tests" '("eat--tests-"))
 
 
-;;; Generated autoloads from elisp-refs/elisp-refs.el
-
-(autoload 'elisp-refs-function "elisp-refs/elisp-refs" "\
-Display all the references to function SYMBOL, in all loaded
-elisp files.
-
-If called with a prefix, prompt for a directory to limit the search.
-
-This searches for functions, not macros. For that, see
-`elisp-refs-macro'.
-
-(fn SYMBOL &optional PATH-PREFIX)" t)
-(autoload 'elisp-refs-macro "elisp-refs/elisp-refs" "\
-Display all the references to macro SYMBOL, in all loaded
-elisp files.
-
-If called with a prefix, prompt for a directory to limit the search.
-
-This searches for macros, not functions. For that, see
-`elisp-refs-function'.
-
-(fn SYMBOL &optional PATH-PREFIX)" t)
-(autoload 'elisp-refs-special "elisp-refs/elisp-refs" "\
-Display all the references to special form SYMBOL, in all loaded
-elisp files.
-
-If called with a prefix, prompt for a directory to limit the search.
-
-(fn SYMBOL &optional PATH-PREFIX)" t)
-(autoload 'elisp-refs-variable "elisp-refs/elisp-refs" "\
-Display all the references to variable SYMBOL, in all loaded
-elisp files.
-
-If called with a prefix, prompt for a directory to limit the search.
-
-(fn SYMBOL &optional PATH-PREFIX)" t)
-(autoload 'elisp-refs-symbol "elisp-refs/elisp-refs" "\
-Display all the references to SYMBOL in all loaded elisp files.
-
-If called with a prefix, prompt for a directory to limit the
-search.
-
-(fn SYMBOL &optional PATH-PREFIX)" t)
-(register-definition-prefixes "elisp-refs/elisp-refs" '("elisp-"))
-
-
-;;; Generated autoloads from elisp-refs/elisp-refs-bench.el
-
-(register-definition-prefixes "elisp-refs/elisp-refs-bench" '("elisp-refs-"))
-
-
-;;; Generated autoloads from elisp-refs/test/elisp-refs-unit-test.el
-
-(register-definition-prefixes "elisp-refs/test/elisp-refs-unit-test" '("with-temp-backed-buffer"))
-
-
 ;;; Generated autoloads from s/dev/ert.el
 
 (autoload 'ert-deftest "s/dev/ert" "\
@@ -1332,8 +1274,6 @@ evaluate the variable `guru-mode'.
 The mode's hook is called both when the mode is enabled and when it is
 disabled.
 
-\\{guru-mode-map}
-
 (fn &optional ARG)" t)
 (put 'guru-global-mode 'globalized-minor-mode t)
 (defvar guru-global-mode nil "\
@@ -1359,49 +1299,6 @@ See `guru-mode' for more information on Guru mode.
 
 (fn &optional ARG)" t)
 (register-definition-prefixes "guru-mode/guru-mode" '("guru-"))
-
-
-;;; Generated autoloads from helpful/helpful.el
-
-(autoload 'helpful-function "helpful/helpful" "\
-Show help for function named SYMBOL.
-
-See also `helpful-macro', `helpful-command' and `helpful-callable'.
-
-(fn SYMBOL)" t)
-(autoload 'helpful-command "helpful/helpful" "\
-Show help for interactive function named SYMBOL.
-
-See also `helpful-function'.
-
-(fn SYMBOL)" t)
-(autoload 'helpful-key "helpful/helpful" "\
-Show help for interactive command bound to KEY-SEQUENCE.
-
-(fn KEY-SEQUENCE)" t)
-(autoload 'helpful-macro "helpful/helpful" "\
-Show help for macro named SYMBOL.
-
-(fn SYMBOL)" t)
-(autoload 'helpful-callable "helpful/helpful" "\
-Show help for function, macro or special form named SYMBOL.
-
-See also `helpful-macro', `helpful-function' and `helpful-command'.
-
-(fn SYMBOL)" t)
-(autoload 'helpful-symbol "helpful/helpful" "\
-Show help for SYMBOL, a variable, function or macro.
-
-See also `helpful-callable' and `helpful-variable'.
-
-(fn SYMBOL)" t)
-(autoload 'helpful-variable "helpful/helpful" "\
-Show help for variable named SYMBOL.
-
-(fn SYMBOL)" t)
-(autoload 'helpful-at-point "helpful/helpful" "\
-Show help for the symbol at point." t)
-(register-definition-prefixes "helpful/helpful" '("helpful-"))
 
 
 ;;; Generated autoloads from marginalia/marginalia.el
@@ -1474,89 +1371,6 @@ Match COMPONENT against the keywords in `orderless-kwd-alist'.
 
 (fn COMPONENT INDEX TOTAL)")
 (register-definition-prefixes "orderless/orderless-kwd" '("orderless-kwd-"))
-
-
-;;; Generated autoloads from pulsar/pulsar.el
-
-(autoload 'pulsar-pulse-line "pulsar/pulsar" "\
-Create a pulse highlight for the current line.
-Also see `pulsar-highlight-pulse'." t)
-(autoload 'pulsar-highlight-pulse "pulsar/pulsar" "\
-Highlight the current LOCUS by pulsing it.
-To pulse is to add a colour and then gradually fade it away.  The pulse
-is subject to `pulsar-delay' and `pulsar-iterations'.
-
-When the region is active, LOCUS covers the region boundaries.
-Otherwise, LOCUS spans the current line.
-
-For highlights without a pulse, see `pulsar-highlight-temporarily' and
-`pulsar-highlight-permanently'.
-
-(fn &optional LOCUS)" t)
-(autoload 'pulsar-highlight-temporarily "pulsar/pulsar" "\
-Temporarily highlight the current LOCUS.
-Unlike `pulsar-highlight-pulse', never pulse the current line.  Keep the
-highlight in place until another command is invoked.  This is what makes
-the highlight temporary.
-
-For a permanent highlight, see `pulsar-highlight-permanently'.
-
-(fn LOCUS)" t)
-(autoload 'pulsar-highlight-permanently "pulsar/pulsar" "\
-Set a permanent highlight to the current LOCUS.
-When the region is active, LOCUS is a cons cell of positions
-corresponding to the region boundaries.  Otherwise it is a cons cell of
-positions corresponding to the beginning and end of the current line.
-
-Remove the highlight with `pulsar-highlight-permanently-remove' or
-toggle it with `pulsar-highlight-permanently'.
-
-For a temporary highlight use `pulsar-highlight-temporarily' and
-related.
-
-(fn LOCUS)" t)
-(autoload 'pulsar-highlight-permanently-dwim "pulsar/pulsar" "\
-Do-What-I-Mean with a permanent highlighting of the current LOCUS.
-When there is a highlight, remove it, else add it.
-
-If the region is active, LOCUS corresponds to its boundaries.  If there
-is no region, then LOCUS corresponds to the boundaries of the current
-line.
-
-(fn LOCUS)" t)
-(autoload 'pulsar-define-pulse-with-face "pulsar/pulsar" "\
-Produce function to pulse the current line with FACE.
-If FACE starts with the `pulsar-' prefix, remove it and keep only
-the remaining text.  The assumption is that something like
-`pulsar-red' will be convered to `red', thus deriving a function
-named `pulsar-pulse-line-red'.  Any other FACE is taken as-is.
-
-(fn FACE)" nil t)
-(function-put 'pulsar-define-pulse-with-face 'lisp-indent-function 'function)
-(put 'pulsar-global-mode 'globalized-minor-mode t)
-(defvar pulsar-global-mode nil "\
-Non-nil if Pulsar-Global mode is enabled.
-See the `pulsar-global-mode' command
-for a description of this minor mode.
-Setting this variable directly does not take effect;
-either customize it (see the info node `Easy Customization')
-or call the function `pulsar-global-mode'.")
-(custom-autoload 'pulsar-global-mode "pulsar/pulsar" nil)
-(autoload 'pulsar-global-mode "pulsar/pulsar" "\
-Toggle Pulsar mode in all buffers.
-With prefix ARG, enable Pulsar-Global mode if ARG is positive;
-otherwise, disable it.
-
-If called from Lisp, toggle the mode if ARG is `toggle'.
-Enable the mode if ARG is nil, omitted, or is a positive number.
-Disable the mode if ARG is a negative number.
-
-Pulsar mode is enabled in all buffers where `pulsar--on' would do it.
-
-See `pulsar-mode' for more information on Pulsar mode.
-
-(fn &optional ARG)" t)
-(register-definition-prefixes "pulsar/pulsar" '("pulsar-"))
 
 
 ;;; Generated autoloads from s/s.el
@@ -1640,8 +1454,6 @@ evaluate the variable `smartparens-strict-mode'.
 
 The mode's hook is called both when the mode is enabled and when it is
 disabled.
-
-\\{smartparens-strict-mode-map}
 
 (fn &optional ARG)" t)
 (put 'smartparens-global-strict-mode 'globalized-minor-mode t)
