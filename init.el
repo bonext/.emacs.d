@@ -107,9 +107,6 @@
   (menu-bar-mode -1))
 (when (fboundp 'scroll-bar-mode)
   (scroll-bar-mode -1))
-;; remove window titlebar
-(if (aa-home-p)
-    (add-to-list 'default-frame-alist '(undecorated . t)))
 ;; allow more space around the sides
 (when (fboundp 'set-fringe-mode)
   (set-fringe-mode 10))
