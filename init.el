@@ -232,6 +232,9 @@
 ;; first mark pop is C-u C-SPC, next C-SPC only
 (setopt set-mark-command-repeat-pop t)
 
+;; select and type to delete selection
+(delete-selection-mode +1)
+
 ;; jump to help automatically
 (setopt help-window-select t)
 
@@ -374,6 +377,13 @@
                                         ;
                                         ; C O D I N G
                                         ;
+
+;; tree-sitter
+;;; enable for all modes regardless
+;; TODO: enabling this will switch *all* modes to ts- when possible
+;; not sure what is the tradeoff here yet
+;; (setopt treesit-enabled-modes t)
+(setopt treesit-auto-install-grammar 'ask)
 
 ;; slime
 (when (and
@@ -518,15 +528,15 @@
 (keymap-global-set "C-M-s" #'isearch-forward)
 (keymap-global-set "C-M-r" #'isearch-backward)
 
-;; apropos
-(keymap-global-set "C-h u" #'apropos-user-option)
-
 ;; TODO: remap defaults to better defaults
 ;; via https://www.matem.unam.mx/~omar/apropos-emacs.html#underappreciated-emacs-built-ins
 (keymap-global-set "<remap> <forward-word>" #'forward-to-word)
 ;; backward-word -> backward-to-word
 ;; up-list: love this command: it puts point after the current s-expression
 (keymap-global-set "<remap> <delete-char>" #'delete-forward-char)
+
+;; C-x C-b defaults to ibuffer
+(global-set-key [remap list-buffers] 'ibuffer)
 
 (server-start)
 ;; recondiser configuration if this exceeds 500 lines
