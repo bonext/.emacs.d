@@ -505,14 +505,9 @@
 (keymap-global-set "C-c p" #'cape-prefix-map)
 
 ;; window management
-(defvar aa-leader-map-windows (make-sparse-keymap) "SPC w: window management")
-(keymap-global-set "C-c w" aa-leader-map-windows)
-(which-key-add-key-based-replacements
-  "C-c w" "window management")
-;; switch to other window even in a different frame
-(keymap-set aa-leader-map-windows "o" #'next-multiframe-window)
-(which-key-add-key-based-replacements
-  "C-c w o" "next window")
+;;;; M-o switches windows
+(global-set-key (kbd "M-o") #'other-window)
+
 
 ;; enable reversible C-x 1 via winner-mode
 (keymap-global-set "C-x 1" #'aa-toggle-delete-other-windows)
@@ -537,6 +532,9 @@
 
 ;; C-x C-b defaults to ibuffer
 (global-set-key [remap list-buffers] 'ibuffer)
+
+;;;; remap M-i for imenu
+(global-set-key (kbd "M-i") #'imenu)
 
 (server-start)
 ;; recondiser configuration if this exceeds 500 lines
