@@ -484,7 +484,7 @@
             (kbd "a")
             `(lambda ()
                (interactive)
-               (view-file ,(file-name-concat org-directory "all.org"))))
+               (view-file ,(file-name-concat org-directory "notes.org"))))
 (which-key-add-key-based-replacements
   "C-c n a" "read all notes")
 
